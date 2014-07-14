@@ -6,7 +6,7 @@ from pygame.locals import *
 import pickle
 
 import sys
-
+from calibFileManager import *
 
 def eventHandling(eventsObject):
     for event in eventsObject:
@@ -22,6 +22,9 @@ def eventHandling(eventsObject):
             elif event.key==pygame.K_q: #quits entirely
                 print "q pressed"
                 vals.quit_FLG=1
+            #Load calibration data from file : 'l', load
+            elif event.key == pygame.K_l:
+                vals.calibLoadFlag = True
             if vals.rec_flg: #if recording, can change the lag time
                 if event.key==pygame.K_z:
                     vals.lagValue+=100
@@ -52,6 +55,33 @@ def eventHandling(eventsObject):
                         while min(vals.clickingCalibList)<30:
                             vals.clickingCalibList.remove(min(vals.clickingCalibList))
                         vals.clickValue=int(1.2*min(vals.clickingCalibList))
-                        vals.clickingCalib=True                            
+                        vals.clickingCalib=True
+
+                        #store them to file.
+                        if not vals.calibWriteFinished:
+                            calibWriter = CalibFileManager(vals.calibFile)
+                            calibWriter.write(vals.mouseModeValue, vals.clickValue)
+
+                            vals.calibWriteFinished = True
+
+            if vals.calibLoadFlag:
+                if not vals.calibReadFinished:
+                    calibReader = CalibFileManager(vals.calibFile)
+                    try:
+                        vals.mouseModeValue = int(calibReader.read('mouseModeValue'))
+                        vals.clickValue = int(calibReader.read('clickValue'))
+                    except:
+                        # Go back and press again
+                        print 'Error: Calibration data file not found.'
+                        vals.calibLoadFlag = False
+                        return
+
+                    vals.clickingCalib = True
+                    vals.startClickModeCalib = True
+                    vals.mouseModeCalib = True
+                    vals.startMouseModeCalib = True
+
+                    vals.calibReadFinished = True
+
         if event.type==QUIT:
             vals.quit_FLG=1
