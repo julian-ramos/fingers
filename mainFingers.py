@@ -50,6 +50,7 @@ class mainThread(threading.Thread):
         myfont=pygame.font.SysFont("monospace",15)
         calibFont=pygame.font.SysFont("monospace",20)
         depthFont=pygame.font.SysFont("monospace",10)
+        defaultFont=pygame.font.SysFont("monospace",15)
         
         infoObject = pygame.display.Info()
         width=infoObject.current_w
@@ -121,6 +122,10 @@ class mainThread(threading.Thread):
                         smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
                         m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
         #                 m.move(smoothX,smoothY)
+            
+            if not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
+                doDraw.drawDefault(screen, defaultFont)
+
             eventsObject=pygame.event.get()
             doEvents.eventHandling(eventsObject)
             

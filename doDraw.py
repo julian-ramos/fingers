@@ -192,3 +192,15 @@ def drawAllMiniCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,average
         print "Calibration Completed"
         print "Press r to start recording"
         calibrationDone=1
+
+def drawDefault(screen, defaultFont):
+    screen.fill(vals.black)
+
+    #Drawing the instructions
+    pygame.draw.rect(screen, vals.gray, (5, 5, 500, 90))
+    default1 = defaultFont.render('press "l" to load calibration data,', 1, vals.black)
+    screen.blit(default1, (10, 15))
+    default2 = defaultFont.render('or press "c" to calibrate,', 1, vals.black)
+    screen.blit(default2, (10, 35))
+    default3 = defaultFont.render('then press "r" to start recording.', 1, vals.black)
+    screen.blit(default3, (10, 55))
