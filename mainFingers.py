@@ -62,20 +62,13 @@ class mainThread(threading.Thread):
         while kill==False:
             
             screen.fill((0,0,0))
-            pygame.draw.circle(screen, (255,0,0), (100+np.random.randint(5),100+np.random.randint(5)),10)
-            pygame.draw.circle(screen, (255,0,0), (110+np.random.randint(5),150+np.random.randint(5)),10)
-            pygame.draw.circle(screen, (255,0,0), (120+np.random.randint(5),110+np.random.randint(5)),10)
+            rpt=[[int(i2) for i2 in i]for i in coords[0]]
+            rpt2=[[int(i2) for i2 in i]for i in coords[1]]
             
             if vals.calibration: #do calibration
                 #Receiving data from the threads
-                rpt=coords[0]
-                rpt2=coords[1]
-                try: #to eliminate the case when theres an error with rpt or rpt2
-                    rpt[0][0]+0
-                    rpt2[0][0]+0
-                except:
-                    rpt=[ [0,0] for i in range(4)]
-                    rpt2=[ [0,0] for i in range(4)]
+            
+                
                 newList=findingPoints.findDegrees(rpt) #[(theta1,i1),(theta2,i2)....)]
                 tipIndex, tipIndexAngle, kIndex,kIndexAngle=findingPoints.indexData(newList)
                 tipThumb,tipThumbAngle,kThumb,kThumbAngle=findingPoints.thumbData(newList)
@@ -86,20 +79,6 @@ class mainThread(threading.Thread):
             
             if vals.rec_flg==1: #Recording
             #Receiving data from the threads
-                rpt=coords[0]
-                rpt2=coords[1]
-                
-                
-                rpt=[[int(i2) for i2 in i]for i in coords[0]]
-                rpt2=[[int(i2) for i2 in i]for i in coords[1]]
-                
-                
-                try: #to eliminate the case when theres an error with rpt or rpt2
-                    rpt[0][0]+0
-                    rpt2[0][0]+0
-                except:
-                    rpt=[ [0,0] for i in range(4)]
-                    rpt2=[ [0,0] for i in range(4)]
         
             #Finding out the location of the LEDs, tipThumb, kThumb....
                 newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
@@ -143,24 +122,21 @@ class mainThread(threading.Thread):
                         m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
         #                 m.move(smoothX,smoothY)
             eventsObject=pygame.event.get()
-            print(eventsObject)
             doEvents.eventHandling(eventsObject)
-            
-            if vals.quit_FLG: #if quit flg then break from while loop
-                break
             
             msElapsed=clock.tick(pygameRate)
             pygame.display.update() 
             
             
              
-            if kill==True:
+            if kill==True or vals.quit_FLG:
                 pygame.quit()
                 sys.exit()
                 break
             
             for event in eventsObject: 
                 if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_ESCAPE):
+                    kill=True
                     pygame.quit()
                     sys.exit()
                     break
