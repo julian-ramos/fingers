@@ -22,11 +22,19 @@ wiiMAC=[]
 done=False
 while not done:
     try:
-        if wiiMAC=='00:23:CC:8F:AA:9E':
-            wiiMAC='00:24:1E:7A:DD:5B'
+        # if wiiMAC=='00:23:CC:8F:AA:9E':
+        #     wiiMAC='00:24:1E:7A:DD:5B'
+        #     wiiID='wiiMote1'
+        # else:
+        #     wiiMAC='00:23:CC:8F:AA:9E'
+        #     wiiID='wiiMote2'
+        wiiMAC1 = 'A4:5C:27:22:B4:5D'
+        wiiMAC2 = '00:19:1D:60:7E:CE'
+        if wiiMAC==wiiMAC2:
+            wiiMAC=wiiMAC1
             wiiID='wiiMote1'
         else:
-            wiiMAC='00:23:CC:8F:AA:9E'
+            wiiMAC=wiiMAC2
             wiiID='wiiMote2'
         print "Trying to connect to "+" "+wiiMAC
         print "Press 1 & 2 on the Wiimote simultaneously, to find it"

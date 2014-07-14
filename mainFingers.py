@@ -66,7 +66,7 @@ class mainThread(threading.Thread):
             rpt=[[int(i2) for i2 in i]for i in coords[0]]
             rpt2=[[int(i2) for i2 in i]for i in coords[1]]
             
-            if vals.calibration or vals.calibLoadFlag: #do calibration or load from file
+            if not vals.rec_flg and (vals.calibration or vals.calibLoadFlag): #do calibration or load from file
                 #Receiving data from the threads
             
                 
