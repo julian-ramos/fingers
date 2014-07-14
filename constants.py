@@ -37,8 +37,9 @@ kIndexAngle=0
 tipThumbAngle=0
 kThumbAngle=0
 
-
-
+#wiimote number
+wiimoteNum = 0
+wiimoteMaxNum = 2
 
 
 #calibration constants

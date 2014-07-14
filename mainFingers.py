@@ -66,7 +66,7 @@ class mainThread(threading.Thread):
             rpt=[[int(i2) for i2 in i]for i in coords[0]]
             rpt2=[[int(i2) for i2 in i]for i in coords[1]]
             
-            if vals.calibration: #do calibration
+            if not vals.rec_flg and (vals.calibration or vals.calibLoadFlag): #do calibration or load from file
                 #Receiving data from the threads
             
                 
@@ -123,7 +123,8 @@ class mainThread(threading.Thread):
                         m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
         #                 m.move(smoothX,smoothY)
             
-            if not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
+            if vals.wiimoteNum == vals.wiimoteMaxNum \
+            and not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
                 doDraw.drawDefault(screen, defaultFont)
 
             eventsObject=pygame.event.get()
@@ -281,6 +282,7 @@ class Client(threading.Thread):
         self.address = address
         self.size = 1024
         self.data=[]
+        vals.wiimoteNum = vals.wiimoteNum + 1
 
     def run(self):
         running = 1
