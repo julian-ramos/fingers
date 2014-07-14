@@ -120,8 +120,8 @@ class mainThread(threading.Thread):
                         vals.buff[1].put(mouseY)
                         smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
                         smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
-                        m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
-        #                 m.move(smoothX,smoothY)
+#                         m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
+                        m.move(smoothX,smoothY)
             
             if vals.wiimoteNum == vals.wiimoteMaxNum \
             and not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
