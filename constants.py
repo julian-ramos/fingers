@@ -41,9 +41,6 @@ kThumbAngle=0
 wiimoteNum = 0
 wiimoteMaxNum = 2
 
-#wiiMACAddr
-wiiMACFile = 'wiiMAC.data'
-
 #calibration constants
 mouseModeValue=10
 clickValue=10
