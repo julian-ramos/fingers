@@ -1,0 +1,6 @@
+*.class
+*.pyc
+*.pyo
+runner.sh~
+.pydevproject
+.project

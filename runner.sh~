@@ -1,0 +1,1 @@
+x-terminal-emulator --tab -e "python client.py" --tab -e "python mainFinger.py"
