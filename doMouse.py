@@ -1,9 +1,14 @@
+from scipy.spatial.distance import euclidean 
 import constants as vals
 import funcs as fun
 import time
 
 
 def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
+#3D Distance from the tipIndex to tipThumb
+    dist3D=euclidean(rpt[tipIndex],rpt[tipThumb])
+    vals.dist3D=dist3D   
+    
 #Distance for switching modes
     dista=fun.distanceVec(\
     [rpt[tipIndex][0]],\

@@ -120,3 +120,4 @@ ASDFIKD=0
 
 clickDistance=0
 tipDistance=0
+dist3D=0
