@@ -49,8 +49,8 @@ while 1:
                 for m in mesg[1]:   # Loop through IR LED sources
                     cont+=1
                     if m:   # If a source exists
-                        rpt[cont][0]=(1200-m['pos'][0])/2
-                        rpt[cont][1]=m['pos'][1]/2
+                        rpt[cont][0]=(1200-m['pos'][0])
+                        rpt[cont][1]=m['pos'][1]
     
     mess2send='%s,0|x%.2fy%.2f,1|x%.2fy%.2f,2|x%.2fy%.2f,3|x%.2fy%.2f,'%(wiiID,\
                                                       rpt[0][0],rpt[0][1],\
