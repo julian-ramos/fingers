@@ -289,7 +289,11 @@ class Client(threading.Thread):
         while running:
             data = self.client.recv(self.size)                
             if data:
-                self.wiiID,self.data=messageDecypher(data)
+                try:
+                    self.wiiID,self.data=messageDecypher(data)
+                except:
+                    print "User quit."
+                    return
                 global coords
                 
                 if self.wiiID.find('1')>=0:
