@@ -18,26 +18,40 @@ port = 50000
 size = 1024
 socketCon=False
 # s.send('identity wiiMote1')
-wiiMAC=[]
+wiiMAC=[]   
+#wiiMACAddr: Write your wiimote address in the file 'wiiMAC.data'.
+#Such as:
+#xx:xx:xx:xx:xx:xx
+#xx:xx:xx:xx:xx:xx
+wiiMACFile = 'wiiMAC.data' 
 done=False
 while not done:
+    wiiMACAddr = []
     try:
-        # if wiiMAC=='00:23:CC:8F:AA:9E':
-        #     wiiMAC='00:24:1E:7A:DD:5B'
-        #     wiiID='wiiMote1'
-        # else:
-        #     wiiMAC='00:23:CC:8F:AA:9E'
-        #     wiiID='wiiMote2'
-        wiiMAC1 = 'A4:5C:27:22:B4:5D'
-        wiiMAC2 = '00:19:1D:60:7E:CE'
-        if wiiMAC==wiiMAC2:
-            wiiMAC=wiiMAC1
-            wiiID='wiiMote1'
-        else:
-            wiiMAC=wiiMAC2
-            wiiID='wiiMote2'
-        print "Trying to connect to "+" "+wiiMAC
-        print "Press 1 & 2 on the Wiimote simultaneously, to find it"
+        wiiMACReader = open(wiiMACFile, 'r')
+        wiiMACAddr = wiiMACReader.readlines()
+        wiiMACReader.close()
+    except:
+        print 'Error: Wiimote MAC addr file not found.'
+        continue
+    # wiiMACReader = open(wiiMACFile, 'r')
+    # wiiMACAddr = wiiMACReader.readlines()
+    # wiiMACReader.close()
+
+    if len(wiiMACAddr) != 2:
+        print 'Error: Invalid wiimote MAC addr.'
+        continue
+
+    if wiiMAC == wiiMACAddr[1].strip():
+        wiiMAC = wiiMACAddr[0].strip()
+        wiiID = 'wiiMote1'
+    else:
+        wiiMAC = wiiMACAddr[1].strip()
+        wiiID = 'wiiMote2'
+    print "Trying to connect to "+" "+wiiMAC
+    print "Press 1 & 2 on the Wiimote simultaneously, to find it"
+    
+    try:
         wii = cwiid.Wiimote(wiiMAC)
         wii.enable(cwiid.FLAG_MESG_IFC)
         wii.rpt_mode = cwiid.RPT_IR | cwiid.RPT_BTN

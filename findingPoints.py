@@ -1,6 +1,3 @@
-import findingPoints
-
-
 from pymouse import PyMouse
 from pykeyboard import PyKeyboard
 import pygame
