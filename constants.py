@@ -63,14 +63,42 @@ calibWriteFinished = False
 
 #recording flags
 rec_flg =0
-flg=True
 mouse_flg=0
+
+# Not used in current version of click&drag
+flg=True
 click_flg=0
 doubleClick_flg=0
 drag_flg=0
-dragX=0
-dragY=0
 wait_flg=0
+mouseClickBuff = [[], []]
+
+# Mark down the possible point of click or drag
+clickX = 0
+clickY = 0
+dragX = 0
+dragY = 0
+
+# Define some name of mouse state machine
+mouseState = 0
+MOUSE_NORMAL = 0
+MOUSE_CLICK_READY = MOUSE_NORMAL + 1
+MOUSE_CLICK = MOUSE_CLICK_READY + 1
+MOUSE_DRAG = MOUSE_CLICK + 1
+
+# Calculating the variance may not work, because we can both click and drag without moving.
+'''
+# The variance threshold of X and Y to judge the correct action(click / drag)
+# Click var is smaller than actionVar, and drag var is bigger
+# (varX + varY) / 2 
+mouseActVarThre = 30
+
+# Original data used to get actionVar
+mouseActBuff = [[], []]
+'''
+# The time threshold to do the judge(millisecond)
+mouseActTimeThre = 150
+
 
 timeHold=80 #in milliseconds      
 mouseModeSwitchTime=0
