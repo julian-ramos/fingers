@@ -100,6 +100,10 @@ mouseActBuff = [[], []]
 mouseActTimeThre = 150
 
 
+
+mouseSwitched_flg=0
+mouseModeSwitchTime=0
+
 timeHold=80 #in milliseconds      
 mouseModeSwitchTime=0
 
@@ -148,3 +152,5 @@ ASDFIKD=0
 clickDistance=0
 tipDistance=0
 dist3D=0
+
+boxLimit=41 #(the upper bound of box. Note as value decreases, box size increases)

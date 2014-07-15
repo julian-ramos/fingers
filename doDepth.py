@@ -39,3 +39,18 @@ def findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipInde
 
 #35cm=f*6cm/disparity
 #f=35cm/6cm*disparity    
+
+def checkAllInBox():
+    for i in xrange(4):
+        if vals.depthBuff[i].mean()<vals.boxLimit:#if a single one is out of box, false
+            return False;
+    return True;
+
+def checkIndexInBox(): 
+    return vals.depthBuff[2].mean()>=vals.boxLimit
+
+def checkAllAboveBox():
+    for i in xrange(4):
+        if vals.depthBuff[i].mean()>=vals.boxLimit: #if a single one is in box, false
+            return False;
+    return True;    

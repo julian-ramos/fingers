@@ -3,7 +3,7 @@ import constants as vals
 import funcs as fun
 import time
 import numpy as np
-
+import doDepth
 
 def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
@@ -27,6 +27,8 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     [rpt[tipThumb][1]])
 
     vals.clickDistance=distClick[0]
+
+
 #Modifying vals.mouseModeValue with respect to distance between knuckles
    # currentKnuckleValue=fun.distanceVec(\
    # [rpt[kIndex][0]],\
@@ -42,23 +44,30 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     newMouseModeValue=vals.mouseModeValue
     newClickValue=vals.clickValue
 
+
+
 #Switching Modes
+    #When distance tips goes below mouseModevalue, start measuring time.
     if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
         vals.mouseModeSwitchTime=time.time()  
-    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000<=5*vals.timeHold) and vals.mouse_flg==0 and vals.drag_flg==0 and 10<=dista[0]<=newMouseModeValue:
+
+    #if distance is below for a certain time and all other conditions are met, then switch
+    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) and vals.mouse_flg==0 and \
+        vals.drag_flg==0 and 10<=dista[0]<=newMouseModeValue and not vals.mouseSwitched_flg:
         print('Mouse mode activated')
         vals.mouse_flg=1
         vals.mouseModeSwitchTime=0
-    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000<=5*vals.timeHold) and vals.mouse_flg==1 and vals.drag_flg==0 and 10<=dista[0]<=newMouseModeValue:
+        vals.mouseSwitched_flg=1
+    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) and vals.mouse_flg==1 and \
+                vals.drag_flg==0 and 10<=dista[0]<=newMouseModeValue and not vals.mouseSwitched_flg:
         print('Mouse mode deactivated')
         vals.mouse_flg=0
         vals.contDist=0
-    if (time.time()-vals.mouseModeSwitchTime)*1000>5*vals.timeHold:
+        vals.mouseSwitched_flg=1
+    #after switching, the fingers need to part in order to reset constants.
+    if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
+        vals.mouseSwitched_flg=0
         vals.mouseModeSwitchTime=0
-
-#raise a flg to stop from switching.4
-
-
 
 #Adjusting MaxBuff with respect to thumbtip and index knuckle
     #if vals.mouse_flg:
