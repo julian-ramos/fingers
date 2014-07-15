@@ -36,6 +36,7 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
     distance3D=calibFont.render("3D-Distance:"+str(int(vals.dist3D)),1,vals.white)
     screen.blit(distance3D,(0,255))
 
+
 #main circles
     pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
     pygame.draw.circle(screen, vals.blue, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)

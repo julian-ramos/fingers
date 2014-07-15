@@ -100,11 +100,17 @@ class mainThread(threading.Thread):
                 doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
                 #doDraw.drawAllMiniRecording(miniScreen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
         
+            #Creating the 3d box
+
+
             #Mouse Events
-                doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                if doDepth.checkAllInBox():
+                    doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
-                doGestures.gestures(averageX,averageY,k,m)
-                
+                print doDepth.checkAllAboveBox()
+                if doDepth.checkAllAboveBox():
+                    doGestures.gestures(averageX,averageY,k,m)
+
                 if vals.mouse_flg==1:
                     mouseX=(rpt[tipIndex][0]-600)*width/400                    
                     mouseY=(rpt[tipIndex][1]-150)*height/290
@@ -115,7 +121,7 @@ class mainThread(threading.Thread):
                     then this problem won't exist, but then it may start to recognize the knuckle LED as the tip and vice 
                     versa. So this is a give or take until we have a better filtering method."""
         
-                    if vals.inrange:
+                    if vals.inrange and doDepth.checkIndexInBox():
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
                         smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
