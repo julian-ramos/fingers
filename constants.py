@@ -53,12 +53,14 @@ rightClickValue=180
 
 clickNum = 5
 
+'''
 # Not used in current version
 mouseModeCalib=False
 startMouseModeCalib=False
 clickingCalib=False
 startClickModeCalib=False
 calibWriteFinished = False
+'''
 
 # Define the calibration state machine
 calibState = 0
@@ -76,6 +78,7 @@ calibReadFinished = False
 rec_flg =0
 mouse_flg=0
 
+'''
 # Not used in current version of click&drag
 flg=True
 click_flg=0
@@ -83,6 +86,7 @@ doubleClick_flg=0
 drag_flg=0
 wait_flg=0
 mouseClickBuff = [[], []]
+'''
 
 # Mark down the possible point of click or drag
 clickX = 0
