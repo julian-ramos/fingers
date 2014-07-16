@@ -104,25 +104,29 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,av
     pygame.draw.circle(screen, vals.white, (averageX/3,averageY/3),10)
 
     #Drawing the instructions
-    pygame.draw.rect(screen, vals.gray, (0,5,500,60))
-    if not (vals.mouseModeCalib or vals.startClickModeCalib or vals.startMouseModeCalib or vals.clickingCalib):
+    pygame.draw.rect(screen, vals.gray, (0,5,600,60))
+    if vals.calibState == vals.START_CALIB:
         Calib1=calibFont.render("Press H to start",1,vals.black)
         screen.blit(Calib1,(0,15))
-    if vals.startMouseModeCalib and not vals.mouseModeCalib:
+
+    elif vals.calibState == vals.MOUSE_MODE_CALIB:
         Calib1=calibFont.render("Tap tip of thumb and tip of index",1,vals.black)
         screen.blit(Calib1,(0,15))
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),5 )
-        vals.mouseModeCalibList.append(mouseModeDistance[0])                
-    if vals.startClickModeCalib and not vals.clickingCalib:
-        Calib1=calibFont.render("Tap tip of thumb and knuckle of index",1,vals.black)
+        vals.mouseModeCalibList.append(mouseModeDistance[0])     
+
+    elif vals.calibState == vals.CLICK_CALIB:
+        Calib1=calibFont.render("Tap tip of thumb and knuckle of index for {} times".format(\
+            str(vals.clickNum)), 1, vals.black)
         screen.blit(Calib1,(0,15))
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[kIndex][0]/3,rpt[kIndex][1]/3),5 )
-        vals.clickingCalibList.append(clickingDistance[0])                    
-    if vals.mouseModeCalib and vals.clickingCalib:
+        vals.clickingCalibList.append(clickingDistance[0])      
+                      
+    elif vals.calibState == vals.END_CALIB:
         calibrationDone=1
         Calib1=calibFont.render("Calibration Completed",1,vals.black)
         screen.blit(Calib1,(0,15))

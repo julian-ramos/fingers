@@ -37,50 +37,44 @@ def eventHandling(eventsObject):
                 else:
                     vals.mouse_flg=1
                     
-        #Mouse events for vals.calibration mode
+        # Mouse events for vals.calibration mode
             if vals.calibration:
-                if not vals.mouseModeCalib:
-                    if not vals.startMouseModeCalib and event.key==pygame.K_h:
-                        vals.startMouseModeCalib=True 
-                    elif vals.startMouseModeCalib and event.key==pygame.K_h:
-                        vals.mouseModeCalib=True
-                        while min(vals.mouseModeCalibList)<50:
+                # Transition if press 'H'
+                if event.key == pygame.K_h:
+                    if vals.calibState == vals.START_CALIB:
+                        vals.calibState = vals.MOUSE_MODE_CALIB
+
+                    elif vals.calibState == vals.MOUSE_MODE_CALIB:
+                        while min(vals.mouseModeCalibList) < 50:
                             vals.mouseModeCalibList.remove(min(vals.mouseModeCalibList))
-                        vals.mouseModeValue=int(1.2*min(vals.mouseModeCalibList))
-                        vals.mouseModeCalib=True
-                if vals.mouseModeCalib:
-                    if not vals.startClickModeCalib and event.key==pygame.K_h:
-                        vals.startClickModeCalib=True
-                    elif vals.startClickModeCalib and event.key==pygame.K_h:
-                        while min(vals.clickingCalibList)<30:
-                            vals.clickingCalibList.remove(min(vals.clickingCalibList))
-                        vals.clickValue=int(1.2*min(vals.clickingCalibList))
-                        vals.clickingCalib=True
+                        vals.mouseModeValue = int(1.2 * min(vals.mouseModeCalibList))
+                        vals.calibState = vals.CLICK_CALIB
 
-                        #store them to file.
-                        if not vals.calibWriteFinished:
+                    elif vals.calibState == vals.CLICK_CALIB:
+                            while min(vals.clickingCalibList) < 30:
+                                vals.clickingCalibList.remove(min(vals.clickingCalibList))
+                            vals.clickValue=int(1.2 * min(vals.clickingCalibList))
+
+                            #store them to file.
                             calibWriter = CalibFileManager(vals.calibFile)
-                            calibWriter.write(vals.mouseModeValue, vals.clickValue)
+                            calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.boxLimit)
+                            vals.calibState = vals.END_CALIB
 
-                            vals.calibWriteFinished = True
-
+            # Read calibration data from file, vals.calibLoadFlag mode
             if vals.calibLoadFlag:
                 if not vals.calibReadFinished:
                     calibReader = CalibFileManager(vals.calibFile)
                     try:
                         vals.mouseModeValue = int(calibReader.read('mouseModeValue'))
                         vals.clickValue = int(calibReader.read('clickValue'))
+                        vals.boxLimit = int(calibReader.read('boxLimit'))
                     except:
                         # Go back and press again
                         print 'Error: Calibration data file not found.'
                         vals.calibLoadFlag = False
                         return
 
-                    vals.clickingCalib = True
-                    vals.startClickModeCalib = True
-                    vals.mouseModeCalib = True
-                    vals.startMouseModeCalib = True
-
+                    vals.calibState = vals.END_CALIB
                     vals.calibReadFinished = True
 
         if event.type==QUIT:

@@ -47,19 +47,30 @@ clickValue=10
 knuckleValue=80
 lagValue=100
 calibration=False
+mouseModeCalibList=[]
+clickingCalibList=[]
+rightClickValue=180
+
+clickNum = 5
+
+# Not used in current version
 mouseModeCalib=False
 startMouseModeCalib=False
 clickingCalib=False
 startClickModeCalib=False
-mouseModeCalibList=[]
-clickingCalibList=[]
-rightClickValue=180
+calibWriteFinished = False
+
+# Define the calibration state machine
+calibState = 0
+START_CALIB, \
+MOUSE_MODE_CALIB, \
+CLICK_CALIB, \
+END_CALIB = range(4)
 
 #calibration file using JSON
 calibFile = 'calib.data'
 calibLoadFlag = False
 calibReadFinished = False
-calibWriteFinished = False
 
 #recording flags
 rec_flg =0
@@ -79,12 +90,12 @@ clickY = 0
 dragX = 0
 dragY = 0
 
-# Define some name of mouse state machine
+# Define the mouse state machine
 mouseState = 0
-MOUSE_NORMAL = 0
-MOUSE_CLICK_READY = MOUSE_NORMAL + 1
-MOUSE_CLICK = MOUSE_CLICK_READY + 1
-MOUSE_DRAG = MOUSE_CLICK + 1
+MOUSE_NORMAL, \
+MOUSE_CLICK_READY, \
+MOUSE_CLICK, \
+MOUSE_DRAG = range(4)
 
 # Calculating the variance may not work, because we can both click and drag without moving.
 '''
