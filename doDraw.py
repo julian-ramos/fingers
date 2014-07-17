@@ -1,13 +1,13 @@
 import constants as vals
 
 import pygame
-
+import doDepth
 from pygame.locals import *
 
 import funcs as fun
 
 
-def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont, calibFont,depthFont):
+def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont, calibFont,depthFont):
 #     screen.fill(vals.black)
 
     mouseLabel=myfont.render("Mouse:"+" "+str(vals.mouseModeValue) ,1,(255,255,255))
@@ -36,6 +36,9 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
     distance3D=calibFont.render("3D-Distance:"+str(int(vals.dist3D)),1,vals.white)
     screen.blit(distance3D,(0,255))
 
+    box3D=calibFont.render(str(int(vals.boxLimit)),1,vals.white)
+    screen.blit(box3D,(0,285))
+
 
 #main circles
     pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
@@ -44,6 +47,7 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
     pygame.draw.circle(screen, vals.white, (rpt[kThumb][0]/3,rpt[kThumb][1]/3),10)
 
     pygame.draw.circle(screen, vals.gray, (averageX/3,averageY/3),13)
+    pygame.draw.circle(screen, vals.gray, (averageX2/3,averageY2/3),13)
 
     pygame.draw.circle(screen, vals.red, (rpt2[tipIndex2][0]/3,rpt2[tipIndex2][1]/3),10)
     pygame.draw.circle(screen, vals.blue, (rpt2[kIndex2][0]/3,rpt2[kIndex2][1]/3),10)
@@ -81,7 +85,7 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
 
 
 
-def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,averageY,myfont,calibFont,depthFont):
+def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipIndex2, tipThumb2,kThumb2,kIndex2,averageX,averageY,myfont,calibFont,depthFont):
     mouseModeDistance=fun.distanceVec(\
         [rpt[tipIndex][0]],\
         [rpt[tipIndex][1]],\
@@ -117,6 +121,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,av
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),5 )
         vals.mouseModeCalibList.append(mouseModeDistance[0])     
 
+
     elif vals.calibState == vals.CLICK_CALIB:
         Calib1=calibFont.render("Tap tip of thumb and knuckle of index for {} times".format(\
             str(vals.clickNum)), 1, vals.black)
@@ -124,7 +129,10 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,av
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[kIndex][0]/3,rpt[kIndex][1]/3),5 )
-        vals.clickingCalibList.append(clickingDistance[0])      
+        vals.clickingCalibList.append(clickingDistance[0])  
+        doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
+        vals.boxBoundCalibList.append(doDepth.meanDepth())
+    
                       
     elif vals.calibState == vals.END_CALIB:
         calibrationDone=1
@@ -132,6 +140,10 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,av
         screen.blit(Calib1,(0,15))
         Calib2=calibFont.render("Press r to start recording",1,vals.black)
         screen.blit(Calib2,(0,35))
+
+
+
+
 
 
 def drawAllMiniRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont, calibFont,depthFont):

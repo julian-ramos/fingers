@@ -49,6 +49,11 @@ lagValue=100
 calibration=False
 mouseModeCalibList=[]
 clickingCalibList=[]
+
+boxLimit=41 #(the upper bound of box. Note as value decreases, box size increases)
+boxBoundCalibList=[]
+
+
 rightClickValue=180
 
 clickNum = 5
@@ -140,10 +145,10 @@ depthBuff[2]=q.miniQueue(maxDepthBuff)
 depthBuff[3]=q.miniQueue(maxDepthBuff)
 
 #gesture constants
-gestureRightThreshHold=1000
-gestureLeftThreshHold=450
-gestureDownThreshHold=700
-gestureUpThreshHold=400
+gestureRightThreshHold=800
+gestureLeftThreshHold=550
+gestureDownThreshHold=550
+gestureUpThreshHold=350
 
 gesture_flg_UD=0
 gesture_flg_DU=0
@@ -168,4 +173,3 @@ clickDistance=0
 tipDistance=0
 dist3D=0
 
-boxLimit=41 #(the upper bound of box. Note as value decreases, box size increases)

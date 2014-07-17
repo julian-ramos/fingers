@@ -67,20 +67,20 @@ class mainThread(threading.Thread):
             rpt2=[[int(i2) for i2 in i]for i in coords[1]]
             
             if not vals.rec_flg and (vals.calibration or vals.calibLoadFlag): #do calibration or load from file
-                #Receiving data from the threads
-            
-                
-                newList=findingPoints.findDegrees(rpt) #[(theta1,i1),(theta2,i2)....)]
+            #Receiving data from the threads
+                newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
                 tipIndex, tipIndexAngle, kIndex,kIndexAngle=findingPoints.indexData(newList)
                 tipThumb,tipThumbAngle,kThumb,kThumbAngle=findingPoints.thumbData(newList)
-                averageX,averageY=findingPoints.centerFind(rpt)
+                averageX,averageY=findingPoints.centerFind(rpt) #the center point
+            #Find out the location of the 2nd Wiimote LEDs
+                newList2=findingPoints.findDegrees(rpt2) #returns in from [(theta1,i1),(theta2,i2)....)]
+                tipIndex2, tipIndexAngle2, kIndex2,kIndexAngle2=findingPoints.indexData(newList2)
+                tipThumb2,tipThumbAngle2,kThumb2,kThumbAngle2=findingPoints.thumbData(newList2)
             #GUI section
                 #doDraw.drawAllMiniCalibration(miniScreen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,averageY,myfont,calibFont,depthFont)
-                doDraw.drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,averageY,myfont,calibFont,depthFont)
+                doDraw.drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2, tipIndex2, tipThumb2,kThumb2,kIndex2, averageX,averageY,myfont,calibFont,depthFont)
             
-            if vals.rec_flg==1: #Recording
-            #Receiving data from the threads
-        
+            if vals.rec_flg==1: #Recording 
             #Finding out the location of the LEDs, tipThumb, kThumb....
                 newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
                 tipIndex, tipIndexAngle, kIndex,kIndexAngle=findingPoints.indexData(newList)
@@ -90,6 +90,8 @@ class mainThread(threading.Thread):
                 newList2=findingPoints.findDegrees(rpt2) #returns in from [(theta1,i1),(theta2,i2)....)]
                 tipIndex2, tipIndexAngle2, kIndex2,kIndexAngle2=findingPoints.indexData(newList2)
                 tipThumb2,tipThumbAngle2,kThumb2,kThumbAngle2=findingPoints.thumbData(newList2)
+                averageX2,averageY2=findingPoints.centerFind(rpt2) #the center point
+
             #Check whether LED is in range
                 newRpt=copy.deepcopy(rpt)
                 vals.rptList.append(newRpt)
@@ -97,7 +99,7 @@ class mainThread(threading.Thread):
             #Depth
                 doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
             #GUI
-                doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
+                doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont,calibFont,depthFont)
                 #doDraw.drawAllMiniRecording(miniScreen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
         
             #Creating the 3d box
@@ -107,7 +109,6 @@ class mainThread(threading.Thread):
                 if doDepth.checkAllInBox():
                     doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
-                print doDepth.checkAllAboveBox()
                 if doDepth.checkAllAboveBox():
                     doGestures.gestures(averageX,averageY,k,m)
 
