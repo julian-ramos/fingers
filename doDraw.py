@@ -1,8 +1,9 @@
 import constants as vals
 
 import pygame
-
 from pygame.locals import *
+
+import time
 
 import funcs as fun
 
@@ -124,7 +125,8 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,av
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[kIndex][0]/3,rpt[kIndex][1]/3),5 )
-        vals.clickingCalibList.append(clickingDistance[0])      
+        vals.clickingCalibList[0].append(time.time() - vals.clickCalibSTime)
+        vals.clickingCalibList[1].append(clickingDistance[0]) 
                       
     elif vals.calibState == vals.END_CALIB:
         calibrationDone=1

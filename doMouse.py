@@ -81,7 +81,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     # Clicking and Dragging
     if vals.mouseState == vals.MOUSE_NORMAL:
         # print 'NORMAL'
-        print distClick[0], vals.inrange, vals.mouse_flg
+        # print distClick[0], vals.inrange, vals.mouse_flg
         if distClick[0] <= newClickValue and vals.inrange and vals.mouse_flg:
             # Get possible point of click or drag
             vals.clickX, vals.clickY = vals.buff[0].mean(), vals.buff[1].mean()
@@ -116,7 +116,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     elif vals.mouseState == vals.MOUSE_DRAG:
         # print 'DRAG'
-        if distClick[0] > newClickValue and vals.mouse_flg:
+        if distClick[0] > newClickValue * 1.5 and vals.mouse_flg:
             vals.mouseState = vals.MOUSE_NORMAL
             m.release(vals.buff[0].mean(),vals.buff[1].mean())
             print("Release")

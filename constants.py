@@ -14,7 +14,7 @@ yellow = (255,255,0)
 gray= (205,200, 177)
 
 buff=[[],[]]
-maxBuff=20
+maxBuff = 10
 buff[0]=q.miniQueue(maxBuff)
 buff[1]=q.miniQueue(maxBuff)
 
@@ -48,7 +48,7 @@ knuckleValue=80
 lagValue=100
 calibration=False
 mouseModeCalibList=[]
-clickingCalibList=[]
+clickingCalibList=[[], []]		#time, value
 rightClickValue=180
 
 clickNum = 5
@@ -63,7 +63,7 @@ calibWriteFinished = False
 '''
 
 # Define the calibration state machine
-calibState = 0
+calibState = -1
 START_CALIB, \
 MOUSE_MODE_CALIB, \
 CLICK_CALIB, \
@@ -73,6 +73,9 @@ END_CALIB = range(4)
 calibFile = 'calib.data'
 calibLoadFlag = False
 calibReadFinished = False
+
+# Used to get user's  clickValue and clickTime(mouseActTimeThre)
+clickCalibSTime = 0
 
 #recording flags
 rec_flg =0
@@ -113,8 +116,6 @@ mouseActBuff = [[], []]
 '''
 # The time threshold to do the judge(millisecond)
 mouseActTimeThre = 150
-
-
 
 mouseSwitched_flg=0
 mouseModeSwitchTime=0
@@ -168,4 +169,4 @@ clickDistance=0
 tipDistance=0
 dist3D=0
 
-boxLimit=41 #(the upper bound of box. Note as value decreases, box size increases)
+boxLimit=21 #(the upper bound of box. Note as value decreases, box size increases)
