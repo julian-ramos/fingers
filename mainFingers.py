@@ -80,9 +80,7 @@ class mainThread(threading.Thread):
                 #doDraw.drawAllMiniCalibration(miniScreen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,averageY,myfont,calibFont,depthFont)
                 doDraw.drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2, tipIndex2, tipThumb2,kThumb2,kIndex2, averageX,averageY,myfont,calibFont,depthFont)
             
-            if vals.rec_flg==1: #Recording
-            #Receiving data from the threads
-        
+            if vals.rec_flg==1: #Recording 
             #Finding out the location of the LEDs, tipThumb, kThumb....
                 newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
                 tipIndex, tipIndexAngle, kIndex,kIndexAngle=findingPoints.indexData(newList)
