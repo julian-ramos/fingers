@@ -51,15 +51,17 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
         vals.mouseModeSwitchTime=time.time()  
 
+
+    hold5ms = (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) 
+    tipInRange= (10<=dista[0]<=newMouseModeValue)
+    mouseCondition= hold5ms and tipInRange and vals.inrange==1
     #if distance is below for a certain time and all other conditions are met, then switch
-    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) and vals.mouse_flg==0 and \
-        vals.mouseState!=vals.MOUSE_DRAG and 10<=dista[0]<=newMouseModeValue and not vals.mouseSwitched_flg:
+    if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
         print('Mouse mode activated')
         vals.mouse_flg=1
         vals.mouseModeSwitchTime=0
         vals.mouseSwitched_flg=1
-    if (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) and vals.mouse_flg==1 and \
-                vals.mouseState!=vals.MOUSE_DRAG and 10<=dista[0]<=newMouseModeValue and not vals.mouseSwitched_flg:
+    if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
         print('Mouse mode deactivated')
         vals.mouse_flg=0
         vals.contDist=0
@@ -81,7 +83,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     # Clicking and Dragging
     if vals.mouseState == vals.MOUSE_NORMAL:
         # print 'NORMAL'
-        # print distClick[0], vals.inrange, vals.mouse_flg
+        #print distClick[0], vals.inrange, vals.mouse_flg
         if distClick[0] <= newClickValue and vals.inrange and vals.mouse_flg:
             # Get possible point of click or drag
             vals.clickX, vals.clickY = vals.buff[0].mean(), vals.buff[1].mean()
@@ -116,7 +118,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     elif vals.mouseState == vals.MOUSE_DRAG:
         # print 'DRAG'
-        if distClick[0] > newClickValue * 1.5 and vals.mouse_flg:
+        if distClick[0] > newClickValue * 1.2 and vals.mouse_flg:
             vals.mouseState = vals.MOUSE_NORMAL
             m.release(vals.buff[0].mean(),vals.buff[1].mean())
             print("Release")

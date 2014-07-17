@@ -54,3 +54,10 @@ def checkAllAboveBox():
         if vals.depthBuff[i].mean()>=vals.boxLimit: #if a single one is in box, false
             return False;
     return True;    
+
+def meanDepth():
+    averageDepth=0
+    for i in xrange(4):
+        averageDepth+=vals.depthBuff[i].mean()
+    averageDepth=averageDepth/4
+    return averageDepth

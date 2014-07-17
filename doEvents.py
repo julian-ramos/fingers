@@ -79,6 +79,14 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
+                        while min(vals.boxBoundCalibList)<15:
+                            vals.boxBoundCalibList.remove(min(vals.boxBoundCalibList))
+                        sumBoxLimit=0
+                        for i in xrange(len(vals.boxBoundCalibList)):
+                            sumBoxLimit+=vals.boxBoundCalibList[i]
+                        sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
+                        vals.boxLimit=int(sumBoxLimit)-4
+
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
                         calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit)
