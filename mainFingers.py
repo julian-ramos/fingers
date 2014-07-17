@@ -107,7 +107,7 @@ class mainThread(threading.Thread):
                 if doDepth.checkAllInBox():
                     doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
-                print doDepth.checkAllAboveBox()
+                # print doDepth.checkAllAboveBox()
                 if doDepth.checkAllAboveBox():
                     doGestures.gestures(averageX,averageY,k,m)
 
@@ -121,13 +121,14 @@ class mainThread(threading.Thread):
                     then this problem won't exist, but then it may start to recognize the knuckle LED as the tip and vice 
                     versa. So this is a give or take until we have a better filtering method."""
         
-                    if vals.inrange and doDepth.checkIndexInBox():
+                    if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
                         smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
                         smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
-#                         m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
-                        m.move(smoothX,smoothY)
+                        # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
+                        m.move(smoothX, smoothY)
+                        # m.move(mouseX, mouseY)
             
             if vals.wiimoteNum == vals.wiimoteMaxNum \
             and not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
