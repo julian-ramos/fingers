@@ -122,6 +122,8 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),5 )
         vals.mouseModeCalibList.append(mouseModeDistance[0])     
+        doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
+        vals.boxBoundCalibList.append(doDepth.meanDepth())        
 
     elif vals.calibState == vals.CLICK_CALIB:
         Calib1=calibFont.render("Tap tip of thumb and knuckle of index for {} times".format(\
@@ -132,8 +134,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[kIndex][0]/3,rpt[kIndex][1]/3),5 )
         vals.clickingCalibList[0].append(time.time() - vals.clickCalibSTime)
         vals.clickingCalibList[1].append(clickingDistance[0]) 
-        doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
-        vals.boxBoundCalibList.append(doDepth.meanDepth())
+
                       
     elif vals.calibState == vals.END_CALIB:
         calibrationDone=1

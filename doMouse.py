@@ -45,32 +45,30 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     newClickValue=vals.clickValue
 
 
+    if doDepth.checkAllInBox():
+    #Switching Modes
+        #When distance tips goes below mouseModevalue, start measuring time.
+        if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
+            vals.mouseModeSwitchTime=time.time()  
 
-#Switching Modes
-    #When distance tips goes below mouseModevalue, start measuring time.
-    if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
-        vals.mouseModeSwitchTime=time.time()  
-
-
-    hold5ms = (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) 
-    tipInRange= (10<=dista[0]<=newMouseModeValue)
-    mouseCondition= hold5ms and tipInRange and vals.inrange==1
-    #if distance is below for a certain time and all other conditions are met, then switch
-    # print vals.testTypeFlag
-    if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
-        print('Mouse mode activated')
-        vals.mouse_flg=1
-        vals.mouseModeSwitchTime=0
-        vals.mouseSwitched_flg=1
-    if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
-        print('Mouse mode deactivated')
-        vals.mouse_flg=0
-        vals.contDist=0
-        vals.mouseSwitched_flg=1
-    #after switching, the fingers need to part in order to reset constants.
-    if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
-        vals.mouseSwitched_flg=0
-        vals.mouseModeSwitchTime=0
+        hold5ms = (vals.timeHold<=(time.time()-vals.mouseModeSwitchTime)*1000) 
+        tipInRange= (10<=dista[0]<=newMouseModeValue)
+        mouseCondition= hold5ms and tipInRange and vals.inrange==1
+        #if distance is below for a certain time and all other conditions are met, then switch
+        if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
+            print('Mouse mode activated')
+            vals.mouse_flg=1
+            vals.mouseModeSwitchTime=0
+            vals.mouseSwitched_flg=1
+        if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
+            print('Mouse mode deactivated')
+            vals.mouse_flg=0
+            vals.contDist=0
+            vals.mouseSwitched_flg=1
+        #after switching, the fingers need to part in order to reset constants.
+        if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
+            vals.mouseSwitched_flg=0
+            vals.mouseModeSwitchTime=0
 
 #Adjusting MaxBuff with respect to thumbtip and index knuckle
     #if vals.mouse_flg:
@@ -126,10 +124,10 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print 'distClick[0]: ' + str(distClick[0])
 
     if vals.testTypeFlag:
-        # time, dista[0], distClick[0], hold5ms, tipInRange, vals.inrange
+        # time, dista[0], distClick[0], vals.inrange
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
-            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(hold5ms), str(tipInRange), str(vals.inrange), \
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(vals.inrange), \
             str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
             str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), str(vals.mouse_flg)
             ))

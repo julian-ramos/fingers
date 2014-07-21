@@ -30,8 +30,7 @@ def eventHandling(eventsObject):
                 vals.quit_FLG=1
                 if vals.testTypeFlag:
                     ttf  = open(vals.testTypeFile, 'w')
-                    print >> ttf, 'time, dista[0], distClick[0], hold5ms, tipInRange, vals.inrange, \
-                    tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg'
+                    print >> ttf, 'time, dista[0], distClick[0], vals.inrange, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg'
                     for string in vals.testTypeData:
                         print >> ttf, string
                     ttf.close()
@@ -71,6 +70,15 @@ def eventHandling(eventsObject):
                             vals.mouseModeCalibList.remove(min(vals.mouseModeCalibList))
                         vals.mouseModeValue = int(1.2 * min(vals.mouseModeCalibList))
                         vals.clickCalibSTime = time.time()
+                        while min(vals.boxBoundCalibList)<15:
+                            vals.boxBoundCalibList.remove(min(vals.boxBoundCalibList))
+                        sumBoxLimit=0
+                        for i in xrange(len(vals.boxBoundCalibList)):
+                            sumBoxLimit+=vals.boxBoundCalibList[i]
+                        sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
+                        vals.boxLimit=int(sumBoxLimit)-3
+                        vals.boxLimitBottom=int(sumBoxLimit)+3
+
                         vals.calibState = vals.CLICK_CALIB
 
                     elif vals.calibState == vals.CLICK_CALIB:
@@ -96,17 +104,11 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
-                        while min(vals.boxBoundCalibList)<15:
-                            vals.boxBoundCalibList.remove(min(vals.boxBoundCalibList))
-                        sumBoxLimit=0
-                        for i in xrange(len(vals.boxBoundCalibList)):
-                            sumBoxLimit+=vals.boxBoundCalibList[i]
-                        sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
-                        vals.boxLimit=int(sumBoxLimit)-4
+
 
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
-                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit)
+                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
                         vals.calibState = vals.END_CALIB
 
             # Read calibration data from file, vals.calibLoadFlag mode
@@ -118,6 +120,8 @@ def eventHandling(eventsObject):
                         vals.clickValue = float(calibReader.read('clickValue'))
                         vals.mouseActTimeThre = float(calibReader.read('mouseActTimeThre'))
                         vals.boxLimit = float(calibReader.read('boxLimit'))
+                        vals.boxLimitBottom = float(calibReader.read('boxLimitBottom'))
+
                     except:
                         # Go back and press again
                         print 'Error: Calibration data file not found.'
