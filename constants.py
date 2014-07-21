@@ -41,11 +41,16 @@ kThumbAngle=0
 wiimoteNum = 0
 wiimoteMaxNum = 2
 
+# Test and collect data
+testTypeFlag = False
+testTypeFile = 'testTypeFile.txt'
+testTypeData = []
+testStartTime = 0
+
 #calibration constants
 mouseModeValue=10
 clickValue=10
 knuckleValue=80
-lagValue=100
 calibration=False
 mouseModeCalibList=[]
 clickingCalibList=[[], []]		#time, value
@@ -60,6 +65,7 @@ clickNum = 5
 
 '''
 # Not used in current version
+lagValue=100
 mouseModeCalib=False
 startMouseModeCalib=False
 clickingCalib=False

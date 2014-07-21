@@ -18,6 +18,7 @@ def eventHandling(eventsObject):
             if event.key==pygame.K_r: #start recording
                 vals.rec_flg=1
                 # vals.calibration=False
+                vals.testStartTime = time.time()
             elif event.key==pygame.K_c: #start vals.calibration
                 vals.calibration=1
                 vals.calibState = vals.START_CALIB
@@ -27,14 +28,30 @@ def eventHandling(eventsObject):
             elif event.key==pygame.K_q: #quits entirely
                 print "q pressed"
                 vals.quit_FLG=1
+                if vals.testTypeFlag:
+                    ttf  = open(vals.testTypeFile, 'w')
+                    print >> ttf, 'time, dista[0], distClick[0], hold5ms, tipInRange, vals.inrange, \
+                    tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg'
+                    for string in vals.testTypeData:
+                        print >> ttf, string
+                    ttf.close()
             #Load calibration data from file : 'l', load
             elif event.key == pygame.K_l:
                 vals.calibLoadFlag = True
+            # Start testing the device while typing
+            elif event.key == pygame.K_t:
+                if vals.testTypeFlag == False:
+                    vals.testTypeFlag = True
+                else:
+                    vals.testTypeFlag = False
+                print 'testType_flg changed to {}.'.format(str(vals.testTypeFlag)) 
+
             if vals.rec_flg: #if recording, can change the lag time
                 if event.key==pygame.K_z:
                     vals.lagValue+=100
                 elif event.key==pygame.K_x:
                     vals.lagValue-=100
+
             #Forced mouse mode
             if event.key==pygame.K_m:
                 if vals.mouse_flg==1:

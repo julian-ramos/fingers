@@ -56,6 +56,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     tipInRange= (10<=dista[0]<=newMouseModeValue)
     mouseCondition= hold5ms and tipInRange and vals.inrange==1
     #if distance is below for a certain time and all other conditions are met, then switch
+    # print vals.testTypeFlag
     if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
         print('Mouse mode activated')
         vals.mouse_flg=1
@@ -124,6 +125,14 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print("Release")
             print 'distClick[0]: ' + str(distClick[0])
 
+    if vals.testTypeFlag:
+        # time, dista[0], distClick[0], hold5ms, tipInRange, vals.inrange
+        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(hold5ms), str(tipInRange), str(vals.inrange), \
+            str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
+            str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), str(vals.mouse_flg)
+            ))
 
 '''
 # Old logic of click and drag.
