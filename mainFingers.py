@@ -106,8 +106,7 @@ class mainThread(threading.Thread):
 
 
             #Mouse Events
-                if doDepth.checkAllInBox():
-                    doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 if doDepth.checkAllAboveBox():
