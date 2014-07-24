@@ -125,10 +125,17 @@ class mainThread(threading.Thread):
                     if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
+                        # data0 = vals.buff[0].getData()
+                        # data1 = vals.buff[1].getData() 
+                        # smoothX = np.mean(fun.smooth(data0, window_len = len(data0)))
+                        # smoothY = np.mean(fun.smooth(data1, window_len = len(data1)))
+                        # print data0, data1
+                        # print smoothX, smoothY
                         smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
                         smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 
-                        if not vals.testTypeFlag:
+
+                        if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
                             m.move(smoothX, smoothY)
                             # m.move(mouseX, mouseY)

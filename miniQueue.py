@@ -1,16 +1,18 @@
 import numpy as np
 class miniQueue():
     
-    def __init__(self,maxlen=20):
-        self.data=[]
-        self.maxlen=maxlen
+    def __init__(self, maxBuff = 10):#, currBuff = 0):
+        self.data = []
+        self.maxBuff = maxBuff
+        # self.currBuff = currBuff
+        # if currBuff == 0:
+        #     self.currBuff = maxBuff
         
     def put(self,x):
-        if len(self.data)==self.maxlen:
+        if self.size() == self.maxBuff:
             self.data.pop(0)
-            self.data.append(x)
-        else:
-            self.data.append(x)
+
+        self.data.append(x)
             
     def get(self):
         if len(self.data)>0:
@@ -20,12 +22,29 @@ class miniQueue():
     def size(self):
         return len(self.data)
     def full(self):
-        return len(self.data)==self.maxlen
+        return len(self.data)==self.maxBuff
     def erase(self):
         self.data=[]
     def mean(self):
-        if self.size() > 0:
+        # if self.size() > self.currBuff:
+        #     # print -self.currBuff, self.size()
+        #     ret = np.mean(self.data[-self.currBuff:self.size()])
+        ret = 0
+        if self.size() > 0: 
             ret = np.mean(self.data)
-        else:
-            ret = 0
         return ret
+    # def setCurrBuff(self, currBuff):
+    #     ret = False
+    #     if currBuff > self.maxBuff:
+    #         self.currBuff = self.maxBuff
+    #     elif currBuff > 0:
+    #         self.currBuff = int(currBuff)
+    #         ret = True
+    #     return ret
+    # def getData(self):
+    #     ret = []
+    #     if self.size() > self.currBuff:
+    #         ret = self.data[-self.currBuff:self.size()]
+    #     else:
+    #         ret = self.data
+    #     return ret

@@ -14,9 +14,9 @@ yellow = (255,255,0)
 gray= (205,200, 177)
 
 buff=[[],[]]
-maxBuff = 10
-buff[0]=q.miniQueue(maxBuff)
-buff[1]=q.miniQueue(maxBuff)
+maxBuff = 10 		# Max buffer size of the x-y queue
+buff[0]=q.miniQueue(maxBuff)#, minBuff)
+buff[1]=q.miniQueue(maxBuff)#, minBuff)
 
 
 rpt=[ [0,0] for i in range(4)]
@@ -43,9 +43,13 @@ wiimoteMaxNum = 2
 
 # Test and collect data
 testTypeFlag = False
-testTypeFile = 'testTypeFile.txt'
+testPointFlag = False
+testTypeFile = 'testTypeFile.csv'
 testTypeData = []
 testStartTime = 0
+
+# Debug Mode
+debugFlag = False
 
 #calibration constants
 mouseModeValue=10

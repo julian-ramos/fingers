@@ -15,6 +15,16 @@ from funcs import peakdetect, smooth
 def eventHandling(eventsObject):
     for event in eventsObject:
         if event.type==KEYDOWN:
+            '''
+            'r': record mode
+            'c': calibration mode
+            'l': load data mode
+            't': test type open/close
+            'p': test mouse open/close
+            'd': debug mode opne/close
+            'm': switch between mouse and keyboard
+            'q': quit
+            '''
             if event.key==pygame.K_r: #start recording
                 vals.rec_flg=1
                 # vals.calibration=False
@@ -30,7 +40,7 @@ def eventHandling(eventsObject):
                 vals.quit_FLG=1
                 if vals.testTypeFlag:
                     ttf  = open(vals.testTypeFile, 'w')
-                    print >> ttf, 'time, dista[0], distClick[0], vals.inrange, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg'
+                    print >> ttf, 'time, dista[0], distClick[0], vals.inrange, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
                     for string in vals.testTypeData:
                         print >> ttf, string
                     ttf.close()
@@ -39,11 +49,16 @@ def eventHandling(eventsObject):
                 vals.calibLoadFlag = True
             # Start testing the device while typing
             elif event.key == pygame.K_t:
-                if vals.testTypeFlag == False:
-                    vals.testTypeFlag = True
-                else:
-                    vals.testTypeFlag = False
-                print 'testType_flg changed to {}.'.format(str(vals.testTypeFlag)) 
+                vals.testTypeFlag = not vals.testTypeFlag
+                print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
+            # Start testing the pointing function
+            elif event.key == pygame.K_p:
+                vals.testPointFlag = not vals.testPointFlag
+                print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
+            # Debug mode: test new feature
+            elif event.key == pygame.K_d:
+                vals.debugFlag = not vals.debugFlag
+                print 'debugFlag changed to {}'.format(str(vals.debugFlag))
 
             if vals.rec_flg: #if recording, can change the lag time
                 if event.key==pygame.K_z:
@@ -82,12 +97,12 @@ def eventHandling(eventsObject):
                         vals.calibState = vals.CLICK_CALIB
 
                     elif vals.calibState == vals.CLICK_CALIB:
-                        # Generate clickCalibFile to test
-                        # ccf = open('clickCalibFile.txt', 'w')
-                        # for i in range(len(vals.clickingCalibList[0])):
-                        #     print >> ccf, '{},{}'.format(vals.clickingCalibList[0][i],\
-                        #     vals.clickingCalibList[1][i])
-                        # ccf.close()
+                        # Generate clickCalibFile to test or debug
+                        ccf = open('clickCalibFile.txt', 'w')
+                        for i in range(len(vals.clickingCalibList[0])):
+                            print >> ccf, '{},{}'.format(vals.clickingCalibList[0][i],\
+                            vals.clickingCalibList[1][i])
+                        ccf.close()
                         # print vals.clickingCalibList
                                 
                         vals.clickValue, vals.mouseActTimeThre = getDistAndTime(\

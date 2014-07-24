@@ -70,14 +70,34 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouseSwitched_flg=0
             vals.mouseModeSwitchTime=0
 
-#Adjusting MaxBuff with respect to thumbtip and index knuckle
-    #if vals.mouse_flg:
+    '''
+    #Adjusting MaxBuff with respect to thumbtip and index knuckle
+    # It doesn't work. Currently this method uses a larger buffer when clicking,
+    # in order to avoid mistakes when getting the clickX and clickY.
+    # But this method will only work when we put the cursor still on the target.
+    # If we move and press 'click', it will be worse, because of its larger buffer contains
+    # more wrong information.
+
+    # Method 1: Sin
+    # if vals.mouse_flg and vals.debugFlag:
+    #     currBuff = vals.minBuff
+    #     if distClick[0] < 0.8 * newClickValue:
+    #         currBuff = vals.maxBuff            
+    #     elif distClick[0] > 1.2 * newClickValue:
+    #         currBuff = vals.minBuff
+    #     else:
+    #         currBuff = (vals.maxBuff + vals.minBuff)/2 - (vals.maxBuff - vals.minBuff)/2 * \
+    #         np.sin((distClick[0] - newClickValue) * 2 * np.pi / 0.8 / newClickValue)
+    #     vals.buff[0].setCurrBuff(currBuff)
+    #     vals.buff[1].setCurrBuff(currBuff)
+
     #    a=40*newClickValue
     #    vals.maxBuff=a/distClick[0]
     #    if vals.maxBuff<20:
     #        vals.maxBuff=20
     #    elif vals.maxBuff>40:
     #        vals.maxBuff=40
+    '''
     
     # Clicking and Dragging
     if vals.mouseState == vals.MOUSE_NORMAL:
@@ -91,7 +111,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.stime = time.time()
             vals.mouseState = vals.MOUSE_CLICK_READY
             #vals.mouseActBuff = [[], []]
-            print 'NORMAL -> READY'
+            print 'READY'
             print 'distClick[0]: ' + str(distClick[0])
 
     elif vals.mouseState == vals.MOUSE_CLICK_READY:
@@ -100,14 +120,16 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         if distClick[0] > newClickValue and vals.mouse_flg and  currTime <= vals.mouseActTimeThre:
             # Click
             vals.mouseState = vals.MOUSE_CLICK
-            m.click(vals.clickX, vals.clickY)
+            if not vals.testTypeFlag:
+                m.click(vals.clickX, vals.clickY)
             print('Click')
             print 'distClick[0]: ' + str(distClick[0])
 
         elif distClick[0] <= newClickValue and vals.mouse_flg and currTime > vals.mouseActTimeThre:
             # Drag
             vals.mouseState = vals.MOUSE_DRAG
-            m.press(vals.dragX, vals.dragY)
+            if not vals.testTypeFlag:
+                m.press(vals.dragX, vals.dragY)
             print('Drag')
             print 'distClick[0]: ' + str(distClick[0])
 
@@ -119,17 +141,21 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         # print 'DRAG'
         if distClick[0] > newClickValue * 1.2 and vals.mouse_flg:
             vals.mouseState = vals.MOUSE_NORMAL
-            m.release(vals.buff[0].mean(),vals.buff[1].mean())
+            if not vals.testTypeFlag:
+                m.release(vals.buff[0].mean(),vals.buff[1].mean())
             print("Release")
             print 'distClick[0]: ' + str(distClick[0])
 
     if vals.testTypeFlag:
+        # Note: it is not the real coordinate. TODO: convert them.
         # time, dista[0], distClick[0], vals.inrange
-        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
+        # mouse_flg, mouseState, clickX, clickY
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(vals.inrange), \
             str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
-            str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), str(vals.mouse_flg)
+            str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), \
+            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
             ))
 
 '''
