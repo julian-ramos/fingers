@@ -57,7 +57,12 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
     pygame.draw.circle(screen, vals.white, (rpt2[kThumb2][0]/3,rpt2[kThumb2][1]/3),10)
 
 #GUI for depth
-    pygame.draw.rect(screen, vals.gray, (500,0,1500,1500))
+    # pygame.draw.rect(screen, vals.gray, (500,0,1500,1500))
+    depthGUILeft = int(vals.width * 0.3)
+    depthGUITop = 0
+    depthGUIWidth = int(vals.width * 0.45) - depthGUILeft
+    depthGUIHeight = vals.height - depthGUITop
+    pygame.draw.rect(screen, vals.gray, (depthGUILeft, depthGUITop, depthGUIWidth, depthGUIHeight))
     #Creating the lines
     for i in xrange(11):
         offsetY=75
@@ -84,6 +89,12 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         MouseKeyboard=myfont.render( "Keyboard mode",1,(255,255,255))
     screen.blit(MouseKeyboard,(0,50))
 
+    if vals.testTypeFlag:
+        typeGUILeft = int(vals.width * 0.55)
+        typeGUITop = 0
+        typeGUIWidth = int(vals.width * 0.95) - typeGUILeft
+        typeGUIHeight = vals.height - typeGUITop
+        pygame.draw.rect(screen, vals.white, (typeGUILeft, typeGUITop, typeGUIWidth, typeGUIHeight))
 
 
 

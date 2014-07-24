@@ -53,9 +53,10 @@ class mainThread(threading.Thread):
         defaultFont=pygame.font.SysFont("monospace",15)
         
         infoObject = pygame.display.Info()
-        width=infoObject.current_w
-        height=infoObject.current_h
-        screen=pygame.display.set_mode((width/2,height/2))
+        vals.width = int(infoObject.current_w * 0.9)
+        vals.height = int(infoObject.current_h * 0.9)
+        # print width, height
+        screen=pygame.display.set_mode((vals.width, vals.height))
         global kill
         
         
@@ -113,8 +114,8 @@ class mainThread(threading.Thread):
                     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
-                    mouseX=(rpt[tipIndex][0]-600)*width/400                    
-                    mouseY=(rpt[tipIndex][1]-150)*height/290
+                    mouseX=(rpt[tipIndex][0]-600)*vals.width/400                    
+                    mouseY=(rpt[tipIndex][1]-150)*vals.height/290
         
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 
