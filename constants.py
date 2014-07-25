@@ -51,6 +51,10 @@ testTypeFile = 'testTypeFile.csv'
 testTypeData = []
 testStartTime = 0
 
+textContentFile = 'textFiles/text01.txt'
+textContent = ''
+textGUI = None
+
 # Debug Mode
 debugFlag = False
 

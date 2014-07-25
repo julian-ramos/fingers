@@ -151,8 +151,16 @@ def eventHandling(eventsObject):
                     vals.calibState = vals.END_CALIB
                     vals.calibReadFinished = True
 
+            # Show the character user types in
+            if vals.testTypeFlag:
+                if not (pygame.key.get_mods() & pygame.KMOD_CTRL):
+                    pass
+
         if event.type==QUIT:
             vals.quit_FLG=1
+
+        if vals.testTypeFlag and vals.textGUI != None:
+            vals.textGUI.update(event)
 
 def getDistAndTime(X, Y, paramD, paramT):
     "Get mean and std of distance and time(ms) with calib data: meanDist, stdDist, meanTime, stdTime"
