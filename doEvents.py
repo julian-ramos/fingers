@@ -7,6 +7,8 @@ import time
 from bisect import bisect_left
 import numpy as np
 import sys
+import os
+from subprocess import Popen
 
 import constants as vals
 from calibFileManager import *
@@ -52,6 +54,11 @@ def eventHandling(eventsObject):
                 # Start testing the device while typing
                 elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                     vals.testTypeFlag = not vals.testTypeFlag
+                    if vals.testTypeFlag:
+                        try:
+                            Popen(["gedit", vals.typeContentFile], stdin = open(os.devnull, 'r'))
+                        except:
+                            pass
                     print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
                 # Start testing the pointing function
                 elif event.key == pygame.K_p:

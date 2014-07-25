@@ -54,6 +54,7 @@ testStartTime = 0
 textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None
+typeContentFile = 'textFiles/user01.txt'
 '''
 typeContent = ''
 typeGUI = None
