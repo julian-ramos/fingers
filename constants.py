@@ -13,6 +13,9 @@ black = (0,0,0)
 yellow = (255,255,0)
 gray= (205,200, 177)
 
+width = 800
+height = 600
+
 buff=[[],[]]
 maxBuff = 10 		# Max buffer size of the x-y queue
 buff[0]=q.miniQueue(maxBuff)#, minBuff)
@@ -47,6 +50,15 @@ testPointFlag = False
 testTypeFile = 'testTypeFile.csv'
 testTypeData = []
 testStartTime = 0
+
+textContentFile = 'textFiles/text01.txt'
+textContent = ''
+textGUI = None
+typeContentFile = 'textFiles/user01.txt'
+'''
+typeContent = ''
+typeGUI = None
+'''
 
 # Debug Mode
 debugFlag = False

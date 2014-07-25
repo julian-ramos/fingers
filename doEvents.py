@@ -7,6 +7,8 @@ import time
 from bisect import bisect_left
 import numpy as np
 import sys
+import os
+from subprocess import Popen
 
 import constants as vals
 from calibFileManager import *
@@ -25,53 +27,63 @@ def eventHandling(eventsObject):
             'm': switch between mouse and keyboard
             'q': quit
             '''
-            if event.key==pygame.K_r: #start recording
-                vals.rec_flg=1
-                # vals.calibration=False
-                vals.testStartTime = time.time()
-            elif event.key==pygame.K_c: #start vals.calibration
-                vals.calibration=1
-                vals.calibState = vals.START_CALIB
-            elif event.key==pygame.K_s: #pauses the recording
-                vals.rec_flg=False
-                break
-            elif event.key==pygame.K_q: #quits entirely
-                print "q pressed"
-                vals.quit_FLG=1
-                if vals.testTypeFlag:
-                    ttf  = open(vals.testTypeFile, 'w')
-                    print >> ttf, 'time, dista[0], distClick[0], vals.inrange, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
-                    for string in vals.testTypeData:
-                        print >> ttf, string
-                    ttf.close()
-            #Load calibration data from file : 'l', load
-            elif event.key == pygame.K_l:
-                vals.calibLoadFlag = True
-            # Start testing the device while typing
-            elif event.key == pygame.K_t:
-                vals.testTypeFlag = not vals.testTypeFlag
-                print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
-            # Start testing the pointing function
-            elif event.key == pygame.K_p:
-                vals.testPointFlag = not vals.testPointFlag
-                print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
-            # Debug mode: test new feature
-            elif event.key == pygame.K_d:
-                vals.debugFlag = not vals.debugFlag
-                print 'debugFlag changed to {}'.format(str(vals.debugFlag))
+            # Note: [not testing] or [testing but press Ctrl now]
+            if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
+                if event.key==pygame.K_r: #start recording
+                    vals.rec_flg=1
+                    # vals.calibration=False
+                    vals.testStartTime = time.time()
+                elif event.key==pygame.K_c: #start vals.calibration
+                    vals.calibration=1
+                    vals.calibState = vals.START_CALIB
+                # Acts strange now
+                # elif event.key==pygame.K_s: #pauses the recording
+                #     vals.rec_flg=False 
+                elif event.key==pygame.K_q: #quits entirely
+                    print "q pressed"
+                    vals.quit_FLG=1
+                    if vals.testTypeFlag:
+                        ttf  = open(vals.testTypeFile, 'w')
+                        print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
+                        for string in vals.testTypeData:
+                            print >> ttf, string
+                        ttf.close()
+                #Load calibration data from file : 'l', load
+                elif event.key == pygame.K_l:
+                    vals.calibLoadFlag = True
+                # Start testing the device while typing
+                elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
+                    vals.testTypeFlag = not vals.testTypeFlag
+                    if vals.testTypeFlag:
+                        try:
+                            Popen(["gedit", vals.typeContentFile], stdin = open(os.devnull, 'r'))
+                        except:
+                            pass
+                    print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
+                # Start testing the pointing function
+                elif event.key == pygame.K_p:
+                    vals.testPointFlag = not vals.testPointFlag
+                    print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
+                # Debug mode: test new feature
+                elif event.key == pygame.K_d:
+                    vals.debugFlag = not vals.debugFlag
+                    print 'debugFlag changed to {}'.format(str(vals.debugFlag))
+                #Forced mouse mode
+                elif event.key==pygame.K_m:
+                    if vals.mouse_flg==1:
+                        vals.mouse_flg=0
+                    else:
+                        vals.mouse_flg=1
+                
+                '''
+                if vals.rec_flg: #if recording, can change the lag time
+                    if event.key==pygame.K_z:
+                        vals.lagValue+=100
+                    elif event.key==pygame.K_x:
+                        vals.lagValue-=100
+                '''
 
-            if vals.rec_flg: #if recording, can change the lag time
-                if event.key==pygame.K_z:
-                    vals.lagValue+=100
-                elif event.key==pygame.K_x:
-                    vals.lagValue-=100
-
-            #Forced mouse mode
-            if event.key==pygame.K_m:
-                if vals.mouse_flg==1:
-                    vals.mouse_flg=0
-                else:
-                    vals.mouse_flg=1
+            # if vals.testTypeFlag and not(pygame.key.get_mods() & pygame.KMOD_CTRL)
                     
         # Mouse events for vals.calibration mode
             if vals.calibration:
@@ -147,8 +159,21 @@ def eventHandling(eventsObject):
                     vals.calibState = vals.END_CALIB
                     vals.calibReadFinished = True
 
+            # Note: I canceled the design of type area,  because it is too complicated without a lib. 
+            # I cannot find a way to add widgets from libs such as pgu without 
+            # changing the frame of the project. By Zhen.
+
+            # Show the character user types in
+            # if vals.testTypeFlag and vals.typeGUI != None:
+            #     vals.typeGUI.update([event])
+            #     print str(pygame.key.name(event.key))
+
         if event.type==QUIT:
             vals.quit_FLG=1
+
+        if vals.testTypeFlag:
+            if vals.textGUI != None:
+                vals.textGUI.update(event)           
 
 def getDistAndTime(X, Y, paramD, paramT):
     "Get mean and std of distance and time(ms) with calib data: meanDist, stdDist, meanTime, stdTime"

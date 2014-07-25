@@ -44,8 +44,8 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     newMouseModeValue=vals.mouseModeValue
     newClickValue=vals.clickValue
 
-
-    if doDepth.checkAllInBox():
+    inBox = doDepth.checkAllInBox() # Used to log data
+    if inBox:
     #Switching Modes
         #When distance tips goes below mouseModevalue, start measuring time.
         if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
@@ -147,12 +147,13 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print 'distClick[0]: ' + str(distClick[0])
 
     if vals.testTypeFlag:
-        # Note: it is not the real coordinate. TODO: convert them.
-        # time, dista[0], distClick[0], vals.inrange
+        ''' TODO: convert them to actual coordinate on the display.'''
+        # Note: it is not the real coordinate.
+        # time, dista[0], distClick[0], vals.inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
         # mouse_flg, mouseState, clickX, clickY
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
-            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(vals.inrange), \
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
             str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
             str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), \
             str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
