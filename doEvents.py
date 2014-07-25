@@ -42,7 +42,7 @@ def eventHandling(eventsObject):
                     vals.quit_FLG=1
                     if vals.testTypeFlag:
                         ttf  = open(vals.testTypeFile, 'w')
-                        print >> ttf, 'time, dista[0], distClick[0], vals.inrange, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
+                        print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
                         for string in vals.testTypeData:
                             print >> ttf, string
                         ttf.close()
@@ -76,6 +76,7 @@ def eventHandling(eventsObject):
                         vals.lagValue-=100
                 '''
 
+            # if vals.testTypeFlag and not(pygame.key.get_mods() & pygame.KMOD_CTRL)
                     
         # Mouse events for vals.calibration mode
             if vals.calibration:
@@ -151,16 +152,21 @@ def eventHandling(eventsObject):
                     vals.calibState = vals.END_CALIB
                     vals.calibReadFinished = True
 
+            # Note: I canceled the design of type area,  because it is too complicated without a lib. 
+            # I cannot find a way to add widgets from libs such as pgu without 
+            # changing the frame of the project. By Zhen.
+
             # Show the character user types in
-            if vals.testTypeFlag:
-                if not (pygame.key.get_mods() & pygame.KMOD_CTRL):
-                    pass
+            # if vals.testTypeFlag and vals.typeGUI != None:
+            #     vals.typeGUI.update([event])
+            #     print str(pygame.key.name(event.key))
 
         if event.type==QUIT:
             vals.quit_FLG=1
 
-        if vals.testTypeFlag and vals.textGUI != None:
-            vals.textGUI.update(event)
+        if vals.testTypeFlag:
+            if vals.textGUI != None:
+                vals.textGUI.update(event)           
 
 def getDistAndTime(X, Y, paramD, paramT):
     "Get mean and std of distance and time(ms) with calib data: meanDist, stdDist, meanTime, stdTime"

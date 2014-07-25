@@ -1,0 +1,28 @@
+Human–computer interaction
+From Wikipedia, the free encyclopedia
+
+Human–computer interaction (HCI) involves the study, planning, design and uses of the interaction between people (users) and computers. It is often regarded as the intersection of computer science, behavioral sciences, design, media studies, and several other fields of study. The term was popularized by Card, Moran, and Newell in their seminal 1983 book, The Psychology of Human-Computer Interaction, although the authors first used the term in 1980,[1] and the first known use was in 1975.[2] The term connotes that, unlike other tools with only limited uses (such as a hammer, useful for driving nails, but not much else), a computer has many affordances for use and this takes place in an open-ended dialog between the user and the computer.
+
+Introduction
+
+Humans interact with computers in many ways, and the interface between humans and the computers they use is crucial to facilitating this interaction. Desktop applications, internet browsers, handheld computers, and computer kiosks make use of the prevalent Graphical User Interfaces (GUI) of today. Voice User Interfaces (VUI) are used for speech recognition and synthesising systems, and the emerging multi-modal and gestalt User Interfaces (gUI) allow humans to engage with embodied character agents in a way that cannot be achieved with other interface paradigms.
+
+According to Junny Manglib (IT Specialist), Human–computer interaction (HCI) is the study, planning and design of the interaction between people (users) and computers. It is often regarded as the intersection of computer science, behavioral sciences, design and several other fields of study. Interaction between users and computers occurs at the user interface (or simply interface), which includes both software and hardware; for example, characters or objects displayed by software on a personal computer's monitor, input received from users via hardware peripherals such as keyboards and mice, and other user interactions with large-scale computerized systems such as aircraft and power plants. The Association for Computing Machinery defines human-computer interaction as "a discipline concerned with the design, evaluation and implementation of interactive computing systems for human use and with the study of major phenomena surrounding them".[3] An important facet of HCI is the securing of user satisfaction (or simply End User Computing Satisfaction). "Because human–computer interaction studies a human and a machine in communication, it draws from supporting knowledge on both the machine and the human side. On the machine side, techniques in computer graphics, operating systems, programming languages, and development environments are relevant. On the human side, communication theory, graphic and industrial design disciplines, linguistics, social sciences, cognitive psychology, social psychology, and human factors such as computer user satisfaction are relevant. And, of course, engineering and design methods are relevant."[3] Due to the multidisciplinary nature of HCI, people with different backgrounds contribute to its success. HCI is also sometimes referred to as human–machine interaction (HMI), man–machine interaction (MMI) or computer–human interaction (CHI).
+
+Poorly designed human-machine interfaces can lead to many unexpected problems. A classic example of this is the Three Mile Island accident, a nuclear meltdown accident, where investigations concluded that the design of the human–machine interface was at least partially responsible for the disaster.[4][5][6] Similarly, accidents in aviation have resulted from manufacturers' decisions to use non-standard flight instrument or throttle quadrant layouts: even though the new designs were proposed to be superior in regards to basic human–machine interaction, pilots had already ingrained the "standard" layout and thus the conceptually good idea actually had undesirable results.
+
+HCI Goals
+
+HCI (Human Computer Interaction) aims to improve the interactions between users and computers by making computers more usable and receptive to users' needs. Specifically, HCI has interests in:
+
+    methodologies and processes for designing interfaces (i.e., given a task and a class of users, design the best possible interface within given constraints, optimizing for a desired property such as learnability or efficiency of use)
+    methods for implementing interfaces (e.g. software toolkits and libraries)
+    techniques for evaluating and comparing interfaces
+    developing new interfaces and interaction techniques
+    developing descriptive and predictive models and theories of interaction
+
+A long term goal of HCI is to design systems that minimize the barrier between the human's mental model of what they want to accomplish and the computer's support of the user's task.
+
+Professional practitioners in HCI are usually designers concerned with the practical application of design methodologies to problems in the world. Their work often revolves around designing graphical user interfaces and web interfaces.
+
+Researchers in HCI are interested in developing new design methodologies, experimenting with new devices, prototyping new software systems, exploring new interaction paradigms, and developing models and theories of interaction.

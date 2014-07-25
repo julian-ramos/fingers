@@ -54,6 +54,10 @@ testStartTime = 0
 textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None
+'''
+typeContent = ''
+typeGUI = None
+'''
 
 # Debug Mode
 debugFlag = False

@@ -53,7 +53,7 @@ class mainThread(threading.Thread):
         defaultFont=pygame.font.SysFont("monospace",15)
         
         infoObject = pygame.display.Info()
-        vals.width = int(infoObject.current_w * 0.9)
+        vals.width = int(infoObject.current_w * 0.5)
         vals.height = int(infoObject.current_h * 0.9)
         # print width, height
         screen=pygame.display.set_mode((vals.width, vals.height))

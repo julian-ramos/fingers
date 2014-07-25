@@ -5,7 +5,7 @@ import time
 import constants as vals
 import doDepth
 import funcs as fun
-from textGUIHelper import *
+from funcs import Reader
 
 
 def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont, calibFont,depthFont):
@@ -58,24 +58,27 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
 
     #GUI for depth
         # pygame.draw.rect(screen, vals.gray, (500,0,1500,1500))
-        depthGUILeft = int(vals.width * 0.3)
-        depthGUITop = 0
-        depthGUIWidth = int(vals.width * 0.45) - depthGUILeft
-        depthGUIHeight = vals.height - depthGUITop
+        depthGUILeft = int(vals.width * 0.7)
+        depthGUITop = int(vals.height * 0.05)
+        depthGUIWidth = int(vals.width * 0.95) - depthGUILeft
+        depthGUIHeight = int(vals.height * 0.95) - depthGUITop
         pygame.draw.rect(screen, vals.gray, (depthGUILeft, depthGUITop, depthGUIWidth, depthGUIHeight))
+        
+        # left--1startPos--2green--3white--4red--5blue--6endPos--7label--8right
+        tmpSplit = depthGUIWidth / 8
         #Creating the lines
         for i in xrange(11):
             offsetY=75
-            startPos=(550,offsetY+i*30)
-            endPos=(650, offsetY+(i*30))
+            startPos=(depthGUILeft + tmpSplit,offsetY+i*30)         # was 550
+            endPos=(depthGUILeft + tmpSplit*6, offsetY+(i*30))      # was 650 
             pygame.draw.line(screen,vals.black,startPos,endPos)
             depthLabel=depthFont.render( str(5*i),1,vals.black)
-            screen.blit(depthLabel,(660,offsetY+i*30))
-        #Depth circles
-        pygame.draw.circle(screen, vals.green, (560,int(75+vals.depthBuff[0].mean()*6)),10) #tipThumb
-        pygame.draw.circle(screen, vals.white, (580,int(75+vals.depthBuff[1].mean()*6)),10) #kThumb
-        pygame.draw.circle(screen, vals.red, (600,int(75+vals.depthBuff[2].mean()*6)),10) #tipindex
-        pygame.draw.circle(screen, vals.blue, (620,int(75+vals.depthBuff[3].mean()*6)),10)#kIndex
+            screen.blit(depthLabel,(depthGUILeft + tmpSplit*7,offsetY+i*30))
+        #Depth circles. Was 560, 580, 600, 620
+        pygame.draw.circle(screen, vals.green, (depthGUILeft + tmpSplit*2,int(75+vals.depthBuff[0].mean()*6)),10) #tipThumb
+        pygame.draw.circle(screen, vals.white, (depthGUILeft + tmpSplit*3,int(75+vals.depthBuff[1].mean()*6)),10) #kThumb
+        pygame.draw.circle(screen, vals.red, (depthGUILeft + tmpSplit*4,int(75+vals.depthBuff[2].mean()*6)),10) #tipindex
+        pygame.draw.circle(screen, vals.blue, (depthGUILeft + tmpSplit*5,int(75+vals.depthBuff[3].mean()*6)),10)#kIndex
 
     #The gesture bounds
         pygame.draw.line(screen,vals.white, (vals.gestureRightThreshHold/3,0),(vals.gestureRightThreshHold/3,800))
@@ -90,8 +93,10 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         screen.blit(MouseKeyboard,(0,50))
 
     else:
-    # Testing Recording Mode: Show article and text input area
+    # Testing Recording Mode: Show article text.
+    # I canceled the text input area.
 
+        testFont = 'textFiles/MonospaceTypewriter.ttf'
         # Text GUI on the left: show the text
         
         if vals.textContent == '':
@@ -108,20 +113,21 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         
         textGUILeft = int(vals.width * 0.05)
         textGUITop = int(vals.height * 0.05)
-        textGUIWidth = int(vals.width * 0.45) - textGUILeft
+        textGUIWidth = int(vals.width * 0.95) - textGUILeft
         textGUIHeight = int(vals.height * 0.95) - textGUITop
         pygame.draw.rect(screen, vals.white, (textGUILeft, textGUITop, textGUIWidth, textGUIHeight))
 
         if vals.textGUI == None:
             textFontSize = 15
-            textGUIRecWidth = 10
+            textBorder = 10
 
-            vals.textGUI = Reader(unicode(vals.textContent.expandtabs(4), 'utf8'), (textGUILeft + textGUIRecWidth, textGUITop + textGUIRecWidth), \
-                textGUIWidth - 2 * textGUIRecWidth, textFontSize, height = textGUIHeight - 2 * textGUIRecWidth, \
-                font = 'textFiles/MonospaceTypewriter.ttf', fgcolor = (0, 0, 0), hlcolor = (255,10,150,100), split = True)
+            vals.textGUI = Reader(unicode(vals.textContent.expandtabs(4), 'utf8'), (textGUILeft + textBorder, textGUITop + textBorder), \
+                textGUIWidth - 2 * textBorder, textFontSize, height = textGUIHeight - 2 * textBorder, \
+                font = testFont, fgcolor = (0, 0, 0), hlcolor = (255,10,150,100), split = True)
 
         vals.textGUI.show()
 
+        '''
         # Type GUI on the right: input area        
 
         typeGUILeft = int(vals.width * 0.55)
@@ -130,6 +136,17 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         typeGUIHeight = int(vals.height * 0.95) - typeGUITop
         pygame.draw.rect(screen, vals.white, (typeGUILeft, typeGUITop, typeGUIWidth, typeGUIHeight))
 
+        if vals.typeGUI == None:
+            typeFontSize = 15
+            typeBorder = 10
+
+            typeFont = pygame.font.Font(testFont, typeFontSize)
+            vals.typeGUI = Input(x = typeGUILeft + typeBorder, y = typeGUITop + typeBorder, \
+                font = typeFont, color = (255, 255, 255))
+
+        vals.typeGUI.draw(screen)
+        pygame.display.flip()
+        '''
 
 def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipIndex2, tipThumb2,kThumb2,kIndex2,averageX,averageY,myfont,calibFont,depthFont):
     mouseModeDistance=fun.distanceVec(\
