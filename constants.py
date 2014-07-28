@@ -51,6 +51,8 @@ testTypeFile = 'testTypeFile.csv'
 testTypeData = []
 testStartTime = 0
 
+# Define the name of the user and text
+# Note: may be load from Steven's file in the future.
 textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None

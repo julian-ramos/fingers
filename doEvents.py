@@ -56,7 +56,8 @@ def eventHandling(eventsObject):
                     vals.testTypeFlag = not vals.testTypeFlag
                     if vals.testTypeFlag:
                         try:
-                            Popen(["gedit", vals.typeContentFile], stdin = open(os.devnull, 'r'))
+                            Popen(["gedit", vals.typeContentFile, '--geometry=+1080+20'], \
+                                stdin = open(os.devnull, 'r'))
                         except:
                             pass
                     print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
