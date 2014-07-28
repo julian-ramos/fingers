@@ -109,12 +109,12 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.dragX, vals.dragY = vals.buff[0].mean(), vals.buff[1].mean()
 
             vals.stime = time.time()
-            vals.mouseState = vals.MOUSE_CLICK_READY
+            vals.mouseState = vals.MOUSE_READY
             #vals.mouseActBuff = [[], []]
             print 'READY'
             print 'distClick[0]: ' + str(distClick[0])
 
-    elif vals.mouseState == vals.MOUSE_CLICK_READY:
+    elif vals.mouseState == vals.MOUSE_READY:
         # print 'READY'
         currTime = (time.time() - vals.stime) * float(1000)
         if distClick[0] > newClickValue and vals.mouse_flg and  currTime <= vals.mouseActTimeThre:
@@ -126,10 +126,10 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print 'distClick[0]: ' + str(distClick[0])
 
         elif distClick[0] <= newClickValue and vals.mouse_flg and currTime > vals.mouseActTimeThre:
-            # Drag
-            vals.mouseState = vals.MOUSE_DRAG
-            if not vals.testTypeFlag:
+            # Drag if enabled
+            if vals.dragFlag and not vals.testTypeFlag:
                 m.press(vals.dragX, vals.dragY)
+            vals.mouseState = vals.MOUSE_DRAG
             print('Drag')
             print 'distClick[0]: ' + str(distClick[0])
 
@@ -140,9 +140,10 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     elif vals.mouseState == vals.MOUSE_DRAG:
         # print 'DRAG'
         if distClick[0] > newClickValue * 1.2 and vals.mouse_flg:
-            vals.mouseState = vals.MOUSE_NORMAL
-            if not vals.testTypeFlag:
+            # Release if enabled
+            if vals.dragFlag and not vals.testTypeFlag:
                 m.release(vals.buff[0].mean(),vals.buff[1].mean())
+            vals.mouseState = vals.MOUSE_NORMAL
             print("Release")
             print 'distClick[0]: ' + str(distClick[0])
 

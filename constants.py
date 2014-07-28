@@ -62,8 +62,12 @@ typeContent = ''
 typeGUI = None
 '''
 
+# Enable/Disable dragging function
+# Note: different from drag_flg. drag_flg is not used now.
+dragFlag = True
+
 # Debug Mode
-debugFlag = False
+# debugFlag = False
 
 #calibration constants
 mouseModeValue=10
@@ -129,7 +133,7 @@ dragY = 0
 # Define the mouse state machine
 mouseState = 0
 MOUSE_NORMAL, \
-MOUSE_CLICK_READY, \
+MOUSE_READY, \
 MOUSE_CLICK, \
 MOUSE_DRAG = range(4)
 

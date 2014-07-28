@@ -65,10 +65,10 @@ def eventHandling(eventsObject):
                 elif event.key == pygame.K_p:
                     vals.testPointFlag = not vals.testPointFlag
                     print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
-                # Debug mode: test new feature
+                # Enable/Disable dragging function
                 elif event.key == pygame.K_d:
-                    vals.debugFlag = not vals.debugFlag
-                    print 'debugFlag changed to {}'.format(str(vals.debugFlag))
+                    vals.dragFlag = not vals.dragFlag
+                    print 'dragFlag changed to {}'.format(str(vals.dragFlag))
                 #Forced mouse mode
                 elif event.key==pygame.K_m:
                     if vals.mouse_flg==1:
