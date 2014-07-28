@@ -117,7 +117,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     elif vals.mouseState == vals.MOUSE_READY:
         # print 'READY'
         currTime = (time.time() - vals.stime) * float(1000)
-        if distClick[0] > newClickValue and vals.mouse_flg and  currTime <= vals.mouseActTimeThre:
+        if distClick[0] > newClickValue and vals.mouse_flg and vals.inrange and  currTime <= vals.mouseActTimeThre:
             # Click
             vals.mouseState = vals.MOUSE_CLICK
             if not vals.testTypeFlag:
@@ -125,10 +125,13 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print('Click')
             print 'distClick[0]: ' + str(distClick[0])
 
-        elif distClick[0] <= newClickValue and vals.mouse_flg and currTime > vals.mouseActTimeThre:
+        elif distClick[0] <= newClickValue and vals.mouse_flg and vals.inrange and currTime > vals.mouseActTimeThre:
             # Drag if enabled
-            if vals.dragFlag and not vals.testTypeFlag:
-                m.press(vals.dragX, vals.dragY)
+            if not vals.testTypeFlag:
+                if vals.dragFlag:
+                    m.press(vals.dragX, vals.dragY)
+                else:
+                    m.click(vals.clickX, vals.clickY)
             vals.mouseState = vals.MOUSE_DRAG
             print('Drag')
             print 'distClick[0]: ' + str(distClick[0])

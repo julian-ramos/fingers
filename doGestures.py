@@ -41,6 +41,7 @@ def gestures(averageX,averageY,keyboard,mouse):
 			k.release_key(k.alt_key)
 			k.release_key(k.left_key)
 			vals.gesture_flg_RL=0
+			print 'right to left'
 #Swipe Left to Right
 	if gestureCheck.allAboveGestureLeft(averageX,vals.gestureLeftThreshHold) and not vals.gesture_flg_LR:
 		vals.gestureTime=time.time()
@@ -54,6 +55,7 @@ def gestures(averageX,averageY,keyboard,mouse):
 			k.release_key(k.alt_key)
 			k.release_key(k.right_key)
 			vals.gesture_flg_LR=0
+			print 'left to right'
 #Swipe Down to Up
 	if gestureCheck.allAboveGestureDown(averageY,vals.gestureDownThreshHold) and not vals.gesture_flg_DU:
 		vals.gestureTime=time.time()
@@ -67,6 +69,7 @@ def gestures(averageX,averageY,keyboard,mouse):
 			k.release_key(k.alt_key)
 			k.release_key(k.up_key)
 			vals.gesture_flg_DU=0
+			'down to up'
 #Swipe Up to Down
 	if gestureCheck.allAboveGestureUp(averageY,vals.gestureUpThreshHold) and not vals.gesture_flg_UD:
 		vals.gestureTime=time.time()
@@ -80,6 +83,7 @@ def gestures(averageX,averageY,keyboard,mouse):
 			k.release_key(k.alt_key)
 			k.release_key(k.down_key)
 			vals.gesture_flg_UD=0
+			print 'up to down'
 	if vals.gesture_flg_RL and (time.time()-vals.gestureTime)>=1:
 		vals.gesture_flg_RL=0
 	if vals.gesture_flg_LR and (time.time()-vals.gestureTime)>=1:
