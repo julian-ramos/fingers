@@ -47,16 +47,19 @@ wiimoteMaxNum = 2
 # Test and collect data
 testTypeFlag = False
 testPointFlag = False
-testTypeFile = 'testTypeFile.csv'
+testTypeFile = 'testLog/{}_Type_Test.csv'
 testTypeData = []
 testStartTime = 0
 
 # Define the name of the user and text
-# Note: may be load from Steven's file in the future.
+# Note: read userName from Steven's file.
 textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None
-typeContentFile = 'textFiles/user01.txt'
+typeContentFile = 'textFiles/{}_Type_Content.txt'
+userNameFile = '../FittsLawTest/userName'
+# userNameFile = '../FittsLawTest/userData/userName'
+userName = ''
 '''
 typeContent = ''
 typeGUI = None

@@ -299,7 +299,7 @@ def peakdetect(y_axis, x_axis = None, lookahead = 300, delta=0):
         
     return [max_peaks, min_peaks]
 
-    ########## Reader - 1.3 ##########
+########## Reader - 1.3 ##########
 # Download from http://www.pygame.org/project-Reader-1813-3179.html
 # This module can show a text area with auto-split to fit the size.
 

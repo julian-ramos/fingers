@@ -43,7 +43,7 @@ def eventHandling(eventsObject):
                     print "q pressed"
                     vals.quit_FLG=1
                     if vals.testTypeFlag:
-                        ttf  = open(vals.testTypeFile, 'w')
+                        ttf  = open(vals.testTypeFile.format(vals.userName), 'w')
                         print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
                         for string in vals.testTypeData:
                             print >> ttf, string
@@ -57,8 +57,11 @@ def eventHandling(eventsObject):
                     if vals.testTypeFlag:
                         vals.testStartTime = time.time()
                         try:
-                            Popen(["gedit", vals.typeContentFile, '--geometry=+1080+20'], \
-                                stdin = open(os.devnull, 'r'))
+                            unf = open(vals.userNameFile, 'r')
+                            vals.userName = unf.readline().strip()
+                            unf.close()
+                            Popen(["gedit", vals.typeContentFile.format(vals.userName), \
+                                '--geometry=+1080+20'], stdin = open(os.devnull, 'r'))
                         except:
                             pass
                     print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 

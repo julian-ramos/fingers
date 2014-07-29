@@ -58,9 +58,9 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
 
     #GUI for depth
         # pygame.draw.rect(screen, vals.gray, (500,0,1500,1500))
-        depthGUILeft = int(vals.width * 0.7)
+        depthGUILeft = int(vals.width * 0.35)
         depthGUITop = int(vals.height * 0.05)
-        depthGUIWidth = int(vals.width * 0.95) - depthGUILeft
+        depthGUIWidth = int(vals.width * 0.45) - depthGUILeft
         depthGUIHeight = int(vals.height * 0.95) - depthGUITop
         pygame.draw.rect(screen, vals.gray, (depthGUILeft, depthGUITop, depthGUIWidth, depthGUIHeight))
         
@@ -113,12 +113,12 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         
         textGUILeft = int(vals.width * 0.05)
         textGUITop = int(vals.height * 0.05)
-        textGUIWidth = int(vals.width * 0.95) - textGUILeft
+        textGUIWidth = int(vals.width * 0.45) - textGUILeft
         textGUIHeight = int(vals.height * 0.95) - textGUITop
         pygame.draw.rect(screen, vals.white, (textGUILeft, textGUITop, textGUIWidth, textGUIHeight))
 
         if vals.textGUI == None:
-            textFontSize = 15
+            textFontSize = 20
             textBorder = 10
 
             vals.textGUI = Reader(unicode(vals.textContent.expandtabs(4), 'utf8'), (textGUILeft + textBorder, textGUITop + textBorder), \

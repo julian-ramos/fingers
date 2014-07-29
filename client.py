@@ -31,6 +31,7 @@ while not done:
         wiiMACReader = open(wiiMACFile, 'r')
         wiiMACAddr = wiiMACReader.readlines()
         wiiMACReader.close()
+        # print wiiMACAddr
     except:
         print 'Error: Wiimote MAC addr file not found.'
         continue
