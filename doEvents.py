@@ -32,7 +32,7 @@ def eventHandling(eventsObject):
                 if event.key==pygame.K_r: #start recording
                     vals.rec_flg=1
                     # vals.calibration=False
-                    vals.testStartTime = time.time()
+                    # vals.testStartTime = time.time()  
                 elif event.key==pygame.K_c: #start vals.calibration
                     vals.calibration=1
                     vals.calibState = vals.START_CALIB
@@ -55,6 +55,7 @@ def eventHandling(eventsObject):
                 elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                     vals.testTypeFlag = not vals.testTypeFlag
                     if vals.testTypeFlag:
+                        vals.testStartTime = time.time()
                         try:
                             Popen(["gedit", vals.typeContentFile, '--geometry=+1080+20'], \
                                 stdin = open(os.devnull, 'r'))

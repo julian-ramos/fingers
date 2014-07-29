@@ -38,7 +38,7 @@ while not done:
     # wiiMACAddr = wiiMACReader.readlines()
     # wiiMACReader.close()
 
-    if len(wiiMACAddr) != 2:
+    if len(wiiMACAddr) < 2:
         print 'Error: Invalid wiimote MAC addr.'
         continue
 
