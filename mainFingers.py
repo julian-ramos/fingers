@@ -114,8 +114,12 @@ class mainThread(threading.Thread):
                     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
-                    mouseX=(rpt[tipIndex][0]-600)*vals.width/400                    
-                    mouseY=(rpt[tipIndex][1]-150)*vals.height/290
+                    if vals.windowX==0:
+                        vals.windowX=10
+                    if vals.windowY==0:
+                        vals.windowY=10
+                    mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
+                    mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 

@@ -205,3 +205,6 @@ clickDistance=0
 tipDistance=0
 dist3D=0
 
+#To adjust the cursor sensitivity. Adjusted by arrow keys
+windowX=300
+windowY=290

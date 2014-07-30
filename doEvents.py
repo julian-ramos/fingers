@@ -25,6 +25,10 @@ def eventHandling(eventsObject):
             'p': test mouse open/close
             'd': debug mode opne/close
             'm': switch between mouse and keyboard
+            'up arrow': change sensitivity of fingers
+            'down arrow': change sensitivity of fingers
+            'left arrow': change sensitivity of fingers
+            'right arrow': change sensitivity of fingers
             'q': quit
             '''
             # Note: [not testing] or [testing but press Ctrl now]
@@ -79,15 +83,16 @@ def eventHandling(eventsObject):
                         vals.mouse_flg=0
                     else:
                         vals.mouse_flg=1
-                
-                '''
-                if vals.rec_flg: #if recording, can change the lag time
-                    if event.key==pygame.K_z:
-                        vals.lagValue+=100
-                    elif event.key==pygame.K_x:
-                        vals.lagValue-=100
-                '''
-
+                #Change sensitivity of fingers
+                elif event.key==pygame.K_UP:
+                    vals.windowY+=10            
+                elif event.key==pygame.K_DOWN:
+                    vals.windowY-=10
+                elif event.key==pygame.K_RIGHT:
+                    vals.windowX+=10
+                elif event.key==pygame.K_LEFT:
+                    vals.windowX-=10
+                    
             # if vals.testTypeFlag and not(pygame.key.get_mods() & pygame.KMOD_CTRL)
                     
         # Mouse events for vals.calibration mode

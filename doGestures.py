@@ -69,7 +69,7 @@ def gestures(averageX,averageY,keyboard,mouse):
 			k.release_key(k.alt_key)
 			k.release_key(k.up_key)
 			vals.gesture_flg_DU=0
-			'down to up'
+			print 'down to up'
 #Swipe Up to Down
 	if gestureCheck.allAboveGestureUp(averageY,vals.gestureUpThreshHold) and not vals.gesture_flg_UD:
 		vals.gestureTime=time.time()
