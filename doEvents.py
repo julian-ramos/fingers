@@ -21,11 +21,16 @@ def eventHandling(eventsObject):
             'r': record mode
             'c': calibration mode
             'l': load data mode
+            
             't': test type open/close
             'p': test mouse open/close
-            'd': debug mode opne/close
+            'd': dragging enable/disable
             'm': switch between mouse and keyboard
+            's': test a feature using slope of the distClick
+            
             'q': quit
+
+            'h': enter next screen(calibration)
             '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
@@ -79,7 +84,11 @@ def eventHandling(eventsObject):
                         vals.mouse_flg=0
                     else:
                         vals.mouse_flg=1
-                
+                # Test a feature using slope of the distClick
+                elif event.key == pygame.K_s:
+                    vals.slopeFlag = not vals.slopeFlag
+                    print 'slopeFlag changed to {}'.format(str(vals.slopeFlag))
+
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
                     if event.key==pygame.K_z:
@@ -191,7 +200,7 @@ def getDistAndTime(X, Y, paramD, paramT):
 
     # Note: The author suggests: '(sample / period) / f' where '4 >= f >= 1.25'
     f = 6
-    lookahead = len(X) / 5 / f
+    lookahead = len(X) / vals.clickNum / f
 
     _max, _min = peakdetect(smoothY, X, lookahead)#, 0.30)
     # print _max
