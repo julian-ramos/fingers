@@ -69,6 +69,9 @@ typeGUI = None
 # Note: different from drag_flg. drag_flg is not used now.
 dragFlag = True
 
+# Test a feature using slope of the distClick
+slopeFlag = False
+
 # Debug Mode
 # debugFlag = False
 

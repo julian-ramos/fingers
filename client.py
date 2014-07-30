@@ -23,7 +23,13 @@ wiiMAC=[]
 #Such as:
 #xx:xx:xx:xx:xx:xx
 #xx:xx:xx:xx:xx:xx
-wiiMACFile = 'wiiMAC.data' 
+wiiMACFile = 'wiiMAC.data'
+wiiNum = 0
+try:
+    wiiNum = int(sys.argv[1])
+except:
+    print 'Add a wiiNum to select a wiimote device'
+
 done=False
 while not done:
     wiiMACAddr = []
@@ -43,20 +49,22 @@ while not done:
         print 'Error: Invalid wiimote MAC addr.'
         continue
 
-    if wiiMAC == wiiMACAddr[1].strip():
-        wiiMAC = wiiMACAddr[0].strip()
-        wiiID = 'wiiMote1'
-    else:
-        wiiMAC = wiiMACAddr[1].strip()
-        wiiID = 'wiiMote2'
-    print "Trying to connect to "+" "+wiiMAC
+    wiiMAC = wiiMACAddr[wiiNum].strip()
+    wiiID = 'wiiMote' + str(wiiNum+1)
+    # if wiiMAC == wiiMACAddr[1].strip():
+    #     wiiMAC = wiiMACAddr[0].strip()
+    #     wiiID = 'wiiMote1'
+    # else:
+    #     wiiMAC = wiiMACAddr[1].strip()
+    #     wiiID = 'wiiMote2'
+    print "Trying to connect to " + wiiID + " " + wiiMAC
     print "Press 1 & 2 on the Wiimote simultaneously, to find it"
     
     try:
         wii = cwiid.Wiimote(wiiMAC)
         wii.enable(cwiid.FLAG_MESG_IFC)
         wii.rpt_mode = cwiid.RPT_IR | cwiid.RPT_BTN
-        print wiiMAC+"connected successfully"
+        print wiiMAC + " connected successfully"
         data=[0,0]
         done=True
         connected=True
