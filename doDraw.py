@@ -41,6 +41,22 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         box3D=calibFont.render(str(int(vals.boxLimit)),1,vals.white)
         screen.blit(box3D,(0,285))
 
+#Circles to check on mode switching
+        if doDepth.checkAllInBox(): # Used to log data
+            pygame.draw.circle(screen, vals.green, (10,305),10)
+        else:
+            pygame.draw.circle(screen, vals.red, (10,305),10)
+
+
+        if (vals.inrange==1):
+            pygame.draw.circle(screen, vals.green, (10,325),10)
+        else:
+            pygame.draw.circle(screen, vals.red, (10,325),10)
+
+        if (not vals.mouseSwitched_flg): # Used to log data
+            pygame.draw.circle(screen, vals.green, (10,345),10)
+        else:
+            pygame.draw.circle(screen, vals.red, (10,345),10)
 
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)

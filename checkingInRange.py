@@ -11,12 +11,6 @@ def rangeChecker(rptList,LED1, LED2,LED3,LED4):
     sameFlag=outOfBounds(LED1,LED2,LED3,LED4)
     return (not (sameFlag)), LED1, LED2,LED3,LED4
 
-#Doesnt Seem to be necessary so commented out
-#check when LED is flickering
-#        if not(sameFlag):
-#            sameFlag=flickering(LED1,LED2,LED3,LED4)
-
-
 def outOfBounds( LED1,LED2,LED3,LED4):
     sameFlag=0
     if len(LED1)<10 or len(LED2)<10 or len(LED3)<10 or len(LED4)<10:
@@ -26,8 +20,8 @@ def outOfBounds( LED1,LED2,LED3,LED4):
         flg2=checkEqual(LED2)
         flg3=checkEqual(LED3)
         flg4=checkEqual(LED4)
-        if flg1 or flg2 or flg3 or flg4:
-            sameFlag=1 #there is one thats same
+        #if flg1 or flg2 or flg3 or flg4:
+        #    sameFlag=1 #there is one thats same
         listOfLEDs=[LED1,LED2,LED3,LED4]
         for i in xrange(len(listOfLEDs)):
             thisLED=listOfLEDs[i]
@@ -35,6 +29,9 @@ def outOfBounds( LED1,LED2,LED3,LED4):
                 sameFlag=1
                 break
     return sameFlag
+
+
+
 
 def checkEqual( ledList):
     flg=0
