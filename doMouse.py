@@ -117,12 +117,33 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     elif vals.mouseState == vals.MOUSE_READY:
         # print 'READY'
         currTime = (time.time() - vals.stime) * float(1000)
-        if distClick[0] > newClickValue and vals.mouse_flg and vals.inrange and  currTime <= vals.mouseActTimeThre:
+        # Note: We don't need to add time threshold here to do READY -> CLICK.
+        # Because the point is discrete, it may jump from the READY rectangle to NORMAL without
+        # triggering CLICK or DRAG signal. That is, its distClick < clickValue and time < timeThre for
+        # the last point, but distClick > clickValue and time > timeThre for the current point.
+        # In this case, we assume that is a CLICK. Noted by Zhen Li, Aug 5th, 2014.
+        if distClick[0] > newClickValue and vals.mouse_flg and vals.inrange:# and currTime <= vals.mouseActTimeThre:
             # Click
             vals.mouseState = vals.MOUSE_CLICK
-            if not vals.testTypeFlag:
-                m.click(vals.clickX, vals.clickY)
-            print('Click')
+            # if not vals.testTypeFlag:
+            #     m.click(vals.clickX, vals.clickY)
+
+            # Detect double click:
+            clickTime = (time.time() - vals.lastClickTime) * float(1000)
+            if clickTime > vals.doubleClickTimeThre:
+                # Click
+                if not vals.testTypeFlag:
+                    m.click(vals.clickX, vals.clickY)
+                    vals.lastClickX, vals.lastClickY = vals.clickX, vals.clickY
+                    print('Click')
+            else:
+                # Double Click
+                if not vals.testTypeFlag:
+                    m.click(vals.lastClickX, vals.lastClickY)
+                    print('Double Click')
+
+            vals.lastClickTime = time.time()
+            # print('Click')
             print 'distClick[0]: ' + str(distClick[0])
 
         elif distClick[0] <= newClickValue and vals.mouse_flg and vals.inrange and currTime > vals.mouseActTimeThre:
@@ -142,7 +163,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     elif vals.mouseState == vals.MOUSE_DRAG:
         # print 'DRAG'
-        if distClick[0] > newClickValue * 1.2 and vals.mouse_flg:
+        if distClick[0] > newClickValue and vals.mouse_flg:
             # Release if enabled
             if vals.dragFlag and not vals.testTypeFlag:
                 m.release(vals.buff[0].mean(),vals.buff[1].mean())

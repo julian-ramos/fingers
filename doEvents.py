@@ -135,7 +135,7 @@ def eventHandling(eventsObject):
 
                     elif vals.calibState == vals.CLICK_CALIB:
                         # Generate clickCalibFile to test or debug
-                        ccf = open('clickCalibFile.txt', 'w')
+                        ccf = open('testLog/clickCalibFile.txt', 'w')
                         for i in range(len(vals.clickingCalibList[0])):
                             print >> ccf, '{},{}'.format(vals.clickingCalibList[0][i],\
                             vals.clickingCalibList[1][i])
@@ -143,7 +143,9 @@ def eventHandling(eventsObject):
                         # print vals.clickingCalibList
                                 
                         vals.clickValue, vals.mouseActTimeThre = getDistAndTime(\
-                            vals.clickingCalibList[0], vals.clickingCalibList[1], 2, 2)
+                            vals.clickingCalibList[0], vals.clickingCalibList[1], 2, 4)
+                        vals.mouseActTimeThre = min(vals.mouseActTimeMax, vals.mouseActTimeThre)
+                        vals.mouseActTimeThre = max(vals.mouseActTimeMin, vals.mouseActTimeThre)
 
                         print 'clickValue:{}, mouseActTimeThre:{}'.format(\
                             str(vals.clickValue), str(vals.mouseActTimeThre))

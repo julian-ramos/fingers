@@ -154,7 +154,14 @@ mouseActVarThre = 30
 mouseActBuff = [[], []]
 '''
 # The time threshold to do the judge(millisecond)
-mouseActTimeThre = 150
+mouseActTimeThre = 200
+mouseActTimeMax = 350
+mouseActTimeMin = 150
+
+# The time threshold to detect double click
+doubleClickTimeThre = 300
+lastClickTime = 0
+lastClickX, lastClickY = 0.0, 0.0
 
 mouseSwitched_flg=0
 mouseModeSwitchTime=0
