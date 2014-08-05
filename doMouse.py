@@ -130,7 +130,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
             # Detect double click:
             clickTime = (time.time() - vals.lastClickTime) * float(1000)
-            if clickTime > vals.doubleClickTimeThre:
+            if clickTime > vals.doubleClickTimeThre or not vals.dragFlag:
                 # Click
                 if not vals.testTypeFlag:
                     m.click(vals.clickX, vals.clickY)
