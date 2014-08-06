@@ -200,16 +200,6 @@ gesture_flg_RL=0
 gestureTime=0
 
 
-#just my constants for enabling actual clicking using thumb
-yeah_flg=0
-oh_yeah_flg=0
-
-ASDFTTD=0
-ASDFTKD=0
-ASDFITD=0
-ASDFIKD=0
-
-
 
 clickDistance=0
 tipDistance=0
@@ -218,3 +208,19 @@ dist3D=0
 #To adjust the cursor sensitivity. Adjusted by arrow keys
 windowX=250
 windowY=250
+
+#checking inRange constants
+leftBound=5
+rightBound=1190
+upperBound=5
+lowerBound=750
+
+#Determining the user input field.
+inputCalibration=0
+inputCounter=0
+inputX1=-1
+inputY1=-1
+inputClickStopper=0
+inputX2=-1
+inputY2=-1
+inputSet=0

@@ -43,20 +43,28 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
 
 #Circles to check on mode switching
         if doDepth.checkAllInBox(): # Used to log data
-            pygame.draw.circle(screen, vals.green, (10,305),10)
-        else:
-            pygame.draw.circle(screen, vals.red, (10,305),10)
-
-
-        if (vals.inrange==1):
             pygame.draw.circle(screen, vals.green, (10,325),10)
         else:
             pygame.draw.circle(screen, vals.red, (10,325),10)
 
-        if (not vals.mouseSwitched_flg): # Used to log data
+        inBox=calibFont.render("in 3dBox",1,vals.white)
+        screen.blit(inBox,(20,325))
+
+        if (vals.inrange==1):
             pygame.draw.circle(screen, vals.green, (10,345),10)
         else:
             pygame.draw.circle(screen, vals.red, (10,345),10)
+        
+        inBox=calibFont.render("inrange",1,vals.white)
+        screen.blit(inBox,(20,345))
+
+        if (not vals.mouseSwitched_flg): # Used to log data
+            pygame.draw.circle(screen, vals.green, (10,365),10)
+        else:
+            pygame.draw.circle(screen, vals.red, (10,365),10)
+        
+        inBox=calibFont.render("open tips",1,vals.white)
+        screen.blit(inBox,(20,365))
 
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
@@ -97,7 +105,6 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         pygame.draw.circle(screen, vals.blue, (depthGUILeft + tmpSplit*5,int(75+vals.depthBuff[3].mean()*6)),10)#kIndex
 
     #The gesture bounds
-        pygame.draw.line(screen,vals.white, (vals.gestureRightThreshHold/3,0),(vals.gestureRightThreshHold/3,800))
         pygame.draw.line(screen,vals.red, (vals.gestureLeftThreshHold/3,0),(vals.gestureLeftThreshHold/3,800))
         pygame.draw.line(screen,vals.blue, (0,vals.gestureDownThreshHold/3),(10000,vals.gestureDownThreshHold/3))
         pygame.draw.line(screen,vals.yellow, (0,vals.gestureUpThreshHold/3),(10000,vals.gestureUpThreshHold/3))
@@ -108,6 +115,12 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
             MouseKeyboard=myfont.render( "Keyboard mode",1,(255,255,255))
         screen.blit(MouseKeyboard,(0,50))
 
+        #input rectangle
+        pygame.draw.line(screen,vals.white, (vals.inputX1/3,vals.inputY1/3), (vals.inputX2/3,vals.inputY1/3))
+        pygame.draw.line(screen,vals.white, (vals.inputX2/3,vals.inputY1/3), (vals.inputX2/3,vals.inputY2/3))
+        pygame.draw.line(screen,vals.white, (vals.inputX2/3,vals.inputY2/3), (vals.inputX1/3,vals.inputY2/3))
+        pygame.draw.line(screen,vals.white, (vals.inputX1/3,vals.inputY2/3), (vals.inputX1/3,vals.inputY1/3))
+        
     else:
     # Testing Recording Mode: Show article text.
     # I canceled the text input area.
@@ -299,3 +312,44 @@ def drawDefault(screen, defaultFont):
     screen.blit(default2, (10, 35))
     default3 = defaultFont.render('then press "r" to start recording.', 1, vals.black)
     screen.blit(default3, (10, 55))
+
+
+def drawInputCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipIndex2, tipThumb2,kThumb2,kIndex2,averageX,averageY,myfont,calibFont,depthFont):
+    mouseModeDistance=fun.distanceVec(\
+        [rpt[tipIndex][0]],\
+        [rpt[tipIndex][1]],\
+        [rpt[tipThumb][0]],\
+        [rpt[tipThumb][1]])
+
+    clickingDistance=fun.distanceVec(\
+        [rpt[kIndex][0]],\
+        [rpt[kIndex][1]],\
+        [rpt[tipThumb][0]],\
+        [rpt[tipThumb][1]])
+
+
+    screen.fill(vals.black)
+    #Drawing the Circles
+    pygame.draw.circle(screen, vals.yellow, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
+    pygame.draw.circle(screen, vals.red, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)
+    pygame.draw.circle(screen, vals.green, (rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),10)
+    pygame.draw.circle(screen, vals.blue, (rpt[kThumb][0]/3,rpt[kThumb][1]/3),10)
+    pygame.draw.circle(screen, vals.white, (averageX/3,averageY/3),10)
+
+    #Drawing the instructions
+    pygame.draw.rect(screen, vals.gray, (0,5,600,60))
+    if vals.inputCounter == 0:
+        Calib1=calibFont.render("Tap thumb tip and index knuckle to set top left point",1,vals.black)
+        screen.blit(Calib1,(0,15))
+
+    elif vals.inputCounter==1:
+        Calib1=calibFont.render("Tap thumb tip and index knuckle to set bottom right point",1,vals.black)
+        screen.blit(Calib1,(0,15))
+        #this draws the line
+        pygame.draw.line(screen,vals.white,(vals.inputX1/3,vals.inputY1/3),(rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),5 )
+
+    elif vals.inputSet:
+        Calib2=calibFont.render("Press r to start recording",1,vals.black)
+        screen.blit(Calib2,(0,35))
+        pygame.draw.line(screen,vals.white,(vals.inputX1/3,vals.inputY1/3),(vals.inputX2/3,vals.inputY2/3),5)
+        pygame.draw.rect(screen, vals.white, (vals.inputX1/3, vals.inputY1/3, (vals.inputX2-vals.inputX1)/3, (vals.inputY2-vals.inputY1)/3))
