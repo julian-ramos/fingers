@@ -136,7 +136,10 @@ class mainThread(threading.Thread):
                         vals.lowerBound=vals.inputY2
                     else:
                         vals.upperBound=vals.inputY2
-                        vals.lowerBound=vals.inputY1                        
+                        vals.lowerBound=vals.inputY1       
+
+                    vals.windowX = vals.rightBound - vals.leftBound
+                    vals.windowY = vals.lowerBound - vals.upperBound                 
                     
 
 
@@ -187,14 +190,17 @@ class mainThread(threading.Thread):
  
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
                         mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                        mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
+                        mouseY=(rpt[tipIndex][1]-250)*vals.height/vals.windowY
                     else:
-                        print "ye"
-                        factorX =vals.width/(vals.inputX2-vals.inputX1)
-                        factorY =vals.height/(vals.inputY2-vals.inputY1)
+                        # print "ye"
+                        mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
+                        mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
+                        
+                        # factorX =vals.width/(vals.inputX2-vals.inputX1)
+                        # factorY =vals.height/(vals.inputY2-vals.inputY1)
 
-                        mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
-                        mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
+                        # mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
+                        # mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
 
                     #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
                     #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY

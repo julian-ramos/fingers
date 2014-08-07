@@ -207,7 +207,7 @@ dist3D=0
 
 #To adjust the cursor sensitivity. Adjusted by arrow keys
 windowX=250
-windowY=250
+windowY=200
 
 #checking inRange constants
 leftBound=5
