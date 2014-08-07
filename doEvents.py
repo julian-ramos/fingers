@@ -38,6 +38,9 @@ def eventHandling(eventsObject):
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
                 if event.key==pygame.K_r: #start recording
                     vals.rec_flg=1
+
+                    vals.inputCalibration=0
+
                     # vals.calibration=False
                     # vals.testStartTime = time.time()  
                 elif event.key==pygame.K_c: #start vals.calibration
@@ -86,15 +89,18 @@ def eventHandling(eventsObject):
                         vals.mouse_flg=0
                     else:
                         vals.mouse_flg=1
+#Julian doesn't want me to allow users to change values.
                 #Change sensitivity of fingers
-                elif event.key==pygame.K_UP:
-                    vals.windowY+=10            
-                elif event.key==pygame.K_DOWN:
-                    vals.windowY-=10
-                elif event.key==pygame.K_RIGHT:
-                    vals.windowX+=10
-                elif event.key==pygame.K_LEFT:
-                    vals.windowX-=10
+                #elif event.key==pygame.K_UP:
+                #    vals.windowY+=10            
+                #elif event.key==pygame.K_DOWN:
+                #    vals.windowY-=10
+                #elif event.key==pygame.K_RIGHT:
+                #    vals.windowX+=10
+                #elif event.key==pygame.K_LEFT:
+                #    vals.windowX-=10
+
+
                 # Test a feature using slope of the distClick
                 elif event.key == pygame.K_s:
                     vals.slopeFlag = not vals.slopeFlag
@@ -107,7 +113,6 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_x:
                         vals.lagValue-=100
                 '''
-
             # if vals.testTypeFlag and not(pygame.key.get_mods() & pygame.KMOD_CTRL)
                     
         # Mouse events for vals.calibration mode
@@ -158,8 +163,6 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
-
-
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
                         calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
@@ -194,6 +197,16 @@ def eventHandling(eventsObject):
             # if vals.testTypeFlag and vals.typeGUI != None:
             #     vals.typeGUI.update([event])
             #     print str(pygame.key.name(event.key))
+
+            #after calibration isdone and start the input area.
+            #also it is resettable.
+            if vals.calibState == vals.END_CALIB and event.key == K_e:
+                vals.inputCalibration=1
+
+
+
+
+
 
         if event.type==QUIT:
             vals.quit_FLG=1

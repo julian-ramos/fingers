@@ -81,6 +81,68 @@ class mainThread(threading.Thread):
                 #doDraw.drawAllMiniCalibration(miniScreen, rpt, tipIndex, tipThumb,kThumb,kIndex,averageX,averageY,myfont,calibFont,depthFont)
                 doDraw.drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2, tipIndex2, tipThumb2,kThumb2,kIndex2, averageX,averageY,myfont,calibFont,depthFont)
             
+
+            if vals.inputCalibration:
+            #Receiving data from the threads
+                newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
+                tipIndex, tipIndexAngle, kIndex,kIndexAngle=findingPoints.indexData(newList)
+                tipThumb,tipThumbAngle,kThumb,kThumbAngle=findingPoints.thumbData(newList)
+                averageX,averageY=findingPoints.centerFind(rpt) #the center point
+            #Find out the location of the 2nd Wiimote LEDs
+                newList2=findingPoints.findDegrees(rpt2) #returns in from [(theta1,i1),(theta2,i2)....)]
+                tipIndex2, tipIndexAngle2, kIndex2,kIndexAngle2=findingPoints.indexData(newList2)
+                tipThumb2,tipThumbAngle2,kThumb2,kThumbAngle2=findingPoints.thumbData(newList2)
+            #GUI section
+                doDraw.drawInputCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2, tipIndex2, tipThumb2,kThumb2,kIndex2, averageX,averageY,myfont,calibFont,depthFont)
+
+                #first "click" get where the rpt index x,y, store it. Second click completes the line, turn into square
+                distClick=fun.distanceVec(\
+                [rpt[kIndex][0]],\
+                [rpt[kIndex][1]],\
+                [rpt[tipThumb][0]],\
+                [rpt[tipThumb][1]])
+
+                #first click
+                if (distClick[0]<vals.clickValue and vals.inputCounter==0):
+                    vals.inputX1=rpt[tipIndex][0]
+                    vals.inputY1=rpt[tipIndex][1]
+                    vals.inputCounter+=1
+                    vals.inputClickStopper=1
+                    print "awef"
+                    print vals.inputX1,vals.inputY1
+                if (distClick[0]>=vals.clickValue and vals.inputClickStopper):
+                    vals.inputClickStopper=0
+                
+                #second click
+                if (distClick[0]<vals.clickValue and vals.inputCounter==1 and not vals.inputClickStopper):
+                    vals.inputX2=rpt[tipIndex][0]
+                    vals.inputY2=rpt[tipIndex][1]
+                    print "hey"
+                    print vals.inputX2,vals.inputY2
+                    vals.inputCounter+=1
+                    vals.inputSet=1
+
+                if vals.inputSet:
+                    #sets the inrange constants
+                    if vals.inputX1<=vals.inputX2:
+                        vals.leftBound=vals.inputX1
+                        vals.rightBound=vals.inputX2
+                    else:
+                        vals.leftBound=vals.inputX2
+                        vals.rightBound=vals.inputX1                        
+
+                    if vals.inputY1<=vals.inputY2:
+                        vals.upperBound=vals.inputY1
+                        vals.lowerBound=vals.inputY2
+                    else:
+                        vals.upperBound=vals.inputY2
+                        vals.lowerBound=vals.inputY1       
+
+                    vals.windowX = vals.rightBound - vals.leftBound
+                    vals.windowY = vals.lowerBound - vals.upperBound                 
+                    
+
+
             if vals.rec_flg==1: #Recording 
             #Finding out the location of the LEDs, tipThumb, kThumb....
                 newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
@@ -97,12 +159,19 @@ class mainThread(threading.Thread):
                 newRpt=copy.deepcopy(rpt)
                 vals.rptList.append(newRpt)
                 vals.inrange, vals.LED1,vals.LED2,vals.LED3,vals.LED4=checkingInRange.rangeChecker(vals.rptList, vals.LED1, vals.LED2,vals.LED3,vals.LED4)
+            
+                if (vals.inputX1<=rpt[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt[tipIndex][1]<=vals.inputY2) or \
+                    (vals.inputX1<=rpt2[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt2[tipIndex][1]<=vals.inputY2):
+                    vals.inrange=1
+
             #Depth
                 doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
             #GUI
                 doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont,calibFont,depthFont)
                 #doDraw.drawAllMiniRecording(miniScreen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
-        
+
+
+
             #Creating the 3d box
 
 
@@ -114,12 +183,27 @@ class mainThread(threading.Thread):
                     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
-                    if vals.windowX==0:
-                        vals.windowX=10
-                    if vals.windowY==0:
-                        vals.windowY=10
-                    mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                    mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
+#                    if vals.windowX==0:
+#                        vals.windowX=10
+#                    if vals.windowY==0:
+#                        vals.windowY=10
+ 
+                    if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
+                        mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
+                        mouseY=(rpt[tipIndex][1]-250)*vals.height/vals.windowY
+                    else:
+                        # print "ye"
+                        mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
+                        mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
+                        
+                        # factorX =vals.width/(vals.inputX2-vals.inputX1)
+                        # factorY =vals.height/(vals.inputY2-vals.inputY1)
+
+                        # mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
+                        # mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
+
+                    #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
+                    #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 

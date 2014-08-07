@@ -1,3 +1,4 @@
+import constants as vals
 
 
 def rangeChecker(rptList,LED1, LED2,LED3,LED4):
@@ -25,12 +26,13 @@ def outOfBounds( LED1,LED2,LED3,LED4):
         listOfLEDs=[LED1,LED2,LED3,LED4]
         for i in xrange(len(listOfLEDs)):
             thisLED=listOfLEDs[i]
-            if (not (20<thisLED[len(thisLED)-1][0]<1180)) or (not (20<thisLED[len(thisLED)-1][1]<750)):
+            if (not (vals.leftBound<thisLED[len(thisLED)-1][0]<vals.rightBound)) or (not (vals.upperBound<thisLED[len(thisLED)-1][1]<vals.lowerBound)):
                 sameFlag=1
                 break
     return sameFlag
 
 
+    #Outof bounds perimeter can be used with vals. and then it can be modified
 
 
 def checkEqual( ledList):
