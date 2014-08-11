@@ -69,9 +69,6 @@ typeGUI = None
 # Note: different from drag_flg. drag_flg is not used now.
 dragFlag = True
 
-# Test a feature using slope of the distClick
-slopeFlag = False
-
 # Debug Mode
 # debugFlag = False
 
@@ -206,8 +203,8 @@ tipDistance=0
 dist3D=0
 
 #To adjust the cursor sensitivity. Adjusted by arrow keys
-windowX=250
-windowY=200
+windowX=200
+windowY=250
 
 #checking inRange constants
 leftBound=5

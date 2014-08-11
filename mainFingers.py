@@ -190,7 +190,7 @@ class mainThread(threading.Thread):
  
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
                         mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                        mouseY=(rpt[tipIndex][1]-250)*vals.height/vals.windowY
+                        mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
                     else:
                         # print "ye"
                         mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    

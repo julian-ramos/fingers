@@ -21,18 +21,20 @@ def eventHandling(eventsObject):
             'r': record mode
             'c': calibration mode
             'l': load data mode
+            'h': enter next screen(calibration)
+            'q': quit
             
             't': test type open/close
             'p': test mouse open/close
-            'd': dragging enable/disable
+            'd': dragging & double click enable/disable
             'm': switch between mouse and keyboard
-            'up arrow': change sensitivity of fingers
-            'down arrow': change sensitivity of fingers
-            'left arrow': change sensitivity of fingers
-            'right arrow': change sensitivity of fingers
-            's': test a feature using slope of the distClick
-            'q': quit
-            'h': enter next screen(calibration)
+            'e': do input calibration(optional)
+            
+            Not used: 'up arrow': change sensitivity of fingers
+            Not used: 'down arrow': change sensitivity of fingers
+            Not used: 'left arrow': change sensitivity of fingers
+            Not used: 'right arrow': change sensitivity of fingers
+
             '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
@@ -99,12 +101,6 @@ def eventHandling(eventsObject):
                 #    vals.windowX+=10
                 #elif event.key==pygame.K_LEFT:
                 #    vals.windowX-=10
-
-
-                # Test a feature using slope of the distClick
-                elif event.key == pygame.K_s:
-                    vals.slopeFlag = not vals.slopeFlag
-                    print 'slopeFlag changed to {}'.format(str(vals.slopeFlag))
 
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
