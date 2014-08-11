@@ -199,7 +199,11 @@ class mainThread(threading.Thread):
 #                        vals.windowX=10
 #                    if vals.windowY==0:
 #                        vals.windowY=10
-                    fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
+                    if vals.knuckleFlag:
+                        fingerX = (rpt[tipIndex][0] + rpt[kIndex][0]) / 2
+                        fingerY = (rpt[tipIndex][1] + rpt[kIndex][1]) / 2
+                    else:
+                        fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
 
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
