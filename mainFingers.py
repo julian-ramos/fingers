@@ -31,11 +31,23 @@ import doDepth
 import funcs as fun
 import checkingInRange
 
+def finger2Mouse(fX, fY, rectangle = False):
+    " Convert the fingers coordinate to mouse coordinate "
+    left = vals.leftBound
+    upper = vals.upperBound
+    if rectangle == False:
+        left = 600
+        upper = 150
+
+    mX = (fX - left) * vals.width / vals.windowX                    
+    mY = (fY - upper) * vals.height / vals.windowY
+
+    return mX, mY    
 
 class mainThread(threading.Thread):
     def __init__(self):
-        threading.Thread.__init__(self)
-        
+        threading.Thread.__init__(self)    
+
     def run(self):
         global FLG, coords
         FLG=1
@@ -187,14 +199,21 @@ class mainThread(threading.Thread):
 #                        vals.windowX=10
 #                    if vals.windowY==0:
 #                        vals.windowY=10
- 
-                    if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
-                        mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                        mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
+                    if vals.knuckleFlag:
+                        fingerX = (rpt[tipIndex][0] + rpt[kIndex][0]) / 2
+                        fingerY = (rpt[tipIndex][1] + rpt[kIndex][1]) / 2
                     else:
+                        fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
+
+                    if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
+                        mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
+                        # mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
+                        # mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
+                    else:
+                        mouseX, mouseY = finger2Mouse(fingerX, fingerY, True)
                         # print "ye"
-                        mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
-                        mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
+                        # mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
+                        # mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
                         
                         # factorX =vals.width/(vals.inputX2-vals.inputX1)
                         # factorY =vals.height/(vals.inputY2-vals.inputY1)

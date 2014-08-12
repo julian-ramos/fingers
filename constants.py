@@ -69,6 +69,9 @@ typeGUI = None
 # Note: different from drag_flg. drag_flg is not used now.
 dragFlag = True
 
+# Enable/Disable using knuckle
+knuckleFlag = False
+
 # Debug Mode
 # debugFlag = False
 

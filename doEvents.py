@@ -29,7 +29,8 @@ def eventHandling(eventsObject):
             'd': dragging & double click enable/disable
             'm': switch between mouse and keyboard
             'e': do input calibration(optional)
-            
+            'k': use index knuckle to help correct index tip
+
             Not used: 'up arrow': change sensitivity of fingers
             Not used: 'down arrow': change sensitivity of fingers
             Not used: 'left arrow': change sensitivity of fingers
@@ -91,6 +92,11 @@ def eventHandling(eventsObject):
                         vals.mouse_flg=0
                     else:
                         vals.mouse_flg=1
+                # Use index knuckle to help index tip
+                elif event.key == pygame.K_k:
+                    vals.knuckleFlag = not vals.knuckleFlag
+                    print 'knuckleFlag changed to {}'.format(str(vals.knuckleFlag))
+                    
 #Julian doesn't want me to allow users to change values.
                 #Change sensitivity of fingers
                 #elif event.key==pygame.K_UP:
