@@ -175,7 +175,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     if vals.testTypeFlag or vals.testPointFlag:
         ''' TODO: convert them to actual coordinate on the display.'''
         # Note: it is not the real coordinate.
-        # time, dista[0], distClick[0], vals.inrange, inBox
+        # time, dista0, distClick0, inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
         # mouse_flg, mouseState, clickX, clickY
         vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
