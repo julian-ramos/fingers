@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import time
+import numpy as np
 
 import constants as vals
 import doDepth
@@ -88,21 +89,22 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         depthGUIHeight = int(vals.height * 0.95) - depthGUITop
         pygame.draw.rect(screen, vals.gray, (depthGUILeft, depthGUITop, depthGUIWidth, depthGUIHeight))
         
-        # left--1startPos--2green--3white--4red--5blue--6endPos--7label--8right
-        tmpSplit = depthGUIWidth / 8
+        # 0left--1startPos--2green--3white--4red--5blue--6endPos--7label--8right
+        objXPos = np.linspace(depthGUILeft, depthGUILeft + depthGUIWidth, 9)
+        objXPos = [int(x) for x in objXPos]
         #Creating the lines
         for i in xrange(11):
-            offsetY=75
-            startPos=(depthGUILeft + tmpSplit,offsetY+i*30)         # was 550
-            endPos=(depthGUILeft + tmpSplit*6, offsetY+(i*30))      # was 650 
-            pygame.draw.line(screen,vals.black,startPos,endPos)
-            depthLabel=depthFont.render( str(5*i),1,vals.black)
-            screen.blit(depthLabel,(depthGUILeft + tmpSplit*7,offsetY+i*30))
+            offsetY = 75
+            startPos = (objXPos[1], offsetY + i*30)      # was 550
+            endPos = (objXPos[6], offsetY + i*30)      # was 650 
+            pygame.draw.line(screen, vals.black, startPos, endPos)
+            depthLabel = depthFont.render( str(5*i), 1, vals.black)
+            screen.blit(depthLabel, (objXPos[7], offsetY + i*30))
         #Depth circles. Was 560, 580, 600, 620
-        pygame.draw.circle(screen, vals.green, (depthGUILeft + tmpSplit*2,int(75+vals.depthBuff[0].mean()*6)),10) #tipThumb
-        pygame.draw.circle(screen, vals.white, (depthGUILeft + tmpSplit*3,int(75+vals.depthBuff[1].mean()*6)),10) #kThumb
-        pygame.draw.circle(screen, vals.red, (depthGUILeft + tmpSplit*4,int(75+vals.depthBuff[2].mean()*6)),10) #tipindex
-        pygame.draw.circle(screen, vals.blue, (depthGUILeft + tmpSplit*5,int(75+vals.depthBuff[3].mean()*6)),10)#kIndex
+        pygame.draw.circle(screen, vals.green, (objXPos[2], int(75 + vals.depthBuff[0].mean()*6)), 10) #tipThumb
+        pygame.draw.circle(screen, vals.white, (objXPos[3], int(75 + vals.depthBuff[1].mean()*6)), 10) #kThumb
+        pygame.draw.circle(screen, vals.red, (objXPos[4], int(75 + vals.depthBuff[2].mean()*6)), 10) #tipindex
+        pygame.draw.circle(screen, vals.blue, (objXPos[5], int(75 + vals.depthBuff[3].mean()*6)), 10)#kIndex
 
     #The gesture bounds
         pygame.draw.line(screen,vals.red, (vals.gestureLeftThreshHold/3,0),(vals.gestureLeftThreshHold/3,800))
