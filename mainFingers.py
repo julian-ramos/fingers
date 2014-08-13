@@ -199,8 +199,8 @@ class mainThread(threading.Thread):
 #                        vals.windowX=10
 #                    if vals.windowY==0:
 #                        vals.windowY=10
-                    tipParam = 3
-                    knuParam = 7
+                    tipParam = 7
+                    knuParam = 3
                     if vals.knuckleFlag:
                         fingerX = (rpt[tipIndex][0] * tipParam + rpt[kIndex][0] * knuParam) / (tipParam + knuParam)
                         fingerY = (rpt[tipIndex][1] * tipParam + rpt[kIndex][1] * knuParam) / (tipParam + knuParam)

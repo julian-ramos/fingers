@@ -39,74 +39,79 @@ def eventHandling(eventsObject):
             '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
-                if event.key==pygame.K_r: #start recording
-                    vals.rec_flg=1
+                if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
+                    if event.key==pygame.K_r: #start recording
+                        vals.rec_flg=1
 
-                    vals.inputCalibration=0
+                        vals.inputCalibration=0
 
-                    # vals.calibration=False
-                    # vals.testStartTime = time.time()  
-                elif event.key==pygame.K_c: #start vals.calibration
-                    vals.calibration=1
-                    vals.calibState = vals.START_CALIB
-                # Acts strange now
-                # elif event.key==pygame.K_s: #pauses the recording
-                #     vals.rec_flg=False 
-                elif event.key==pygame.K_q: #quits entirely
-                    print "q pressed"
-                    vals.quit_FLG=1
-                    if vals.testTypeFlag:
-                        ttf  = open(vals.testTypeFile.format(vals.userName), 'w')
-                        print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
-                        for string in vals.testTypeData:
-                            print >> ttf, string
-                        ttf.close()
-                #Load calibration data from file : 'l', load
-                elif event.key == pygame.K_l:
-                    vals.calibLoadFlag = True
-                # Start testing the device while typing
-                elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
-                    vals.testTypeFlag = not vals.testTypeFlag
-                    if vals.testTypeFlag:
-                        vals.testStartTime = time.time()
-                        try:
-                            unf = open(vals.userNameFile, 'r')
-                            vals.userName = unf.readline().strip()
-                            unf.close()
-                            Popen(["gedit", vals.typeContentFile.format(vals.userName), \
-                                '--geometry=+1080+20'], stdin = open(os.devnull, 'r'))
-                        except:
-                            pass
-                    print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
-                # Start testing the pointing function
-                elif event.key == pygame.K_p:
-                    vals.testPointFlag = not vals.testPointFlag
-                    print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
-                # Enable/Disable dragging function
-                elif event.key == pygame.K_d:
-                    vals.dragFlag = not vals.dragFlag
-                    print 'dragFlag changed to {}'.format(str(vals.dragFlag))
-                #Forced mouse mode
-                elif event.key==pygame.K_m:
-                    if vals.mouse_flg==1:
-                        vals.mouse_flg=0
-                    else:
-                        vals.mouse_flg=1
-                # Use index knuckle to help index tip
-                elif event.key == pygame.K_k:
-                    vals.knuckleFlag = not vals.knuckleFlag
-                    print 'knuckleFlag changed to {}'.format(str(vals.knuckleFlag))
-                    
+                        # vals.calibration=False
+                        # vals.testStartTime = time.time()  
+                    elif event.key==pygame.K_c: #start vals.calibration
+                        vals.calibration=1
+                        vals.calibState = vals.START_CALIB
+                    # Acts strange now
+                    # elif event.key==pygame.K_s: #pauses the recording
+                    #     vals.rec_flg=False 
+                    elif event.key==pygame.K_q: #quits entirely
+                        print "q pressed"
+                        vals.quit_FLG=1
+                        if vals.testTypeFlag:
+                            ttf  = open(vals.testTypeFile.format(vals.userName), 'w')
+                            print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
+                            for string in vals.testTypeData:
+                                print >> ttf, string
+                            ttf.close()
+                    #Load calibration data from file : 'l', load
+                    elif event.key == pygame.K_l:
+                        vals.calibLoadFlag = True
+                    # Start testing the device while typing
+                    elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
+                        vals.testTypeFlag = not vals.testTypeFlag
+                        if vals.testTypeFlag:
+                            vals.testStartTime = time.time()
+                            try:
+                                unf = open(vals.userNameFile, 'r')
+                                vals.userName = unf.readline().strip()
+                                unf.close()
+                                Popen(["gedit", vals.typeContentFile.format(vals.userName), \
+                                    '--geometry=+1080+20'], stdin = open(os.devnull, 'r'))
+                            except:
+                                pass
+                        print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
+                    # Start testing the pointing function
+                    elif event.key == pygame.K_p:
+                        vals.testPointFlag = not vals.testPointFlag
+                        print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
+                    # Enable/Disable dragging function
+                    elif event.key == pygame.K_d:
+                        vals.dragFlag = not vals.dragFlag
+                        print 'dragFlag changed to {}'.format(str(vals.dragFlag))
+                    #Forced mouse mode
+                    elif event.key==pygame.K_m:
+                        if vals.mouse_flg==1:
+                            vals.mouse_flg=0
+                        else:
+                            vals.mouse_flg=1
+                    # Use index knuckle to help index tip
+                    elif event.key == pygame.K_k:
+                        vals.knuckleFlag = not vals.knuckleFlag
+                        print 'knuckleFlag changed to {}'.format(str(vals.knuckleFlag))
+                        
 #Julian doesn't want me to allow users to change values.
+# Note: I decided to uncomment these, but add a shift key to make it safe.
+# This is just for the testing. 
                 #Change sensitivity of fingers
-                #elif event.key==pygame.K_UP:
-                #    vals.windowY+=10            
-                #elif event.key==pygame.K_DOWN:
-                #    vals.windowY-=10
-                #elif event.key==pygame.K_RIGHT:
-                #    vals.windowX+=10
-                #elif event.key==pygame.K_LEFT:
-                #    vals.windowX-=10
+                elif (pygame.key.get_mods() & pygame.KMOD_SHIFT):
+                    if event.key == pygame.K_UP or event.key == pygame.K_w:
+                       vals.windowY += 50            
+                    elif event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                       vals.windowY -= 50
+                    elif event.key==pygame.K_RIGHT or event.key == pygame.K_d:
+                       vals.windowX += 50
+                    elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
+                       vals.windowX -= 50
+                    print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
 
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
