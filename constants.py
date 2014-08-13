@@ -57,7 +57,7 @@ textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None
 typeContentFile = 'textFiles/{}_Type_Content.txt'
-userNameFile = '../FittsLawTest/userName'
+userNameFile = '../FittsLawTest/userName.txt'
 # userNameFile = '../FittsLawTest/userData/userName'
 userName = ''
 '''

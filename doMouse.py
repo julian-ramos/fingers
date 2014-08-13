@@ -172,7 +172,7 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print("Release")
             print 'distClick[0]: ' + str(distClick[0])
 
-    if vals.testTypeFlag:
+    if vals.testTypeFlag or vals.testPointFlag:
         ''' TODO: convert them to actual coordinate on the display.'''
         # Note: it is not the real coordinate.
         # time, dista[0], distClick[0], vals.inrange, inBox

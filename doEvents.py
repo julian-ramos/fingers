@@ -14,6 +14,26 @@ import constants as vals
 from calibFileManager import *
 from funcs import peakdetect, smooth
 
+def startRecordTestData():
+    vals.testStartTime = time.time()
+    vals.testTypeData = []
+    try:
+        unf = open(vals.userNameFile, 'r')
+        vals.userName = unf.readline().strip()
+        unf.close()
+    except:
+        print 'Failed to read userName from file: ' + str(vals.userNameFile)
+    print 'start recording test data'
+
+def saveTestData():
+    saveFileName = vals.testTypeFile.format(vals.userName)
+    sf  = open(saveFileName, 'a')
+    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
+    for string in vals.testTypeData:
+        print >> sf, string
+    sf.close()
+    print 'append test data to ' + str(saveFileName)
+
 def eventHandling(eventsObject):
     for event in eventsObject:
         if event.type==KEYDOWN:
@@ -31,10 +51,10 @@ def eventHandling(eventsObject):
             'e': do input calibration(optional)
             'k': use index knuckle to help correct index tip
 
-            Not used: 'up arrow': change sensitivity of fingers
-            Not used: 'down arrow': change sensitivity of fingers
-            Not used: 'left arrow': change sensitivity of fingers
-            Not used: 'right arrow': change sensitivity of fingers
+            Shift + 'w'/'up arrow': change sensitivity of fingers
+            Shift + 's'/'down arrow': change sensitivity of fingers
+            Shift + 'a'/'left arrow': change sensitivity of fingers
+            Shift + 'd'/'right arrow': change sensitivity of fingers
 
             '''
             # Note: [not testing] or [testing but press Ctrl now]
@@ -56,12 +76,9 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_q: #quits entirely
                         print "q pressed"
                         vals.quit_FLG=1
-                        if vals.testTypeFlag:
-                            ttf  = open(vals.testTypeFile.format(vals.userName), 'w')
-                            print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
-                            for string in vals.testTypeData:
-                                print >> ttf, string
-                            ttf.close()
+                        if vals.testTypeFlag or vals.testPointFlag:
+                            # Quit without turn off the type/point flag
+                            saveTestData()
                     #Load calibration data from file : 'l', load
                     elif event.key == pygame.K_l:
                         vals.calibLoadFlag = True
@@ -69,19 +86,31 @@ def eventHandling(eventsObject):
                     elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                         vals.testTypeFlag = not vals.testTypeFlag
                         if vals.testTypeFlag:
-                            vals.testStartTime = time.time()
+                            if not vals.testPointFlag:
+                                # Start testing and timing
+                                startRecordTestData()
                             try:
-                                unf = open(vals.userNameFile, 'r')
-                                vals.userName = unf.readline().strip()
-                                unf.close()
+                                # Open gedit on the right side of the screen
                                 Popen(["gedit", vals.typeContentFile.format(vals.userName), \
                                     '--geometry=+1080+20'], stdin = open(os.devnull, 'r'))
                             except:
                                 pass
+                        else:
+                            # Turn off. Save if necessary.
+                            if not vals.testPointFlag:
+                                saveTestData()
                         print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
                     # Start testing the pointing function
                     elif event.key == pygame.K_p:
                         vals.testPointFlag = not vals.testPointFlag
+                        if vals.testPointFlag:
+                            if not vals.testTypeFlag:
+                                # Start testing and timing
+                                startRecordTestData()
+                        else:
+                            # Turn off. Save if necessary.
+                            if not vals.testTypeFlag:
+                                saveTestData()
                         print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
                     # Enable/Disable dragging function
                     elif event.key == pygame.K_d:
