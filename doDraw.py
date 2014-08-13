@@ -67,6 +67,9 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         inBox=calibFont.render("open tips",1,vals.white)
         screen.blit(inBox,(20,365))
 
+        windowSize = calibFont.render('window size X:{} Y:{}'.format(str(vals.windowX), str(vals.windowY)), 1, vals.white)
+        screen.blit(windowSize, (0, 400))
+
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
         pygame.draw.circle(screen, vals.blue, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)
