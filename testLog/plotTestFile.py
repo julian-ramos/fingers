@@ -17,7 +17,8 @@ def run():
     fi = 0
     if openFiles:
         for fileObj in openFiles:
-            fileName, fileExt = os.path.splitext(fileObj.name)
+            fileName = os.path.basename(fileObj.name).split('.')[0]
+            fileExt = os.path.splitext(fileObj.name)[1]
             if fileExt != '.csv':
                 continue
 
