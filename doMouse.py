@@ -4,6 +4,7 @@ import funcs as fun
 import time
 import numpy as np
 import doDepth
+from mainFingers import finger2Mouse
 
 def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
@@ -174,14 +175,17 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     if vals.testTypeFlag or vals.testPointFlag:
         ''' TODO: convert them to actual coordinate on the display.'''
-        # Note: it is not the real coordinate.
+        tIX, tIY = finger2Mouse(rpt[tipIndex][0], rpt[tipIndex][1])
+        kIX, kIY = finger2Mouse(rpt[kIndex][0], rpt[kIndex][1])
+        tTX, tTY = finger2Mouse(rpt[tipThumb][0], rpt[tipThumb][1])
+        kTX, kTY = finger2Mouse(rpt[kThumb][0], rpt[kThumb][1])
+
         # time, dista0, distClick0, inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
         # mouse_flg, mouseState, clickX, clickY
         vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
-            str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
-            str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), \
+            str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), \
             str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
             ))
 

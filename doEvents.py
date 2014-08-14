@@ -27,12 +27,12 @@ def startRecordTestData():
 
 def saveTestData():
     saveFileName = vals.testTypeFile.format(vals.userName)
-    sf  = open(saveFileName, 'a')
+    sf  = open(saveFileName, 'w')
     print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
     for string in vals.testTypeData:
         print >> sf, string
     sf.close()
-    print 'append test data to ' + str(saveFileName)
+    print 'Write test data to ' + str(saveFileName)
 
 def eventHandling(eventsObject):
     for event in eventsObject:

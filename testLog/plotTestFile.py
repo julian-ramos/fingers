@@ -30,13 +30,40 @@ def run():
             # mouse_flg, mouseState, clickX, clickY
 
             color = ['y.-', 'b.-', 'c.-', 'k.-', 'g.-', 'r.-', 'm.-']
+
+            # Plot all data
             keys = ['dista0', 'distClick0', 'inRange', 'inBox', 'tIX', 'tIY', 'kIX', 'kIY', \
             'tTX', 'tTY', 'kTX', 'kTY', 'mouseState', 'clickX', 'clickY']
+            # for i in range(len(keys)):
+            #     figure(fi + i)
+            #     plot(data['time'], data[keys[i]], color[i % len(color)])
+            #     title('{}-{}'.format(str(fileName), str(keys[i])))
 
-            for i in range(len(keys)):
-                figure(fi + i)
-                plot(data['time'], data[keys[i]], color[i % len(color)])
-                title('{}-{}'.format(str(fileName), str(keys[i])))
+            # Plot selected data
+            selData = data[0:1000]
+            keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'mouseState', 'clickX']
+            figure(fi)
+            fi += 1
+            for i in range(len(keyX)):
+                if keyX[i] == 'mouseState':
+                    ms = np.array(selData['mouseState']) * 500
+                    plot(selData['time'], ms, color[i % len(color)], label = keyX[i])
+                else:
+                    plot(selData['time'], selData[keyX[i]], color[i % len(color)], label = keyX[i])
+            title('{}-{}'.format(str(fileName), 'X'))
+            legend(loc = 'upper right')
+
+            keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'mouseState', 'clickY']
+            figure(fi)
+            fi += 1
+            for i in range(len(keyY)):
+                if keyY[i] == 'mouseState':
+                    ms = np.array(selData['mouseState']) * 500
+                    plot(selData['time'], ms, color[i % len(color)], label = keyY[i])
+                else:
+                    plot(selData['time'], selData[keyY[i]], color[i % len(color)], label = keyY[i])
+            title('{}-{}'.format(str(fileName), 'Y'))
+            legend(loc = 'upper right')
 
             show()
 
