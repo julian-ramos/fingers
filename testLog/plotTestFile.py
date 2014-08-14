@@ -26,14 +26,14 @@ def run():
             data = np.genfromtxt(fileObj.name, dtype = float, delimiter = ',', names = True)
 
             # time, dista0, distClick0, inrange, inBox
-            # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
+            # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
             # mouse_flg, mouseState, clickX, clickY
 
             color = ['y.-', 'b.-', 'c.-', 'k.-', 'g.-', 'r.-', 'm.-']
 
             # Plot all data
             keys = ['dista0', 'distClick0', 'inRange', 'inBox', 'tIX', 'tIY', 'kIX', 'kIY', \
-            'tTX', 'tTY', 'kTX', 'kTY', 'mouseState', 'clickX', 'clickY']
+            'tTX', 'tTY', 'kTX', 'kTY', 'smoothX', 'smoothY', 'mouseState', 'clickX', 'clickY']
             # for i in range(len(keys)):
             #     figure(fi + i)
             #     plot(data['time'], data[keys[i]], color[i % len(color)])
@@ -41,7 +41,7 @@ def run():
 
             # Plot selected data
             selData = data[0:1000]
-            keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'mouseState', 'clickX']
+            keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'smoothX', 'mouseState', 'clickX']
             figure(fi)
             fi += 1
             for i in range(len(keyX)):
@@ -53,7 +53,7 @@ def run():
             title('{}-{}'.format(str(fileName), 'X'))
             legend(loc = 'upper right')
 
-            keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'mouseState', 'clickY']
+            keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'smoothY', 'mouseState', 'clickY']
             figure(fi)
             fi += 1
             for i in range(len(keyY)):

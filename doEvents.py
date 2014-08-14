@@ -28,7 +28,7 @@ def startRecordTestData():
 def saveTestData():
     saveFileName = vals.testTypeFile.format(vals.userName)
     sf  = open(saveFileName, 'w')
-    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
+    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY'
     for string in vals.testTypeData:
         print >> sf, string
     sf.close()

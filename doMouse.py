@@ -179,13 +179,15 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         kIX, kIY = finger2Mouse(rpt[kIndex][0], rpt[kIndex][1])
         tTX, tTY = finger2Mouse(rpt[tipThumb][0], rpt[tipThumb][1])
         kTX, kTY = finger2Mouse(rpt[kThumb][0], rpt[kThumb][1])
+        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 
         # time, dista0, distClick0, inrange, inBox
-        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
+        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
         # mouse_flg, mouseState, clickX, clickY
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
-            str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), \
+            str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
             str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
             ))
 
