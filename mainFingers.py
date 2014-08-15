@@ -208,23 +208,14 @@ class mainThread(threading.Thread):
                         fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
 
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
+                        # Use default option
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
                         # mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
                         # mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
                     else:
+                        # Use the user prefered window size
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, True)
                         # print "ye"
-                        # mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
-                        # mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
-                        
-                        # factorX =vals.width/(vals.inputX2-vals.inputX1)
-                        # factorY =vals.height/(vals.inputY2-vals.inputY1)
-
-                        # mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
-                        # mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
-
-                    #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                    #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 
@@ -235,22 +226,46 @@ class mainThread(threading.Thread):
                     if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
+
+                        if vals.featureFlag:
+                            smoothSize = min(len(vals.buff[0].data), vals.smoothSize)
+                        else:
+                            smoothSize = min(len(vals.buff[0].data), 10)
+
+
+                        smoothX = np.mean(fun.smooth(vals.buff[0].data[-smoothSize:], window_len = smoothSize))
+                        smoothY = np.mean(fun.smooth(vals.buff[1].data[-smoothSize:], window_len = smoothSize))
+
+                        # The 'speed'(actually it is the movement^2 in pixels, not speed)
+                        speed2 = (smoothX - vals.traceX)**2 + (smoothY - vals.traceY)**2
+                        if speed2 > 1000:
+                            speed2 = 1000
+                        elif speed2 < 0.01:
+                            speed2 = 0.01
+
+                        paramA, paramB = 9.6, 10
+                        try:
+                            vals.smoothSize = min(len(vals.buff[0].data), int(paramA + paramB / speed2))
+                        except:
+                            print vals.buff[0].data, speed2
+                        # smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+                        # smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+
                         # data0 = vals.buff[0].getData()
                         # data1 = vals.buff[1].getData() 
                         # smoothX = np.mean(fun.smooth(data0, window_len = len(data0)))
                         # smoothY = np.mean(fun.smooth(data1, window_len = len(data1)))
                         # print data0, data1
                         # print smoothX, smoothY
-                        smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-                        smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
-
 
                         if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
                             # Record the last trace point
                             vals.traceX, vals.traceY = smoothX, smoothY
-                            if vals.featureFlag and vals.mouseState == vals.MOUSE_READY:
-                                vals.traceX = (vals.traceX * 4 + smoothX) / 5
-                                vals.traceY = (vals.traceY * 4 + smoothY) / 5
+                            if vals.featureFlag:# and vals.mouseState == vals.MOUSE_READY:
+                                vals.traceX = np.mean(fun.smooth(vals.buff[0].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                                vals.traceY = np.mean(fun.smooth(vals.buff[1].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                                # vals.traceX = (vals.traceX * 4 + smoothX) / 5
+                                # vals.traceY = (vals.traceY * 4 + smoothY) / 5
                             m.move(vals.traceX, vals.traceY)
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
                             # m.move(smoothX, smoothY)

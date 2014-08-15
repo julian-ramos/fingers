@@ -17,7 +17,8 @@ width = 800
 height = 600
 
 buff=[[],[]]
-maxBuff = 10 		# Max buffer size of the x-y queue
+maxBuff = 20 		# Max buffer size of the x-y queue
+smoothSize = 10
 buff[0]=q.miniQueue(maxBuff)#, minBuff)
 buff[1]=q.miniQueue(maxBuff)#, minBuff)
 

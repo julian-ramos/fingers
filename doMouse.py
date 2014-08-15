@@ -180,8 +180,9 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         kIX, kIY = finger2Mouse(rpt[kIndex][0], rpt[kIndex][1])
         tTX, tTY = finger2Mouse(rpt[tipThumb][0], rpt[tipThumb][1])
         kTX, kTY = finger2Mouse(rpt[kThumb][0], rpt[kThumb][1])
-        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+        smoothX, smoothY = vals.traceX, vals.traceY
+        # smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+        # smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 
         # time, dista0, distClick0, inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY

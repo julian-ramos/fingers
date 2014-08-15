@@ -70,6 +70,13 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         windowSize = calibFont.render('window size X:{} Y:{}'.format(str(vals.windowX), str(vals.windowY)), 1, vals.white)
         screen.blit(windowSize, (0, 400))
 
+        if vals.featureFlag:
+            smoothSize = calibFont.render('smooth buffer size: {}'.format(str(vals.smoothSize)), 1, vals.white)
+        else:
+            smoothSize = calibFont.render('smooth buffer size: N/A', 1, vals.white)
+        screen.blit(smoothSize, (0, 420))
+
+
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
         pygame.draw.circle(screen, vals.blue, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)

@@ -41,7 +41,7 @@ def run():
             #     title('{}-{}'.format(str(fileName), str(keys[i])))
 
             # Plot selected data
-            selData = data[1000:2000]
+            selData = data[:]
             keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'smoothX', 'mouseState', 'clickX']
             figure(fi)
             fi += 1
@@ -54,7 +54,8 @@ def run():
             title('{}-{}'.format(str(fileName), 'X'))
             legend(loc = 'lower right')
 
-            keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'smoothY', 'mouseState', 'clickY']
+            # keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'smoothY', 'mouseState', 'clickY']
+            keyY = ['distClick0', 'tIY', 'smoothY', 'tIX', 'smoothX', 'mouseState']
             figure(fi)
             fi += 1
             for i in range(len(keyY)):
@@ -65,9 +66,13 @@ def run():
                     plot(selData['time'], selData[keyY[i]], color[i % len(color)], label = keyY[i])
             
             # Plot diff
-            ledDiffMean = (np.diff(selData['tIY']) + np.diff(selData['kIY']) + np.diff(selData['tTY']) + np.diff(selData['kTY'])) / 4 * 100
+            # ledDiffMean = (np.diff(selData['tIY']) + np.diff(selData['kIY']) + np.diff(selData['tTY']) + np.diff(selData['kTY'])) / 4 * 100
+            # ledDiffMean = np.sqrt((np.diff(selData['tIY']) ** 2 + np.diff(selData['tIX']) ** 2)) * 100
+            ledDiffMean = np.sqrt((np.diff(selData['smoothY']) ** 2 + np.diff(selData['smoothX']) ** 2)) * 100
+
+
             diffTime = selData['time'][1:]
-            # plot(diffTime, ledDiffMean, 'ro-', label = 'diff * 100')
+            plot(diffTime, ledDiffMean, 'g-', label = 'diff * 100')
 
             tmp = np.sum(ledDiffMean[0:5])
             diffBuff  = np.zeros(len(ledDiffMean) - 4)
@@ -76,10 +81,10 @@ def run():
                 tmp = tmp - ledDiffMean[i-5] + ledDiffMean[i]
                 diffBuff[i - 4] = tmp / 5
             buffTime = selData['time'][5:]
-            plot(buffTime, diffBuff, 'b-', label = 'diff buff * 100')
+            # plot(buffTime, diffBuff, 'b-', label = 'diff buff * 100')
 
             diffThumbIndex = np.abs((np.diff(selData['tTY']) + np.diff(selData['kTY']) - np.diff(selData['tIY']) - np.diff(selData['kIY'])) / 4 * 100)
-            plot(diffTime, diffThumbIndex, 'r-', label = '(thumbDiff - indexDiff) * 100')
+            # plot(diffTime, diffThumbIndex, 'r-', label = '(thumbDiff - indexDiff) * 100')
 
             title('{}-{}'.format(str(fileName), 'Y'))
             legend(loc = 'lower right')
