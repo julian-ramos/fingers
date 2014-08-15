@@ -246,8 +246,14 @@ class mainThread(threading.Thread):
 
 
                         if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
+                            # Record the last trace point
+                            vals.traceX, vals.traceY = smoothX, smoothY
+                            if vals.featureFlag and vals.mouseState == vals.MOUSE_READY:
+                                vals.traceX = (vals.traceX * 4 + smoothX) / 5
+                                vals.traceY = (vals.traceY * 4 + smoothY) / 5
+                            m.move(vals.traceX, vals.traceY)
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
-                            m.move(smoothX, smoothY)
+                            # m.move(smoothX, smoothY)
                             # m.move(mouseX, mouseY)
             
             if vals.wiimoteNum == vals.wiimoteMaxNum \

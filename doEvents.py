@@ -56,6 +56,8 @@ def eventHandling(eventsObject):
             Shift + 'a'/'left arrow': change sensitivity of fingers
             Shift + 'd'/'right arrow': change sensitivity of fingers
 
+            Shift + 'f': new feature testing
+
             '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
@@ -142,6 +144,9 @@ def eventHandling(eventsObject):
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
 
+                    if event.key == pygame.K_f:
+                        vals.featureFlag = not vals.featureFlag
+                        print 'featureFlag changed to {}'.format(str(vals.featureFlag))
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
                     if event.key==pygame.K_z:

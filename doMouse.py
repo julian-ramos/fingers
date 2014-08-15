@@ -106,8 +106,9 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         #print distClick[0], vals.inrange, vals.mouse_flg
         if distClick[0] <= newClickValue and vals.inrange and vals.mouse_flg:
             # Get possible point of click or drag
-            vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-            vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+            vals.clickX, vals.clickY = vals.traceX, vals.traceY
+            # vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+            # vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
             vals.dragX, vals.dragY = vals.clickX, vals.clickY
 
             vals.stime = time.time()

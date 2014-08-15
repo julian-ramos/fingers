@@ -72,8 +72,10 @@ dragFlag = True
 # Enable/Disable using knuckle
 knuckleFlag = False
 
-# Debug Mode
-# debugFlag = False
+# New feature test
+featureFlag = False
+
+traceX, traceY = 0, 0
 
 #calibration constants
 mouseModeValue=10
