@@ -202,9 +202,6 @@ class mainThread(threading.Thread):
 
 
 
-            #Creating the 3d box
-
-
             #Mouse Events
                 doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
