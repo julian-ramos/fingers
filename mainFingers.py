@@ -39,8 +39,24 @@ def finger2Mouse(fX, fY, rectangle = False):
         left = 600
         upper = 150
 
-    mX = (fX - left) * vals.width / vals.windowX                    
-    mY = (fY - upper) * vals.height / vals.windowY
+
+    windowX=vals.windowX
+    windowY=vals.windowY
+
+    if vals.zoom_flg:
+        zoomConstant=10
+        windowX=zoomConstant*windowX
+        windowY=zoomConstant*windowY
+        print "zoom"
+
+        mX = (fX - vals.fX) * vals.width / windowX                    
+        mY = (fY - vals.fY) * vals.height / windowY
+        mX=mX+vals.mouseX
+        mY=mY+vals.mouseY
+        return mX,mY
+
+    mX = (fX - left) * vals.width / windowX                    
+    mY = (fY - upper) * vals.height / windowY
 
     return mX, mY    
 
@@ -63,6 +79,8 @@ class mainThread(threading.Thread):
         calibFont=pygame.font.SysFont("monospace",20)
         depthFont=pygame.font.SysFont("monospace",10)
         defaultFont=pygame.font.SysFont("monospace",15)
+
+        pygame.mixer.init()
         
         infoObject = pygame.display.Info()
         vals.width = infoObject.current_w
@@ -188,17 +206,14 @@ class mainThread(threading.Thread):
 
 
             #Mouse Events
-                doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 if doDepth.checkAllAboveBox():
                     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
-#                    if vals.windowX==0:
-#                        vals.windowX=10
-#                    if vals.windowY==0:
-#                        vals.windowY=10
+                    #This is to weight the location of the pointer WRT tip & knuckle
                     tipParam = 7
                     knuParam = 3
                     if vals.knuckleFlag:
@@ -206,6 +221,10 @@ class mainThread(threading.Thread):
                         fingerY = (rpt[tipIndex][1] * tipParam + rpt[kIndex][1] * knuParam) / (tipParam + knuParam)
                     else:
                         fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
+
+                    if not vals.zoom_flg:
+                        vals.fX=rpt[tipIndex][0]
+                        vals.fY=rpt[tipIndex][1]
 
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
@@ -226,6 +245,16 @@ class mainThread(threading.Thread):
                     #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
                     #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
+
+                    if not vals.zoom_flg:
+                        vals.fingerX=fingerX
+                        vals.fingerY=fingerY
+                        vals.mouseX=mouseX
+                        vals.mouseY=mouseY
+
+
+
+
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 
                     some places (such as corners) are difficult/impossible to click. If we eliminate the if statement
@@ -235,12 +264,7 @@ class mainThread(threading.Thread):
                     if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
-                        # data0 = vals.buff[0].getData()
-                        # data1 = vals.buff[1].getData() 
-                        # smoothX = np.mean(fun.smooth(data0, window_len = len(data0)))
-                        # smoothY = np.mean(fun.smooth(data1, window_len = len(data1)))
-                        # print data0, data1
-                        # print smoothX, smoothY
+
                         smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
                         smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 

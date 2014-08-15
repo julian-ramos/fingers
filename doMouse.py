@@ -6,7 +6,7 @@ import numpy as np
 import doDepth
 from mainFingers import finger2Mouse
 
-def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
+def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
     dist3D=euclidean(rpt[tipIndex],rpt[tipThumb])
     vals.dist3D=dist3D   
@@ -61,15 +61,30 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouse_flg=1
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
+
+            file = 'switch.mp3'    
+            pygame.mixer.music.load(file)
+            pygame.mixer.music.play()
+
+
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
             print('Mouse mode deactivated')
             vals.mouse_flg=0
             vals.contDist=0
             vals.mouseSwitched_flg=1
+
+            file = 'switch.mp3'    
+            pygame.mixer.music.load(file)
+            pygame.mixer.music.play()
+
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
             vals.mouseSwitched_flg=0
             vals.mouseModeSwitchTime=0
+
+
+
+
 
     '''
     #Adjusting MaxBuff with respect to thumbtip and index knuckle
@@ -138,11 +153,24 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.click(vals.clickX, vals.clickY)
                     vals.lastClickX, vals.lastClickY = vals.clickX, vals.clickY
                     print('Click')
+
+                    file = 'click.mp3'    
+                    pygame.mixer.music.load(file)
+                    pygame.mixer.music.play()
+
+
+
             else:
                 # Double Click
                 if not vals.testTypeFlag:
                     m.click(vals.lastClickX, vals.lastClickY)
                     print('Double Click')
+
+                    file = 'click.mp3'    
+                    pygame.mixer.music.load(file)
+                    pygame.mixer.music.play()
+
+
 
             vals.lastClickTime = time.time()
             # print('Click')

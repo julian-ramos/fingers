@@ -224,3 +224,10 @@ inputClickStopper=0
 inputX2=-1
 inputY2=-1
 inputSet=0
+
+
+zoom_flg = 0
+fingerX=0
+fingerY=0
+mouseX=0
+mouseY=0

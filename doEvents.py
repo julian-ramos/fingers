@@ -56,6 +56,8 @@ def eventHandling(eventsObject):
             Shift + 'a'/'left arrow': change sensitivity of fingers
             Shift + 'd'/'right arrow': change sensitivity of fingers
 
+            'z': Will zoom, in other words sensitivity will decrease
+
             '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
@@ -126,7 +128,11 @@ def eventHandling(eventsObject):
                     elif event.key == pygame.K_k:
                         vals.knuckleFlag = not vals.knuckleFlag
                         print 'knuckleFlag changed to {}'.format(str(vals.knuckleFlag))
-                        
+                    elif event.key == pygame.K_z:
+                        vals.zoom_flg = not vals.zoom_flg
+
+
+
 #Julian doesn't want me to allow users to change values.
 # Note: I decided to uncomment these, but add a shift key to make it safe.
 # This is just for the testing. 
@@ -141,6 +147,8 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
+
+
 
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
