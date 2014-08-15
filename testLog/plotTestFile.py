@@ -87,7 +87,7 @@ def run():
             # plot(diffTime, diffThumbIndex, 'r-', label = '(thumbDiff - indexDiff) * 100')
 
             title('{}-{}'.format(str(fileName), 'Y'))
-            legend(loc = 'lower right')
+            legend(loc = 'upper right')
 
             show()
 
