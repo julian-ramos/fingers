@@ -76,6 +76,10 @@ knuckleFlag = False
 # New feature test
 featureFlag = False
 
+speedBuffSize = 10
+speedBuff = q.miniQueue(speedBuffSize)
+smoothSpeed = 0.0
+
 traceX, traceY = 0, 0
 
 #calibration constants

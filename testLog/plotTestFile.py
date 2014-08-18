@@ -68,11 +68,11 @@ def run():
             # Plot diff
             # ledDiffMean = (np.diff(selData['tIY']) + np.diff(selData['kIY']) + np.diff(selData['tTY']) + np.diff(selData['kTY'])) / 4 * 100
             # ledDiffMean = np.sqrt((np.diff(selData['tIY']) ** 2 + np.diff(selData['tIX']) ** 2)) * 100
-            ledDiffMean = np.sqrt((np.diff(selData['smoothY']) ** 2 + np.diff(selData['smoothX']) ** 2)) * 100
+            ledDiffMean = np.sqrt((np.diff(selData['smoothY']) ** 2 + np.diff(selData['smoothX']) ** 2))
 
 
             diffTime = selData['time'][1:]
-            plot(diffTime, ledDiffMean, 'g-', label = 'diff * 100')
+            plot(diffTime, ledDiffMean, 'g-', label = 'diff^2')
 
             tmp = np.sum(ledDiffMean[0:5])
             diffBuff  = np.zeros(len(ledDiffMean) - 4)
@@ -85,6 +85,13 @@ def run():
 
             diffThumbIndex = np.abs((np.diff(selData['tTY']) + np.diff(selData['kTY']) - np.diff(selData['tIY']) - np.diff(selData['kIY'])) / 4 * 100)
             # plot(diffTime, diffThumbIndex, 'r-', label = '(thumbDiff - indexDiff) * 100')
+
+            # plot the speed
+            figure(fi)
+            fi += 1
+            key = ['mouseState', 'speed', 'smoothSize']
+            for i in range(len(key)):
+                plot(selData['time'], selData[key[i]], color[i % len(color)], label = key[i])
 
             title('{}-{}'.format(str(fileName), 'Y'))
             legend(loc = 'upper right')
