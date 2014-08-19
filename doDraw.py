@@ -71,10 +71,10 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         screen.blit(windowSize, (0, 400))
 
         if vals.featureFlag:
-            smoothSize = calibFont.render('smooth buffer size: {}'.format(str(vals.smoothSize)), 1, vals.white)
+            buffSize = calibFont.render('current buffer size: {}'.format(str(vals.buff[0].size())), 1, vals.white)
         else:
-            smoothSize = calibFont.render('smooth buffer size: N/A', 1, vals.white)
-        screen.blit(smoothSize, (0, 420))
+            buffSize = calibFont.render('default buffer size: {}'.format(str(vals.defaultBuffSize)), 1, vals.white)
+        screen.blit(buffSize, (0, 420))
 
 
     #main circles

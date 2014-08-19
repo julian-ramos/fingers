@@ -186,11 +186,11 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
         # time, dista0, distClick0, inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
-        # mouse_flg, mouseState, clickX, clickY, speed, smoothSize
+        # mouse_flg, mouseState, clickX, clickY, speed, buffSize
         vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
             str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
-            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.smoothSize)
+            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.buff[0].size())
             ))
 
 '''

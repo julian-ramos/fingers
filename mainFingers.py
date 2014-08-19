@@ -227,25 +227,38 @@ class mainThread(threading.Thread):
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
 
-                        if vals.featureFlag:
-                            smoothSize = min(len(vals.buff[0].data), vals.smoothSize)
-                        else:
-                            smoothSize = min(len(vals.buff[0].data), 10)
-
-
-                        smoothX = np.mean(fun.smooth(vals.buff[0].data[-smoothSize:], window_len = smoothSize))
-                        smoothY = np.mean(fun.smooth(vals.buff[1].data[-smoothSize:], window_len = smoothSize))
-
-                        # The speed of the cursor
-                        speed = np.sqrt( (smoothX - vals.traceX)**2 + (smoothY - vals.traceY)**2 )
-                        if speed < 0.0001:
-                            speed = 0.0001
-                        vals.speedBuff.put(speed)
-                        vals.smoothSpeed = np.mean(fun.smooth(vals.speedBuff.data, window_len = vals.speedBuff.size()))
-
-                        paramA, paramB = 5.0, 20
-                        vals.smoothSize = min(len(vals.buff[0].data), int(paramA + paramB / vals.smoothSpeed))
+                        # if vals.featureFlag:
+                        #     smoothSize = min(len(vals.buff[0].data), vals.smoothSize)
+                        # else:
+                        #     smoothSize = min(len(vals.buff[0].data), 10)
                         
+                        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len = vals.buff[0].size()))
+                        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len = vals.buff[1].size()))
+
+                        vals.constBuff[0].put(mouseX)
+                        vals.constBuff[1].put(mouseY)
+
+                        smoothX = np.mean(fun.smooth(vals.constBuff[0].data, window_len = vals.constBuff[0].size()))
+                        smoothY = np.mean(fun.smooth(vals.constBuff[1].data, window_len = vals.constBuff[1].size()))
+
+                        # smoothX = np.mean(fun.smooth(vals.buff[0].data[-smoothSize:], window_len = smoothSize))
+                        # smoothY = np.mean(fun.smooth(vals.buff[1].data[-smoothSize:], window_len = smoothSize))
+
+                        if vals.featureFlag:
+                            # The speed of the cursor
+                            speed = np.sqrt( (smoothX - vals.traceX)**2 + (smoothY - vals.traceY)**2 )
+                            if speed < 0.0001:
+                                speed = 0.0001
+                            vals.speedBuff.put(speed)
+                            vals.smoothSpeed = np.mean(fun.smooth(vals.speedBuff.data, window_len = vals.speedBuff.size()))
+
+                            paramA, paramB = 8.5, 20
+                            newSize = max(int(paramA + paramB / np.sqrt(vals.smoothSpeed)), vals.minBuffSize)
+                            # newSize = max(int(paramA + paramB / vals.smoothSpeed), vals.minBuffSize)
+                            newSize = min(newSize, vals.maxBuffSize)
+                            vals.buff[0].setBuffSize(newSize)
+                            vals.buff[1].setBuffSize(newSize)
+                            
                         # smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
                         # smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 
@@ -259,14 +272,14 @@ class mainThread(threading.Thread):
                         if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
                             # Record the last trace point
                             vals.traceX, vals.traceY = smoothX, smoothY
-                            if vals.featureFlag:# and vals.mouseState == vals.MOUSE_READY:
-                                # param = 20.0 / speed2
-                                # vals.traceX = int((vals.traceX * param + smoothX) / (1 + param))
-                                # vals.traceY = int((vals.traceY * param + smoothY) / (1 + param))
-                                vals.traceX = np.mean(fun.smooth(vals.buff[0].data[-vals.smoothSize:], window_len = vals.smoothSize))
-                                vals.traceY = np.mean(fun.smooth(vals.buff[1].data[-vals.smoothSize:], window_len = vals.smoothSize))
-                                # vals.traceX = (vals.traceX * 4 + smoothX) / 5
-                                # vals.traceY = (vals.traceY * 4 + smoothY) / 5
+                            # if vals.featureFlag:# and vals.mouseState == vals.MOUSE_READY:
+                            #     # param = 20.0 / speed2
+                            #     # vals.traceX = int((vals.traceX * param + smoothX) / (1 + param))
+                            #     # vals.traceY = int((vals.traceY * param + smoothY) / (1 + param))
+                            #     vals.traceX = np.mean(fun.smooth(vals.buff[0].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     vals.traceY = np.mean(fun.smooth(vals.buff[1].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     # vals.traceX = (vals.traceX * 4 + smoothX) / 5
+                            #     # vals.traceY = (vals.traceY * 4 + smoothY) / 5
 
                             m.move(vals.traceX, vals.traceY)
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])

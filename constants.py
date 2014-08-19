@@ -17,10 +17,18 @@ width = 800
 height = 600
 
 buff=[[],[]]
-maxBuff = 20 		# Max buffer size of the x-y queue
-smoothSize = 10
-buff[0]=q.miniQueue(maxBuff)#, minBuff)
-buff[1]=q.miniQueue(maxBuff)#, minBuff)
+# Max/Min/Default buffer size of the x-y queue
+maxBuffSize = 40 			
+minBuffSize = 5
+defaultBuffSize = 10
+
+# Buffer for the mouse movement
+buff[0]=q.miniQueue(defaultBuffSize)
+buff[1]=q.miniQueue(defaultBuffSize)
+
+constBuff = [[], []]
+constBuff[0] = q.miniQueue(defaultBuffSize)
+constBuff[1] = q.miniQueue(defaultBuffSize)
 
 
 rpt=[ [0,0] for i in range(4)]
@@ -213,8 +221,8 @@ tipDistance=0
 dist3D=0
 
 #To adjust the cursor sensitivity. Adjusted by arrow keys
-windowX=200
-windowY=250
+windowX=250
+windowY=200
 
 #checking inRange constants
 leftBound=5

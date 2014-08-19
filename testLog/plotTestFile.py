@@ -89,7 +89,7 @@ def run():
             # plot the speed
             figure(fi)
             fi += 1
-            key = ['mouseState', 'speed', 'smoothSize']
+            key = ['mouseState', 'speed', 'buffSize']
             for i in range(len(key)):
                 plot(selData['time'], selData[key[i]], color[i % len(color)], label = key[i])
 

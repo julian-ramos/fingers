@@ -28,7 +28,7 @@ def startRecordTestData():
 def saveTestData():
     saveFileName = vals.testTypeFile.format(vals.userName)
     sf  = open(saveFileName, 'w')
-    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY, speed, smoothSize'
+    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY, speed, buffSize'
     for string in vals.testTypeData:
         print >> sf, string
     sf.close()
@@ -147,6 +147,11 @@ def eventHandling(eventsObject):
                     if event.key == pygame.K_f:
                         vals.featureFlag = not vals.featureFlag
                         print 'featureFlag changed to {}'.format(str(vals.featureFlag))
+                        if vals.featureFlag:
+                            vals.speedBuff.erase()
+                        else:
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize)
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
                     if event.key==pygame.K_z:

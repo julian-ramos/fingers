@@ -33,14 +33,10 @@ class miniQueue():
         if self.size() > 0: 
             ret = np.mean(self.data)
         return ret
-    # def setCurrBuff(self, currBuff):
-    #     ret = False
-    #     if currBuff > self.maxBuff:
-    #         self.currBuff = self.maxBuff
-    #     elif currBuff > 0:
-    #         self.currBuff = int(currBuff)
-    #         ret = True
-    #     return ret
+    def setBuffSize(self, buffSize):
+        if buffSize < len(self.data):
+            self.data = self.data[-buffSize:]
+        self.maxBuff = buffSize
     # def getData(self):
     #     ret = []
     #     if self.size() > self.currBuff:
