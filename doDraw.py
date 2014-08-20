@@ -68,15 +68,22 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         inBox=calibFont.render("open tips",1,vals.white)
         screen.blit(inBox,(20,365))
 
+        # Show window size which is used to control the sensitivity
         windowSize = calibFont.render('window size X:{} Y:{}'.format(str(vals.windowX), str(vals.windowY)), 1, vals.white)
         screen.blit(windowSize, (0, 400))
 
+        # Show the buffer size which is modified by the speed in the new feature(shift+f to turn on/off)
         if vals.featureFlag:
             buffSize = calibFont.render('current buffer size: {}'.format(str(vals.buff[0].size())), 1, vals.white)
         else:
             buffSize = calibFont.render('default buffer size: {}'.format(str(vals.defaultBuffSize)), 1, vals.white)
         screen.blit(buffSize, (0, 420))
 
+        # Show the depth of the four LED : 440, 460, 480, 500
+        ledDepthKey = ['tipThumb: ', 'knuThumb: ', 'tipIndex: ', 'knuIndex: ']
+        for i in range(len(ledDepthKey)):
+            ledDepth = calibFont.render(ledDepthKey[i] + str(vals.depthBuff[i].back()), 1, vals.white)
+            screen.blit(ledDepth, (0, 440 + i * 20))
 
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
