@@ -264,12 +264,13 @@ class mainThread(threading.Thread):
                             
                             # newSize = min(newSize, vals.maxBuffSize)
 
-                            # 3) size = A + B * speed
                             # P1(minSpeed, maxBuff), P2(maxSpeed, minBuff)
                             maxSpeed = 25
                             minSpeed = 0.1
                             maxBuff = 35
                             minBuff = 10
+
+                            # 3) size = A + B * speed
                             paramB = float(minBuff - maxBuff) / (maxSpeed - minSpeed)
                             paramA = maxBuff - paramB * minSpeed
 
