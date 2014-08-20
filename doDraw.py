@@ -228,6 +228,12 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
         vals.boxBoundCalibList.append(doDepth.meanDepth())        
 
+    elif vals.calibState == vals.READY_CLICK_CALIB:
+        Calib1=calibFont.render("Put your hand on the keyboard",1,vals.black)
+        screen.blit(Calib1,(0,15))
+        Calib2=calibFont.render("Press H to start",1,vals.black)
+        screen.blit(Calib2,(0,35))
+
     elif vals.calibState == vals.CLICK_CALIB:
         Calib1=calibFont.render("Tap tip of thumb and knuckle of index for {} times".format(\
             str(vals.clickNum)), 1, vals.black)

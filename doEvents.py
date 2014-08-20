@@ -189,6 +189,9 @@ def eventHandling(eventsObject):
                         vals.boxLimit=int(sumBoxLimit)-3
                         vals.boxLimitBottom=int(sumBoxLimit)+3
 
+                        vals.calibState = vals.READY_CLICK_CALIB
+
+                    elif vals.calibState == vals.READY_CLICK_CALIB:
                         vals.calibState = vals.CLICK_CALIB
 
                     elif vals.calibState == vals.CLICK_CALIB:

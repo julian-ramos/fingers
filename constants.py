@@ -120,8 +120,9 @@ calibWriteFinished = False
 calibState = -1
 START_CALIB, \
 MOUSE_MODE_CALIB, \
+READY_CLICK_CALIB, \
 CLICK_CALIB, \
-END_CALIB = range(4)
+END_CALIB = range(5)
 
 #calibration file using JSON
 calibFile = 'calib.data'
