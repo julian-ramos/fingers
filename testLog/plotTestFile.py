@@ -92,6 +92,20 @@ def run():
             key = ['mouseState', 'speed', 'buffSize']
             for i in range(len(key)):
                 plot(selData['time'], selData[key[i]], color[i % len(color)], label = key[i])
+            
+            # size: a + b * speed
+            # P1(minSpeed, maxBuff), P2(maxSpeed, minBuff)
+            maxSpeed = 25
+            minSpeed = 0.1
+            maxBuff = 35
+            minBuff = 10
+            paramB = float(minBuff - maxBuff) / (maxSpeed - minSpeed)
+            paramA = maxBuff - paramB * minSpeed
+            
+            size = paramA + paramB * np.array(selData['speed'])
+            size = [int(x) for x in size]
+            sizeLimit = [min(max(x, minBuff), maxBuff) for x in size]
+            plot(selData['time'], sizeLimit, color[3], label = 'size = {} + {} * speed'.format(str(paramA), str(paramB)))
 
             title('{}-{}'.format(str(fileName), 'Y'))
             legend(loc = 'upper right')

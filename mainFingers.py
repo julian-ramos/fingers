@@ -252,10 +252,30 @@ class mainThread(threading.Thread):
                             vals.speedBuff.put(speed)
                             vals.smoothSpeed = np.mean(fun.smooth(vals.speedBuff.data, window_len = vals.speedBuff.size()))
 
-                            paramA, paramB = 8.5, 20
-                            newSize = max(int(paramA + paramB / np.sqrt(vals.smoothSpeed)), vals.minBuffSize)
+                            # Several method to get buffer size from speed:
+                            
+                            # paramA, paramB = 8.5, 20
+
+                            # 1) size = A + B / speed
                             # newSize = max(int(paramA + paramB / vals.smoothSpeed), vals.minBuffSize)
-                            newSize = min(newSize, vals.maxBuffSize)
+
+                            # 2) size = A + B / sqrt(speed)
+                            # newSize = max(int(paramA + paramB / np.sqrt(vals.smoothSpeed)), vals.minBuffSize)
+                            
+                            # newSize = min(newSize, vals.maxBuffSize)
+
+                            # 3) size = A + B * speed
+                            # P1(minSpeed, maxBuff), P2(maxSpeed, minBuff)
+                            maxSpeed = 25
+                            minSpeed = 0.1
+                            maxBuff = 35
+                            minBuff = 10
+                            paramB = float(minBuff - maxBuff) / (maxSpeed - minSpeed)
+                            paramA = maxBuff - paramB * minSpeed
+
+                            newSize = paramA + paramB * vals.smoothSpeed
+                            newSize = max(min(int(newSize), maxBuff), minBuff)
+                            
                             vals.buff[0].setBuffSize(newSize)
                             vals.buff[1].setBuffSize(newSize)
                             
