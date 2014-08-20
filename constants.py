@@ -84,6 +84,10 @@ knuckleFlag = False
 # New feature test
 featureFlag = False
 
+# Turn on/off the relative mode
+relativeFlag = False
+depthData = []
+
 speedBuffSize = 10
 speedBuff = q.miniQueue(speedBuffSize)
 smoothSpeed = 0.0

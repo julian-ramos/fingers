@@ -200,7 +200,10 @@ class mainThread(threading.Thread):
                 doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont,calibFont,depthFont)
                 #doDraw.drawAllMiniRecording(miniScreen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
 
-
+                if vals.relativeFlag:
+                    # log the depth and index tip raw coordinate
+                    vals.depthData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
+                        vals.depthBuff[2].back(), vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events
                 doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
