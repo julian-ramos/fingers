@@ -224,23 +224,13 @@ class mainThread(threading.Thread):
                         vals.fY=rpt[tipIndex][1]
 
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
+                        # Use default option
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
                         # mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
                         # mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
                     else:
+                        # Use the user prefered window size
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, True)
-                        # print "ye"
-                        # mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
-                        # mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
-                        
-                        # factorX =vals.width/(vals.inputX2-vals.inputX1)
-                        # factorY =vals.height/(vals.inputY2-vals.inputY1)
-
-                        # mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
-                        # mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
-
-                    #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                    #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
 
                     if not vals.zoom_flg:
@@ -261,14 +251,68 @@ class mainThread(threading.Thread):
                     if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
+                     
+                        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len = vals.buff[0].size()))
+                        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len = vals.buff[1].size()))
 
-                        smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-                        smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+                        if vals.featureFlag:
+                            vals.constBuff[0].put(mouseX)
+                            vals.constBuff[1].put(mouseY)
 
+                            sX = np.mean(fun.smooth(vals.constBuff[0].data, window_len = vals.constBuff[0].size()))
+                            sY = np.mean(fun.smooth(vals.constBuff[1].data, window_len = vals.constBuff[1].size()))
+
+
+                            # The speed of the cursor
+                            speed = np.sqrt( (sX - vals.traceX)**2 + (sY - vals.traceY)**2 )
+                            if speed < 0.0001:
+                                speed = 0.0001
+                            vals.speedBuff.put(speed)
+                            vals.smoothSpeed = np.mean(fun.smooth(vals.speedBuff.data, window_len = vals.speedBuff.size()))
+
+                            # Several method to get buffer size from speed:
+                            
+                            # paramA, paramB = 8.5, 20
+
+                            # 1) size = A + B / speed
+                            # newSize = max(int(paramA + paramB / vals.smoothSpeed), vals.minBuffSize)
+
+                            # 2) size = A + B / sqrt(speed)
+                            # newSize = max(int(paramA + paramB / np.sqrt(vals.smoothSpeed)), vals.minBuffSize)
+                            
+                            # newSize = min(newSize, vals.maxBuffSize)
+
+                            # P1(minSpeed, maxBuff), P2(maxSpeed, minBuff)
+                            maxSpeed = 25
+                            minSpeed = 0.1
+                            maxBuff = 35
+                            minBuff = 10
+
+                            # 3) size = A + B * speed
+                            paramB = float(minBuff - maxBuff) / (maxSpeed - minSpeed)
+                            paramA = maxBuff - paramB * minSpeed
+
+                            newSize = paramA + paramB * vals.smoothSpeed
+                            newSize = max(min(int(newSize), maxBuff), minBuff)
+                            
+                            vals.buff[0].setBuffSize(newSize)
+                            vals.buff[1].setBuffSize(newSize)
 
                         if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
+                            # Record the last trace point
+                            vals.traceX, vals.traceY = smoothX, smoothY
+                            # if vals.featureFlag:# and vals.mouseState == vals.MOUSE_READY:
+                            #     # param = 20.0 / speed2
+                            #     # vals.traceX = int((vals.traceX * param + smoothX) / (1 + param))
+                            #     # vals.traceY = int((vals.traceY * param + smoothY) / (1 + param))
+                            #     vals.traceX = np.mean(fun.smooth(vals.buff[0].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     vals.traceY = np.mean(fun.smooth(vals.buff[1].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     # vals.traceX = (vals.traceX * 4 + smoothX) / 5
+                            #     # vals.traceY = (vals.traceY * 4 + smoothY) / 5
+
+                            m.move(vals.traceX, vals.traceY)
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
-                            m.move(smoothX, smoothY)
+                            # m.move(smoothX, smoothY)
                             # m.move(mouseX, mouseY)
             
             if vals.wiimoteNum == vals.wiimoteMaxNum \

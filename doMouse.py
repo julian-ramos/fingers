@@ -121,8 +121,9 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         #print distClick[0], vals.inrange, vals.mouse_flg
         if distClick[0] <= newClickValue and vals.inrange and vals.mouse_flg:
             # Get possible point of click or drag
-            vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-            vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+            vals.clickX, vals.clickY = vals.traceX, vals.traceY
+            # vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+            # vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
             vals.dragX, vals.dragY = vals.clickX, vals.clickY
 
             vals.stime = time.time()
@@ -207,16 +208,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         kIX, kIY = finger2Mouse(rpt[kIndex][0], rpt[kIndex][1])
         tTX, tTY = finger2Mouse(rpt[tipThumb][0], rpt[tipThumb][1])
         kTX, kTY = finger2Mouse(rpt[kThumb][0], rpt[kThumb][1])
-        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+        smoothX, smoothY = vals.traceX, vals.traceY
+        # smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+        # smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
 
         # time, dista0, distClick0, inrange, inBox
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
-        # mouse_flg, mouseState, clickX, clickY
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+        # mouse_flg, mouseState, clickX, clickY, speed, buffSize
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
             str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
-            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
+            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.buff[0].size())
             ))
 
 

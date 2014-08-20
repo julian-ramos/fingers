@@ -28,7 +28,7 @@ def startRecordTestData():
 def saveTestData():
     saveFileName = vals.testTypeFile.format(vals.userName)
     sf  = open(saveFileName, 'w')
-    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY'
+    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY, speed, buffSize'
     for string in vals.testTypeData:
         print >> sf, string
     sf.close()
@@ -56,6 +56,7 @@ def eventHandling(eventsObject):
             Shift + 'a'/'left arrow': change sensitivity of fingers
             Shift + 'd'/'right arrow': change sensitivity of fingers
 
+             Shift + 'f': new feature testing
             'z': Will zoom, in other words sensitivity will decrease
 
             '''
@@ -148,8 +149,16 @@ def eventHandling(eventsObject):
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
 
-
-
+                    if event.key == pygame.K_f:
+                        vals.featureFlag = not vals.featureFlag
+                        print 'featureFlag changed to {}'.format(str(vals.featureFlag))
+                        if vals.featureFlag:
+                            vals.speedBuff.erase()
+                            vals.constBuff[0].erase()
+                            vals.constBuff[1].erase()
+                        else:
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize)
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
                     if event.key==pygame.K_z:

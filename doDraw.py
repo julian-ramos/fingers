@@ -71,6 +71,13 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         windowSize = calibFont.render('window size X:{} Y:{}'.format(str(vals.windowX), str(vals.windowY)), 1, vals.white)
         screen.blit(windowSize, (0, 400))
 
+        if vals.featureFlag:
+            buffSize = calibFont.render('current buffer size: {}'.format(str(vals.buff[0].size())), 1, vals.white)
+        else:
+            buffSize = calibFont.render('default buffer size: {}'.format(str(vals.defaultBuffSize)), 1, vals.white)
+        screen.blit(buffSize, (0, 420))
+
+
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
         pygame.draw.circle(screen, vals.blue, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)
