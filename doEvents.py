@@ -56,7 +56,9 @@ def eventHandling(eventsObject):
             Shift + 'a'/'left arrow': change sensitivity of fingers
             Shift + 'd'/'right arrow': change sensitivity of fingers
 
-             Shift + 'f': new feature testing
+            Shift + 'f': new feature testing
+            Shift + 'r': testing relative version
+
             'z': Will zoom, in other words sensitivity will decrease
 
             '''
@@ -150,6 +152,7 @@ def eventHandling(eventsObject):
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
 
                     if event.key == pygame.K_f:
+                        # Turn on/off the adjustable buffer size
                         vals.featureFlag = not vals.featureFlag
                         print 'featureFlag changed to {}'.format(str(vals.featureFlag))
                         if vals.featureFlag:
@@ -159,6 +162,21 @@ def eventHandling(eventsObject):
                         else:
                             vals.buff[0].setBuffSize(vals.defaultBuffSize)
                             vals.buff[1].setBuffSize(vals.defaultBuffSize)
+
+                    elif event.key == pygame.K_r:
+                        # Turn on/off the relative version
+                        vals.relativeFlag = not vals.relativeFlag
+                        if vals.relativeFlag:
+                            vals.depthData = []
+                            print 'Log the depth data'
+                        elif vals.depthData != []:
+                            ddf  = open('depthData.csv', 'w')
+                            print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                            for data in vals.depthData:
+                                print >> ddf, data
+                            ddf.close()
+                            print 'Write depth data to file.'
+
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
                     if event.key==pygame.K_z:
@@ -189,6 +207,9 @@ def eventHandling(eventsObject):
                         vals.boxLimit=int(sumBoxLimit)-3
                         vals.boxLimitBottom=int(sumBoxLimit)+3
 
+                        vals.calibState = vals.READY_CLICK_CALIB
+
+                    elif vals.calibState == vals.READY_CLICK_CALIB:
                         vals.calibState = vals.CLICK_CALIB
 
                     elif vals.calibState == vals.CLICK_CALIB:

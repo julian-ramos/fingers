@@ -37,6 +37,11 @@ class miniQueue():
         if buffSize < len(self.data):
             self.data = self.data[-buffSize:]
         self.maxBuff = buffSize
+    def back(self):
+        ret = 0
+        if len(self.data) > 0:
+            ret = self.data[-1]
+        return ret
     # def getData(self):
     #     ret = []
     #     if self.size() > self.currBuff:

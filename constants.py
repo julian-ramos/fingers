@@ -84,6 +84,10 @@ knuckleFlag = False
 # New feature test
 featureFlag = False
 
+# Turn on/off the relative mode
+relativeFlag = False
+depthData = []
+
 speedBuffSize = 10
 speedBuff = q.miniQueue(speedBuffSize)
 smoothSpeed = 0.0
@@ -120,8 +124,9 @@ calibWriteFinished = False
 calibState = -1
 START_CALIB, \
 MOUSE_MODE_CALIB, \
+READY_CLICK_CALIB, \
 CLICK_CALIB, \
-END_CALIB = range(4)
+END_CALIB = range(5)
 
 #calibration file using JSON
 calibFile = 'calib.data'
