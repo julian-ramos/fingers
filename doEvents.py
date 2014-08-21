@@ -170,7 +170,7 @@ def eventHandling(eventsObject):
                             vals.depthData = []
                             print 'Log the depth data'
                         elif vals.depthData != []:
-                            ddf  = open('depthData.csv', 'w')
+                            ddf  = open('testLog/depthData.csv', 'w')
                             print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
                             for data in vals.depthData:
                                 print >> ddf, data
