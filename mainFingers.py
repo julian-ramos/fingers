@@ -207,7 +207,7 @@ class mainThread(threading.Thread):
                         smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
                     smoothTipIndex = vals.depthBuff[2].back()
                     # log the depth and index tip raw coordinate
-                    vals.depthData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
+                    vals.planeDepthData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
                         smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events

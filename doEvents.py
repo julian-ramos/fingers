@@ -167,15 +167,22 @@ def eventHandling(eventsObject):
                         # Turn on/off the relative version
                         vals.relativeFlag = not vals.relativeFlag
                         if vals.relativeFlag:
-                            vals.depthData = []
-                            print 'Log the depth data'
-                        elif vals.depthData != []:
-                            ddf  = open('testLog/depthData.csv', 'w')
-                            print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
-                            for data in vals.depthData:
-                                print >> ddf, data
-                            ddf.close()
-                            print 'Write depth data to file.'
+                            print 'Change to [Relative Mode]'
+                            vals.planeDepthData = []
+                            # print 'Log the depth data'
+                        else:
+                            print 'Change to [Absolute Mode]'
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize)
+                        # Only write to files here when dubugging
+                        # Normaly, we write to files when DEPTH_CALIB -> END_CALIB
+                        # elif vals.planeDepthData != []:
+                        #     ddf  = open('testLog/depthData.csv', 'w')
+                        #     print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        #     for data in vals.planeDepthData:
+                        #         print >> ddf, data
+                        #     ddf.close()
+                        #     print 'Write depth data to file.'
 
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
@@ -237,9 +244,30 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
+                        if vals.relativeFlag:
+                            # Jump to depth calibration if relative
+                            vals.calibState = vals.DEPTH_CALIB
+                        else:
+                            #store them to file.
+                            calibWriter = CalibFileManager(vals.calibFile)
+                            calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
+                            vals.calibState = vals.END_CALIB
+
+                    elif vals.calibState == vals.DEPTH_CALIB:
+                        # Generate depth file to test or debug
+                        ddf  = open('testLog/depthData.csv', 'w')
+                        print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        for data in vals.planeDepthData:
+                            print >> ddf, data
+                        ddf.close()
+                        print 'Write depth data to file.'
+
+                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+                        vals.planeParam = getPlaneParam()
+
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
-                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
+                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom, vals.planeParam)
                         vals.calibState = vals.END_CALIB
 
             # Read calibration data from file, vals.calibLoadFlag mode
@@ -467,3 +495,8 @@ def  getClickTimes(X, Y, valleyX, targetY):
         lo = rightX
 
     return clickTimes
+
+def getPlaneParam():
+    "Calculate the keyboard plane parameters from the depth calibration"
+
+    return [1,1,2,3,5]

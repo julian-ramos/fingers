@@ -8,13 +8,14 @@ class CalibFileManager:
         self.calibJSON = ''
         self.calibDic = {}
 
-    def write(self, mouseModeValue, clickValue, mouseActTimeThre, boxLimit,boxLimitBottom):
+    def write(self, mouseModeValue, clickValue, mouseActTimeThre, boxLimit, boxLimitBottom, planeParam = []):
         self.calibDic = {}
         self.calibDic['mouseModeValue'] = mouseModeValue
         self.calibDic['clickValue'] = clickValue
         self.calibDic['mouseActTimeThre'] = mouseActTimeThre
         self.calibDic['boxLimit'] = boxLimit
         self.calibDic['boxLimitBottom'] = boxLimitBottom
+        self.calibDic['planeParam'] = planeParam
 
         #print 'Write Dic: ' + str(calibDic)
         self.calibJSON = json.dumps(self.calibDic)

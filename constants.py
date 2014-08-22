@@ -86,7 +86,9 @@ featureFlag = False
 
 # Turn on/off the relative mode
 relativeFlag = False
-depthData = []
+planeDepthData = []
+# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+planeParam = []
 
 speedBuffSize = 10
 speedBuff = q.miniQueue(speedBuffSize)
@@ -126,7 +128,8 @@ START_CALIB, \
 MOUSE_MODE_CALIB, \
 READY_CLICK_CALIB, \
 CLICK_CALIB, \
-END_CALIB = range(5)
+DEPTH_CALIB, \
+END_CALIB = range(6)
 
 #calibration file using JSON
 calibFile = 'calib.data'
