@@ -22,7 +22,7 @@ def run():
         ax.set_aspect('equal')
         
     indent = '    '
-    for fi in range(30, 33):
+    for fi in range(20, 22):
         print 'Start No.' + str(fi)
 
         # Load the data and get X, Y and Z
@@ -106,7 +106,7 @@ def run():
 
                 # For this problem, we need the max, to get all training points in the box.
                 maxDev, minDev = max(deviation), min(deviation)
-                print indent*2 + 'MaxDeviation:{}, MinDeviation:{}'.format(maxDev, minDev)
+                print indent*2 + 'MaxDeviation:{}, MinDeviation:{}, Std:{}'.format(maxDev, minDev, np.std(deviation))
 
                 # Test
                 # Total testing number and error number

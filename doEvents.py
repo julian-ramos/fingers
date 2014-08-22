@@ -150,7 +150,8 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
-
+                    vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
+                    print 'relative speed: X-{}, Y-{}'.format(vals.relativeSpeed[0], vals.relativeSpeed[1])
                     if event.key == pygame.K_f:
                         # Turn on/off the adjustable buffer size
                         vals.featureFlag = not vals.featureFlag
@@ -169,6 +170,7 @@ def eventHandling(eventsObject):
                         if vals.relativeFlag:
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
+                            vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
                             # print 'Log the depth data'
                         else:
                             print 'Change to [Absolute Mode]'

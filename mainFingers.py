@@ -63,10 +63,8 @@ def finger2Mouse(fX, fY, rectangle = False):
 def finger2MouseRelative(fXList, fYList, mX0, mY0):
     " Get next mouse point(mX1, mY1) by fX/YList "
 
-    AccRatio = [1, 1]
-
-    mX1 = AccRatio[0] * (fXList[-1] - fXList[-2]) + mX0
-    mY1 = AccRatio[1] * (fYList[-1] - fYList[-2]) + mY0
+    mX1 = vals.relativeSpeed[0]*2 * (fXList[-1] - fXList[-2]) + mX0
+    mY1 = vals.relativeSpeed[1]*2 * (fYList[-1] - fYList[-2]) + mY0
 
     mX1 = max(min(mX1, vals.width), 0)
     mY1 = max(min(mY1, vals.height), 0)
@@ -288,8 +286,14 @@ class mainThread(threading.Thread):
                                 mouseX, mouseY = finger2MouseRelative(vals.fingerBuff[0].data, \
                                     vals.fingerBuff[1].data, vals.traceX, vals.traceY)
 
+                                vals.buff[0].put(mouseX)
+                                vals.buff[1].put(mouseY)
+                             
+                                smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len = vals.buff[0].size()))
+                                smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len = vals.buff[1].size()))
+
                                 # print fingerX, fingerY, mouseX, mouseY
-                                vals.traceX, vals.traceY = mouseX, mouseY
+                                vals.traceX, vals.traceY = smoothX, smoothY
 
                             m.move(vals.traceX, vals.traceY)                     
 
