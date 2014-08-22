@@ -86,9 +86,17 @@ featureFlag = False
 
 # Turn on/off the relative mode
 relativeFlag = False
+
 planeDepthData = []
 # Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
 planeParam = []
+
+onKeyboardFlag = True
+
+fingerBuffSize = 2
+fingerBuff = [[], []]
+fingerBuff[0] = q.miniQueue(fingerBuffSize)
+fingerBuff[1] = q.miniQueue(fingerBuffSize)
 
 speedBuffSize = 10
 speedBuff = q.miniQueue(speedBuffSize)

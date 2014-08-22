@@ -247,6 +247,7 @@ def eventHandling(eventsObject):
                         if vals.relativeFlag:
                             # Jump to depth calibration if relative
                             vals.calibState = vals.DEPTH_CALIB
+                            vals.planeDepthData = []
                         else:
                             #store them to file.
                             calibWriter = CalibFileManager(vals.calibFile)
@@ -280,6 +281,8 @@ def eventHandling(eventsObject):
                         vals.mouseActTimeThre = float(calibReader.read('mouseActTimeThre'))
                         vals.boxLimit = float(calibReader.read('boxLimit'))
                         vals.boxLimitBottom = float(calibReader.read('boxLimitBottom'))
+                        planeParam = calibReader.read('planeParam').strip('[]').split(',')
+                        vals.planeParam = [float(x) for x in planeParam]
 
                     except:
                         # Go back and press again
@@ -496,7 +499,50 @@ def  getClickTimes(X, Y, valleyX, targetY):
 
     return clickTimes
 
+def getPlane(x, y, z):
+    matXY = np.array([x, y, np.ones(len(x))], np.float64)
+    matXY = matXY.T
+    vecZ = z
+    ret = np.linalg.lstsq(matXY, vecZ)
+    return ret
+
 def getPlaneParam():
     "Calculate the keyboard plane parameters from the depth calibration"
+    boxSizeInc = 1.5
 
-    return [1,1,2,3,5]
+    # Load the data and get X, Y and Z
+    depthDataStrArray = [x.split(',') for x in vals.planeDepthData]
+    dataStr = zip(*depthDataStrArray)
+    x, y, z = [float(x) for x in dataStr[4]], [float(x) for x in dataStr[5]], [float(x) for x in dataStr[2]]
+
+    # Get the plane parameter
+    # Linear function: z = a * x + b * y + c
+    ret = getPlane(x, y, z)
+    print 'Residual: {}, {}'.format(ret[1], ret[1] / len(x))
+    a, b, c = ret[0]
+
+    # z = ax + by + c => Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
+    # A = a, B = b, C = -1, D = c, E = sqrt(a**2 + b**2 + 1)
+    A, B, C, D, E = a, b, -1, c, np.sqrt(a**2 + b**2 + 1)
+
+    # From distance(planeZ, rawZ), positive means the point is 'under' the plane, negative means the point is 'above' the plane.
+    # So the max(positive) is the top of the 3D box of keyboard.
+    deviation = np.zeros(len(x))
+    for j in range(len(x)):
+        distance = np.abs((A*x[j] + B*y[j] + C*z[j] + D) / E)
+        zj = a*x[j] + b*y[j] + c
+        if zj < z[j]:
+            # this point is above the plane
+            distance = -distance
+        if distance > 5:
+            print 'Discard: ' + str(distance)
+            distance = 0
+        deviation[j] = distance
+
+    # For this problem, we need the max, to get all training points in the box.
+    maxDev, minDev = max(deviation), min(deviation)
+    print 'max, min: ' + str(maxDev) + str(minDev)
+
+    keyboardTop = maxDev + boxSizeInc
+            
+    return [A, B, C, D, E, keyboardTop]

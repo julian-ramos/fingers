@@ -85,6 +85,16 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
             ledDepth = calibFont.render(ledDepthKey[i] + str(vals.depthBuff[i].back()), 1, vals.white)
             screen.blit(ledDepth, (0, 440 + i * 20))
 
+        if vals.relativeFlag:
+            controlMode = calibFont.render('Relative Mode', 1, vals.white)
+            screen.blit(controlMode, (0, 520))
+
+            onKeyboard = calibFont.render('Keyboard Test: ' + str(vals.onKeyboardFlag), 1, vals.white)
+            screen.blit(onKeyboard, (0, 540))
+        else:
+            controlMode = calibFont.render('Absolute Mode', 1, vals.white)
+            screen.blit(controlMode, (0, 520))
+
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
         pygame.draw.circle(screen, vals.blue, (rpt[kIndex][0]/3,rpt[kIndex][1]/3),10)
@@ -231,6 +241,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),5 )
+        
         vals.mouseModeCalibList.append(mouseModeDistance[0])     
         doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
         vals.boxBoundCalibList.append(doDepth.meanDepth())        
@@ -248,8 +259,31 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         Calib2=calibFont.render("Press H to complete",1,vals.black)
         screen.blit(Calib2,(0,35))
         pygame.draw.line(screen,vals.white,(rpt[tipThumb][0]/3,rpt[tipThumb][1]/3),(rpt[kIndex][0]/3,rpt[kIndex][1]/3),5 )
+        
         vals.clickingCalibList[0].append(time.time() - vals.clickCalibSTime)
         vals.clickingCalibList[1].append(clickingDistance[0]) 
+
+    elif vals.calibState == vals.DEPTH_CALIB:
+        Calib1=calibFont.render("Draw 5 circles on the keyboard",1,vals.black)
+        screen.blit(Calib1,(0,15))
+        Calib2=calibFont.render("Press H to complete",1,vals.black)
+        screen.blit(Calib2,(0,35))
+
+        # Show the depth of the four LED : 440, 460, 480, 500
+        ledDepthKey = ['tipThumb: ', 'knuThumb: ', 'tipIndex: ', 'knuIndex: ']
+        for i in range(len(ledDepthKey)):
+            ledDepth = calibFont.render(ledDepthKey[i] + str(vals.depthBuff[i].back()), 1, vals.white)
+            screen.blit(ledDepth, (0, 80 + i * 20))
+
+        doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
+        if vals.depthBuff[2].size() == 10:
+        #     smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data[-10:], window_len = 10))
+        # else:
+            smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+            # smoothTipIndex = vals.depthBuff[2].back()
+            # log the depth and index tip raw coordinate
+            vals.planeDepthData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
+                smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
                       
     elif vals.calibState == vals.END_CALIB:
