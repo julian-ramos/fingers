@@ -171,6 +171,9 @@ def eventHandling(eventsObject):
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
 
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize / 3)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize / 3)
+
                             height = 150
                             width = height * float(vals.width) / vals.height
                             vals.relativeSpeed = [float(vals.width) / width / 2, float(vals.height) / height / 2]
