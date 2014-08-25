@@ -87,6 +87,8 @@ featureFlag = False
 # Turn on/off the relative mode
 relativeFlag = False
 relativeSpeed = [1, 1]
+# The start point of finger coordinate.
+fingerStart = [720, 250]
 
 planeDepthData = []
 # Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)

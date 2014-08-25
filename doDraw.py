@@ -7,6 +7,7 @@ import constants as vals
 import doDepth
 import funcs as fun
 from funcs import Reader
+import checkingInRange
 
 
 def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont, calibFont,depthFont):
@@ -52,6 +53,7 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         inBox=calibFont.render("in 3dBox",1,vals.white)
         screen.blit(inBox,(20,325))
 
+        vals.inrange, vals.LED1,vals.LED2,vals.LED3,vals.LED4=checkingInRange.rangeChecker(vals.rptList, vals.LED1, vals.LED2,vals.LED3,vals.LED4)
         if (vals.inrange==1):
             pygame.draw.circle(screen, vals.green, (10,345),10)
         else:
@@ -94,6 +96,12 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         else:
             controlMode = calibFont.render('Absolute Mode', 1, vals.white)
             screen.blit(controlMode, (0, 520))
+
+        rawXY = calibFont.render('Raw X:{}, Y:{}'.format(rpt[tipIndex][0], rpt[tipIndex][1]), 1, vals.white)
+        screen.blit(rawXY, (0, 560))
+
+        traceXY = calibFont.render('Mouse X:{}, Y:{}'.format(int(vals.traceX), int(vals.traceY)), 1, vals.white)
+        screen.blit(traceXY, (0, 580))
 
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)

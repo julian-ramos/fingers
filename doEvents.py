@@ -170,7 +170,12 @@ def eventHandling(eventsObject):
                         if vals.relativeFlag:
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
-                            vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
+
+                            height = 150
+                            width = height * float(vals.width) / vals.height
+                            vals.relativeSpeed = [float(vals.width) / width / 2, float(vals.height) / height / 2]
+                            
+                            # vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
                             # print 'Log the depth data'
                         else:
                             print 'Change to [Absolute Mode]'
@@ -213,8 +218,8 @@ def eventHandling(eventsObject):
                         for i in xrange(len(vals.boxBoundCalibList)):
                             sumBoxLimit+=vals.boxBoundCalibList[i]
                         sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
-                        vals.boxLimit=int(sumBoxLimit)-3
-                        vals.boxLimitBottom=int(sumBoxLimit)+3
+                        vals.boxLimit=int(sumBoxLimit)-10
+                        vals.boxLimitBottom=int(sumBoxLimit)+5
 
                         vals.calibState = vals.READY_CLICK_CALIB
 
@@ -510,7 +515,7 @@ def getPlane(x, y, z):
 
 def getPlaneParam():
     "Calculate the keyboard plane parameters from the depth calibration"
-    boxSizeInc = 1.5
+    # boxSizeInc = 1.5
 
     # Load the data and get X, Y and Z
     depthDataStrArray = [x.split(',') for x in vals.planeDepthData]
@@ -542,9 +547,10 @@ def getPlaneParam():
         deviation[j] = distance
 
     # For this problem, we need the max, to get all training points in the box.
-    maxDev, minDev = max(deviation), min(deviation)
-    print 'max, min: ' + str(maxDev) + str(minDev)
+    maxDev, minDev, stdDev = max(deviation), min(deviation), np.std(deviation)
+    print 'max:{}, min:{}, std:{}'.format(maxDev, minDev, stdDev)
 
-    keyboardTop = maxDev + boxSizeInc
+    keyboardTop = 3 * stdDev
+    # keyboardTop = maxDev + boxSizeInc
             
     return [A, B, C, D, E, keyboardTop]

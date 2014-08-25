@@ -63,8 +63,8 @@ def finger2Mouse(fX, fY, rectangle = False):
 def finger2MouseRelative(fXList, fYList, mX0, mY0):
     " Get next mouse point(mX1, mY1) by fX/YList "
 
-    mX1 = vals.relativeSpeed[0]*2 * (fXList[-1] - fXList[-2]) + mX0
-    mY1 = vals.relativeSpeed[1]*2 * (fYList[-1] - fYList[-2]) + mY0
+    mX1 = vals.relativeSpeed[0] * (fXList[-1] - fXList[-2]) + mX0
+    mY1 = vals.relativeSpeed[1] * (fYList[-1] - fYList[-2]) + mY0
 
     mX1 = max(min(mX1, vals.width), 0)
     mY1 = max(min(mY1, vals.height), 0)

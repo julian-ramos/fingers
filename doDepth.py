@@ -25,7 +25,7 @@ def findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipInde
         if disparityList[i]<1:
             depth=0
         else:
-            depth=1.0*focal/disparityList[i]*3.5 #cm, the b value
+            depth=1.0*focal/disparityList[i]*8.4 #cm, the b value
         vals.depthBuff[i].put(depth)
 
 #Some notes about depth measurement
