@@ -42,12 +42,12 @@ def run():
 
             # Plot selected data
             selData = data[:]
-            keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'smoothX', 'mouseState', 'clickX']
+            keyX = ['distClick0', 'tIX', 'kIX', 'tTX', 'kTX', 'smoothX', 'mouse_flg', 'mouseState', 'clickX']
             figure(fi)
             fi += 1
             for i in range(len(keyX)):
-                if keyX[i] == 'mouseState':
-                    ms = np.array(selData['mouseState']) * 500
+                if keyX[i] == 'mouseState' or keyX[i] == 'mouse_flg':
+                    ms = np.array(selData[keyX[i]]) * 500
                     plot(selData['time'], ms, color[i % len(color)], label = keyX[i])
                 else:
                     plot(selData['time'], selData[keyX[i]], color[i % len(color)], label = keyX[i])
@@ -55,12 +55,12 @@ def run():
             legend(loc = 'lower right')
 
             # keyY = ['distClick0', 'tIY', 'kIY', 'tTY', 'kTY', 'smoothY', 'mouseState', 'clickY']
-            keyY = ['distClick0', 'tIY', 'smoothY', 'tIX', 'smoothX', 'mouseState']
+            keyY = ['distClick0', 'tIY', 'smoothY', 'tIX', 'smoothX', 'mouse_flg', 'mouseState']
             figure(fi)
             fi += 1
             for i in range(len(keyY)):
-                if keyY[i] == 'mouseState':
-                    ms = np.array(selData['mouseState']) * 500
+                if keyY[i] == 'mouseState' or keyY[i] == 'mouse_flg':
+                    ms = np.array(selData[keyY[i]]) * 500
                     plot(selData['time'], ms, color[i % len(color)], label = keyY[i])
                 else:
                     plot(selData['time'], selData[keyY[i]], color[i % len(color)], label = keyY[i])

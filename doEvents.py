@@ -44,8 +44,8 @@ def eventHandling(eventsObject):
             'h': enter next screen(calibration)
             'q': quit
             
-            't': test type open/close
-            'p': test mouse open/close
+            't': typing test start/end 
+            'p': pointing test start/end
             'd': dragging & double click enable/disable
             'm': switch between mouse and keyboard
             'e': do input calibration(optional)
