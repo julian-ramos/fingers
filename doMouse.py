@@ -58,6 +58,8 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         #if distance is below for a certain time and all other conditions are met, then switch
         if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
             print('Mouse mode activated')
+            vals.traceX, vals.traceY = m.position()
+
             vals.mouse_flg=1
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1

@@ -22,7 +22,7 @@ def run():
         ax.set_aspect('equal')
         
     indent = '    '
-    for fi in range(40, 43):
+    for fi in range(40, 45):
         print 'Start No.' + str(fi)
 
         # Load the data and get X, Y and Z
