@@ -212,6 +212,12 @@ LED3=[]
 LED4=[]
 rptList=[]
 
+wii2_LED1=[]
+wii2_LED2=[]
+wii2_LED3=[]
+wii2_LED4=[]
+wii2_rptList=[]
+
 #Depth Constants
 maxDepthBuff=10
 depthBuff=[[],[],[],[]]
