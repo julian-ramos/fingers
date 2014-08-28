@@ -64,9 +64,13 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
-            pygame.mixer.music.load(file)
-            pygame.mixer.music.play()
+            file = 'switch.mp3'
+            
+            try:
+                vals.a.play()
+            except:
+                vals.a.load(file)
+                vals.a.play()
 
 
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
@@ -75,9 +79,12 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.contDist=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
-            pygame.mixer.music.load(file)
-            pygame.mixer.music.play()
+            file = 'switch.mp3'
+            try:
+                vals.a.play()
+            except:
+                vals.a.load(file)
+                vals.a.play()
 
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
@@ -158,8 +165,11 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     print('Click')
 
                     file = 'click.mp3'    
-                    pygame.mixer.music.load(file)
-                    pygame.mixer.music.play()
+                    try:
+                        vals.b.play()
+                    except:
+                        vals.b.load(file)
+                        vals.b.play()
 
 
 
@@ -170,8 +180,11 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     print('Double Click')
 
                     file = 'click.mp3'    
-                    pygame.mixer.music.load(file)
-                    pygame.mixer.music.play()
+                    try:
+                        vals.b.play()
+                    except:
+                        vals.b.load(file)
+                        vals.b.play()
 
 
 

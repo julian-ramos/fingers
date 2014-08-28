@@ -66,13 +66,17 @@ def finger2MouseRelative(fXList, fYList, mX0, mY0):
     # Restrict the valid area
     if fXList[-1] < vals.fingerStart[0] or fYList[-1] < vals.fingerStart[1]:
         [mX1, mY1] = [mX0, mY0]
-
-    else:
+        #print('1 %d %d'%(mX1,mY1))
+    elif (fXList[-1] - fXList[-2])**2+(fYList[-1] - fYList[-2])**2>=2:
         mX1 = vals.relativeSpeed[0] * (fXList[-1] - fXList[-2]) + mX0
         mY1 = vals.relativeSpeed[1] * (fYList[-1] - fYList[-2]) + mY0
 
         mX1 = max(min(mX1, vals.width), 0)
         mY1 = max(min(mY1, vals.height), 0)
+        
+    else:
+        [mX1, mY1] = [mX0, mY0]
+        #print('2 %d %d'%(mX1,mY1))
         
     return [mX1, mY1]
 

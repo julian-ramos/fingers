@@ -150,7 +150,7 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
-                    vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
+#                     vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
                     print 'relative speed: X-{}, Y-{}'.format(vals.relativeSpeed[0], vals.relativeSpeed[1])
                     if event.key == pygame.K_f:
                         # Turn on/off the adjustable buffer size
@@ -171,12 +171,12 @@ def eventHandling(eventsObject):
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
 
-                            vals.buff[0].setBuffSize(vals.defaultBuffSize / 3)
-                            vals.buff[1].setBuffSize(vals.defaultBuffSize / 3)
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize*6  / 10)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize*6 / 10)
 
-                            height = 150
+                            height = 300
                             width = height * float(vals.width) / vals.height
-                            vals.relativeSpeed = [float(vals.width) / width / 2, float(vals.height) / height / 2]
+                            vals.relativeSpeed = [float(vals.width) / width / 0.3, float(vals.height) / height / 0.3]
                             
                             # vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
                             # print 'Log the depth data'
@@ -221,8 +221,8 @@ def eventHandling(eventsObject):
                         for i in xrange(len(vals.boxBoundCalibList)):
                             sumBoxLimit+=vals.boxBoundCalibList[i]
                         sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
-                        vals.boxLimit=int(sumBoxLimit)-10
-                        vals.boxLimitBottom=int(sumBoxLimit)+5
+                        vals.boxLimit=int(sumBoxLimit)-5
+                        vals.boxLimitBottom=int(sumBoxLimit)+4
 
                         vals.calibState = vals.READY_CLICK_CALIB
 

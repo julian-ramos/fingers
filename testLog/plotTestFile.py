@@ -29,7 +29,7 @@ def run():
             # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
             # mouse_flg, mouseState, clickX, clickY
 
-            color = ['y.-', 'b.-', 'c.-', 'k.-', 'g.-', 'r.-', 'm.-']
+            color = ['y.-', 'b.-', 'c.-', 'k.-', 'g.-', 'r.-', 'm.-','yx-','bx-','cx-','kx-']
 
             # Plot all data
             keys = ['dista0', 'distClick0', 'inRange', 'inBox', 'tIX', 'tIY', 'kIX', 'kIY', \
