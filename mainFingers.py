@@ -308,7 +308,8 @@ class mainThread(threading.Thread):
                                 # print fingerX, fingerY, mouseX, mouseY
                                 vals.traceX, vals.traceY = smoothX, smoothY
 
-                            m.move(vals.traceX, vals.traceY)                     
+                            if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
+                                m.move(vals.traceX, vals.traceY)                     
 
                     # Absolute:
                     elif not vals.relativeFlag:
