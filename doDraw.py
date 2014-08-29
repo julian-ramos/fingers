@@ -45,7 +45,8 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         screen.blit(box3D,(0,285))
 
 #Circles to check on mode switching
-        if doDepth.checkAllInBox(): # Used to log data
+        # if doDepth.checkAllInBox(): # Used to log data
+        if vals.inSwitchBox:
             pygame.draw.circle(screen, vals.green, (10,325),10)
         else:
             pygame.draw.circle(screen, vals.red, (10,325),10)

@@ -101,6 +101,7 @@ planeParam = []
 switchBoxData = []
 # F = boxUpperSize, G = boxLowerSize. F and G are positive to avoid mistake.
 switchBoxParam = []
+inSwitchBox = False
 
 onKeyboardFlag = True
 

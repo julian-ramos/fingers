@@ -99,7 +99,7 @@ def isOnKeyboard(x, y, z):
     #     distance = -distance
 
     distance = getPlaneDistance(vals.planeParam, x, y, z)
-
+    keyboardTop = vals.planeParam[-1]
     if distance > keyboardTop:
         ret = False
     else:
@@ -239,9 +239,6 @@ class mainThread(threading.Thread):
                 if (vals.inputX1<=rpt[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt[tipIndex][1]<=vals.inputY2) or \
                     (vals.inputX1<=rpt2[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt2[tipIndex][1]<=vals.inputY2):
                     vals.inrange=1
-
-            # Check for the other wiimote
-                
 
             #Depth
                 doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)

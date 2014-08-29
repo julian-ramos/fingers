@@ -298,8 +298,11 @@ def eventHandling(eventsObject):
                         x, y, z = [float(x) for x in switchBoxStr[4]], [float(x) for x in switchBoxStr[5]], [float(x) for x in switchBoxStr[2]]
                         for i in range(len(x)):
                             distance[i] = getPlaneDistance(vals.planeParam, x[i], y[i], z[i])
-                        
-
+                        print 'distance: max:{}, min:{}, mean:{}, std:{}'.format(distance.max(), distance.min(), \
+                            distance.mean(), distance.std())
+                        boxMean = distance.mean()
+                        boxStd = distance.std()
+                        vals.switchBoxParam = [boxMean + 3*boxStd, max(boxMean - 3*boxStd, vals.planeParam[-1]+2)]
 
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
