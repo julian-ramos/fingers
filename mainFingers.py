@@ -30,6 +30,7 @@ import doDraw
 import doDepth
 import funcs as fun
 import checkingInRange
+from doEvents import getPlaneDistance
 
 def finger2Mouse(fX, fY, rectangle = False):
     " Convert the fingers coordinate to mouse coordinate "
@@ -88,14 +89,16 @@ def isOnKeyboard(x, y, z):
         return True
 
     # z = ax + by + c <=> Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
-    A, B, C, D, E, keyboardTop = vals.planeParam
-    a, b, c = -A/C, -B/C, -D/C
+    # A, B, C, D, E, keyboardTop = vals.planeParam
+    # a, b, c = -A/C, -B/C, -D/C
 
-    distance = np.abs((A*x + B*y + C*z + D) / E)
-    zi = a*x + b*y + c
-    if zi < z:
-        # this point is above the plane
-        distance = -distance
+    # distance = np.abs((A*x + B*y + C*z + D) / E)
+    # zi = a*x + b*y + c
+    # if zi < z:
+    #     # this point is above the plane
+    #     distance = -distance
+
+    distance = getPlaneDistance(vals.planeParam, x, y, z)
 
     if distance > keyboardTop:
         ret = False

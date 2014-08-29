@@ -91,9 +91,16 @@ relativeSpeed = [1, 1]
 # The start point of finger coordinate.
 fingerStart = [750, 50]
 
+# The keyboard plane. We only need box upper size because we can't put our fingers
+# lower than keyboard. F is positive to avoid mistake.
 planeDepthData = []
-# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), F = boxUpperSize
 planeParam = []
+
+# The box for switching gesture
+switchBoxData = []
+# F = boxUpperSize, G = boxLowerSize. F and G are positive to avoid mistake.
+switchBoxParam = []
 
 onKeyboardFlag = True
 

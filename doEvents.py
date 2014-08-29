@@ -215,6 +215,7 @@ def eventHandling(eventsObject):
                             vals.mouseModeCalibList.remove(min(vals.mouseModeCalibList))
                         vals.mouseModeValue = int(1.2 * min(vals.mouseModeCalibList))
                         vals.clickCalibSTime = time.time()
+
                         while min(vals.boxBoundCalibList)<15:
                             vals.boxBoundCalibList.remove(min(vals.boxBoundCalibList))
                         sumBoxLimit=0
@@ -223,6 +224,18 @@ def eventHandling(eventsObject):
                         sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
                         vals.boxLimit=int(sumBoxLimit)-5
                         vals.boxLimitBottom=int(sumBoxLimit)+4
+
+                        # Generate depth file to test or debug
+                        sbdf  = open('testLog/switchBoxData.csv', 'w')
+                        print >> sbdf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        for data in vals.switchBoxData:
+                            print >> sbdf, data
+                        sbdf.close()
+                        print 'Write depth data to file.'
+
+                        # # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), s = std
+                        # [A, B, C, D, E, s] = getPlaneParam(vals.switchBoxData)
+                        # vals.switchBoxParam = [A, B, C, D, E, s, s]
 
                         vals.calibState = vals.READY_CLICK_CALIB
 
@@ -273,12 +286,25 @@ def eventHandling(eventsObject):
                         ddf.close()
                         print 'Write depth data to file.'
 
-                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
-                        vals.planeParam = getPlaneParam()
+                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), s
+                        vals.planeParam = getPlaneParam(vals.planeDepthData)
+                        vals.planeParam[-1] = 3 * vals.planeParam[-1]
+
+                        # Get switch box parameters with the keyboard plane and switch points
+                        distance = np.zeros(len(vals.switchBoxData))
+                        # Load the data and get X, Y and Z
+                        switchBoxStrArray = [x.split(',') for x in vals.switchBoxData]
+                        switchBoxStr = zip(*switchBoxStrArray)
+                        x, y, z = [float(x) for x in switchBoxStr[4]], [float(x) for x in switchBoxStr[5]], [float(x) for x in switchBoxStr[2]]
+                        for i in range(len(x)):
+                            distance[i] = getPlaneDistance(vals.planeParam, x[i], y[i], z[i])
+                        
+
 
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
-                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom, vals.planeParam)
+                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, \
+                            vals.boxLimitBottom, vals.planeParam, vals.switchBoxParam)
                         vals.calibState = vals.END_CALIB
 
             # Read calibration data from file, vals.calibLoadFlag mode
@@ -293,6 +319,8 @@ def eventHandling(eventsObject):
                         vals.boxLimitBottom = float(calibReader.read('boxLimitBottom'))
                         planeParam = calibReader.read('planeParam').strip('[]').split(',')
                         vals.planeParam = [float(x) for x in planeParam]
+                        switchBoxParam = calibReader.read('switchBoxParam').strip('[]').split(',')
+                        vals.switchBoxParam = [float(x) for x in switchBoxParam]
 
                     except:
                         # Go back and press again
@@ -516,12 +544,12 @@ def getPlane(x, y, z):
     ret = np.linalg.lstsq(matXY, vecZ)
     return ret
 
-def getPlaneParam():
+def getPlaneParam(depthData):
     "Calculate the keyboard plane parameters from the depth calibration"
     # boxSizeInc = 1.5
 
     # Load the data and get X, Y and Z
-    depthDataStrArray = [x.split(',') for x in vals.planeDepthData]
+    depthDataStrArray = [x.split(',') for x in depthData]
     dataStr = zip(*depthDataStrArray)
     x, y, z = [float(x) for x in dataStr[4]], [float(x) for x in dataStr[5]], [float(x) for x in dataStr[2]]
 
@@ -553,7 +581,23 @@ def getPlaneParam():
     maxDev, minDev, stdDev = max(deviation), min(deviation), np.std(deviation)
     print 'max:{}, min:{}, std:{}'.format(maxDev, minDev, stdDev)
 
-    keyboardTop = 3 * stdDev
+    return [A, B, C, D, E, stdDev]
+    # keyboardTop = 3 * stdDev
     # keyboardTop = maxDev + boxSizeInc
             
-    return [A, B, C, D, E, keyboardTop]
+    # return [A, B, C, D, E, keyboardTop]
+
+def getPlaneDistance(planeParam, x, y, z):
+    " Calculate the distance to the plane. Positive if under the plane, negative if above the plane "
+
+    # z = ax + by + c <=> Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
+    A, B, C, D, E = planeParam[:5]
+    a, b, c = -A/C, -B/C, -D/C
+
+    distance = np.abs((A*x + B*y + C*z + D) / E)
+    zi = a*x + b*y + c
+    if zi < z:
+        # this point is above the plane
+        distance = -distance
+
+    return distance

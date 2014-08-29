@@ -252,7 +252,17 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         
         vals.mouseModeCalibList.append(mouseModeDistance[0])     
         doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
-        vals.boxBoundCalibList.append(doDepth.meanDepth())        
+        vals.boxBoundCalibList.append(doDepth.meanDepth())       
+
+        # Use 3d-box instead just using z-axis information
+        if vals.depthBuff[2].size() == 10:
+        #     smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data[-10:], window_len = 10))
+        # else:
+            smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+            # smoothTipIndex = vals.depthBuff[2].back()
+            # log the depth and index tip raw coordinate
+            vals.switchBoxData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
+                smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1])) 
 
     elif vals.calibState == vals.READY_CLICK_CALIB:
         Calib1=calibFont.render("Put your hand on the keyboard",1,vals.black)
