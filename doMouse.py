@@ -5,6 +5,17 @@ import time
 import numpy as np
 import doDepth
 from mainFingers import finger2Mouse
+from doEvents import getPlaneDistance
+
+def checkSwitchBox(x, y, z):
+    " Check if the finger is in valid height(inside swithch box)"
+    distance = getPlaneDistance(vals.planeParam, x, y, z)
+    upper, lower = vals.switchBoxParam
+
+    if distance >= lower and distance <= upper:
+        vals.inSwitchBox = True
+    else:
+        vals.inSwitchBox = False
 
 def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
@@ -45,8 +56,10 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     newMouseModeValue=vals.mouseModeValue
     newClickValue=vals.clickValue
 
-    inBox = doDepth.checkAllInBox() # Used to log data
-    if inBox:
+    smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+    checkSwitchBox(rpt[tipIndex][0], rpt[tipIndex][1], smoothTipIndex)
+    # inBox = doDepth.checkAllInBox() # Used to log data
+    if vals.inSwitchBox:
     #Switching Modes
         #When distance tips goes below mouseModevalue, start measuring time.
         if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
@@ -231,7 +244,7 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
         # mouse_flg, mouseState, clickX, clickY, speed, buffSize
         vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
-            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
+            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(vals.inSwitchBox)), \
             str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
             str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.buff[0].size())
             ))

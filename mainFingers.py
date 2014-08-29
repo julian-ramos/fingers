@@ -30,6 +30,7 @@ import doDraw
 import doDepth
 import funcs as fun
 import checkingInRange
+from doEvents import getPlaneDistance
 
 def finger2Mouse(fX, fY, rectangle = False):
     " Convert the fingers coordinate to mouse coordinate "
@@ -88,15 +89,17 @@ def isOnKeyboard(x, y, z):
         return True
 
     # z = ax + by + c <=> Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
-    A, B, C, D, E, keyboardTop = vals.planeParam
-    a, b, c = -A/C, -B/C, -D/C
+    # A, B, C, D, E, keyboardTop = vals.planeParam
+    # a, b, c = -A/C, -B/C, -D/C
 
-    distance = np.abs((A*x + B*y + C*z + D) / E)
-    zi = a*x + b*y + c
-    if zi < z:
-        # this point is above the plane
-        distance = -distance
+    # distance = np.abs((A*x + B*y + C*z + D) / E)
+    # zi = a*x + b*y + c
+    # if zi < z:
+    #     # this point is above the plane
+    #     distance = -distance
 
+    distance = getPlaneDistance(vals.planeParam, x, y, z)
+    keyboardTop = vals.planeParam[-1]
     if distance > keyboardTop:
         ret = False
     else:
@@ -236,9 +239,6 @@ class mainThread(threading.Thread):
                 if (vals.inputX1<=rpt[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt[tipIndex][1]<=vals.inputY2) or \
                     (vals.inputX1<=rpt2[tipIndex][0]<=vals.inputX2 and vals.inputY1<=rpt2[tipIndex][1]<=vals.inputY2):
                     vals.inrange=1
-
-            # Check for the other wiimote
-                
 
             #Depth
                 doDepth.findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2)
