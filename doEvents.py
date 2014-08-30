@@ -303,7 +303,7 @@ def eventHandling(eventsObject):
                             distance.mean(), distance.std())
                         boxMean = distance.mean()
                         boxStd = distance.std()
-                        vals.switchBoxParam = [boxMean + 3*boxStd, max(boxMean - 3*boxStd, vals.planeParam[-1]+2)]
+                        vals.switchBoxParam = [20, max(boxMean - 3*boxStd, vals.planeParam[-1]+2)]
 
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
