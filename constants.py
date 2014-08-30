@@ -77,7 +77,7 @@ typeGUI = None
 
 # Enable/Disable dragging function
 # Note: different from drag_flg. drag_flg is not used now.
-dragFlag = True
+dragFlag = False
 
 # Enable/Disable using knuckle
 knuckleFlag = False

@@ -267,7 +267,8 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
-                        if vals.relativeFlag:
+                        if True:
+                        # if vals.relativeFlag:
                             # Jump to depth calibration if relative
                             vals.calibState = vals.DEPTH_CALIB
                             vals.planeDepthData = []
