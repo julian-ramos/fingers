@@ -282,7 +282,10 @@ mouseX=0
 mouseY=0
 
 # sounds constants
-a=pygame.mixer.music
+# a=pygame.mixer.music
 # a.load('switch.mp3')
-b=pygame.mixer.music
+# b=pygame.mixer.music
 # b.load('click.mp3')
+
+switchSound = None
+clickSound = None

@@ -77,13 +77,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'
-            
             try:
-                vals.a.play()
+                vals.switchSound.play()
             except:
-                vals.a.load(file)
-                vals.a.play()
+                pass
+            # file = 'switch.mp3'
+            
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
 
 
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
@@ -92,12 +96,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.contDist=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'
             try:
-                vals.a.play()
+                vals.switchSound.play()
             except:
-                vals.a.load(file)
-                vals.a.play()
+                pass
+
+            # file = 'switch.mp3'
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
 
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
@@ -177,14 +186,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     vals.lastClickX, vals.lastClickY = vals.clickX, vals.clickY
                     print('Click')
 
-                    file = 'click.mp3'    
                     try:
-                        vals.b.play()
+                        vals.clickSound.play()
                     except:
-                        vals.b.load(file)
-                        vals.b.play()
+                        pass
 
-
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
 
             else:
                 # Double Click
@@ -192,14 +204,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.click(vals.lastClickX, vals.lastClickY)
                     print('Double Click')
 
-                    file = 'click.mp3'    
                     try:
-                        vals.b.play()
+                        vals.clickSound.play()
                     except:
-                        vals.b.load(file)
-                        vals.b.play()
+                        pass
 
-
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
 
             vals.lastClickTime = time.time()
             # print('Click')

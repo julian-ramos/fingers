@@ -118,8 +118,13 @@ class mainThread(threading.Thread):
         
         #Intialization of Pygame
         pygameRate=100
-        os.environ['SDL_VIDEO_iWINDOW_POS'] = "%d,%d" % (0,0)
+        os.environ['SDL_VIDEO_iWINDOW_POS'] = "%d,%d" % (0,0)   
+
+        pygame.mixer.pre_init(44100, -16, 2, 2048) # setup mixer to avoid sound lag
         pygame.init()
+        vals.switchSound = pygame.mixer.Sound('switch.wav')
+        vals.clickSound = pygame.mixer.Sound('click.wav')
+
         clock=pygame.time.Clock()
         myfont=pygame.font.SysFont("monospace",15)
         calibFont=pygame.font.SysFont("monospace",20)
