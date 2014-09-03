@@ -6,11 +6,9 @@ Entering any line of input at the terminal will exit the server.
 """
 
 #General imports
-import miniQueue as q
 import numpy as np
 import copy
 import os
-from time import sleep
 import select
 import socket
 import sys
@@ -31,26 +29,28 @@ import doDepth
 import funcs as fun
 import checkingInRange
 
-def finger2Mouse(fX, fY, rectangle = False):
+
+def finger2Mouse(fX, fY, rectangle=False):
     " Convert the fingers coordinate to mouse coordinate "
     left = vals.leftBound
     upper = vals.upperBound
-    if rectangle == False:
+    if rectangle is False:
         left = 600
         upper = 150
 
-    mX = (fX - left) * vals.width / vals.windowX                    
+    mX = (fX - left) * vals.width / vals.windowX
     mY = (fY - upper) * vals.height / vals.windowY
 
-    return mX, mY    
+    return mX, mY
+
 
 class mainThread(threading.Thread):
     def __init__(self):
-        threading.Thread.__init__(self)    
+        threading.Thread.__init__(self)
 
     def run(self):
         global FLG, coords
-        FLG=1
+        FLG = 1
         m = PyMouse()
         k = PyKeyboard()
         
