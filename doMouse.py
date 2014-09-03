@@ -62,7 +62,7 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
+            file = 'switchMode.mp3'    
             pygame.mixer.music.load(file)
             pygame.mixer.music.play()
 
@@ -73,7 +73,7 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.contDist=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
+            file = 'switchMode.mp3'    
             pygame.mixer.music.load(file)
             pygame.mixer.music.play()
 
