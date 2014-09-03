@@ -268,7 +268,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
     elif vals.calibState == vals.READY_CLICK_CALIB:
         Calib1=calibFont.render("Put your hand on the keyboard",1,vals.black)
         screen.blit(Calib1,(0,15))
-        Calib2=calibFont.render("Press H to start",1,vals.black)
+        Calib2=calibFont.render("Press H to calibrate clicking gesture",1,vals.black)
         screen.blit(Calib2,(0,35))
 
     elif vals.calibState == vals.CLICK_CALIB:
@@ -281,6 +281,12 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
         
         vals.clickingCalibList[0].append(time.time() - vals.clickCalibSTime)
         vals.clickingCalibList[1].append(clickingDistance[0]) 
+
+    elif vals.calibState == vals.READY_DEPTH_CALIB:
+        Calib1=calibFont.render("Put your hand on the keyboard",1,vals.black)
+        screen.blit(Calib1,(0,15))
+        Calib2=calibFont.render("Press H to calibrate keyboard plane",1,vals.black)
+        screen.blit(Calib2,(0,35))
 
     elif vals.calibState == vals.DEPTH_CALIB:
         Calib1=calibFont.render("Draw 5 circles on the keyboard",1,vals.black)
