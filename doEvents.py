@@ -270,13 +270,16 @@ def eventHandling(eventsObject):
                         if True:
                         # if vals.relativeFlag:
                             # Jump to depth calibration if relative
-                            vals.calibState = vals.DEPTH_CALIB
+                            vals.calibState = vals.READY_DEPTH_CALIB
                             vals.planeDepthData = []
                         else:
                             #store them to file.
                             calibWriter = CalibFileManager(vals.calibFile)
                             calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
                             vals.calibState = vals.END_CALIB
+
+                    elif vals.calibState == vals.READY_DEPTH_CALIB:
+                        vals.calibState = vals.DEPTH_CALIB
 
                     elif vals.calibState == vals.DEPTH_CALIB:
                         # Generate depth file to test or debug

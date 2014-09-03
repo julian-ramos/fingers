@@ -148,8 +148,9 @@ START_CALIB, \
 MOUSE_MODE_CALIB, \
 READY_CLICK_CALIB, \
 CLICK_CALIB, \
+READY_DEPTH_CALIB, \
 DEPTH_CALIB, \
-END_CALIB = range(6)
+END_CALIB = range(7)
 
 #calibration file using JSON
 calibFile = 'calib.data'
