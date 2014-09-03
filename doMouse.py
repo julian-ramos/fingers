@@ -227,6 +227,10 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.press(vals.dragX, vals.dragY)
                 else:
                     m.click(vals.clickX, vals.clickY)
+                    try:
+                        vals.clickSound.play()
+                    except:
+                        pass
             vals.mouseState = vals.MOUSE_DRAG
             print('Drag')
             print 'distClick[0]: ' + str(distClick[0])

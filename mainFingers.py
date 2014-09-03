@@ -414,7 +414,7 @@ class mainThread(threading.Thread):
                                 # m.move(smoothX, smoothY)
                                 # m.move(mouseX, mouseY)
             
-            if vals.wiimoteNum == vals.wiimoteMaxNum \
+            if vals.wiimoteNum >= vals.wiimoteMaxNum \
             and not (vals.calibLoadFlag or vals.calibration or vals.rec_flg):
                 doDraw.drawDefault(screen, defaultFont)
 
@@ -531,7 +531,7 @@ class Server:
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((self.host,self.port))
-            self.server.listen(5)
+            self.server.listen(30)
         except socket.error, (value,message):
             if self.server:
                 self.server.close()
@@ -581,21 +581,29 @@ class Client(threading.Thread):
             data = self.client.recv(self.size)                
             if data:
                 try:
-                    self.wiiID,self.data=messageDecypher(data)
+                    if data.find('mflt')>=0:
+                        print('got something from the mflt client')
+                        print(data)
+                        self.client.send(str(vals.mouse_flg))
+                        print(vals.mouse_flg)
+                        
+                    elif data.find('wii')>=0:
+                        self.wiiID,self.data=messageDecypher(data)
                 except:
                     print "User quit."
                     return
                 global coords
                 
-                if self.wiiID.find('1')>=0:
-                    coords[0]=self.data
-                else:
-                    coords[1]=self.data
+                if data.find('wii')>=0:
+                    if self.wiiID.find('1')>=0:
+                        coords[0]=self.data
+                    else:
+                        coords[1]=self.data
                 
             else:
-                self.client.close()
-                global kill
-                kill=True
+#                 self.client.close()
+#                 global kill
+#                 kill=True
                 running = 0
                 
             
