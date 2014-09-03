@@ -6,11 +6,9 @@ Entering any line of input at the terminal will exit the server.
 """
 
 #General imports
-import miniQueue as q
 import numpy as np
 import copy
 import os
-from time import sleep
 import select
 import socket
 import sys
@@ -32,14 +30,14 @@ import funcs as fun
 import checkingInRange
 from doEvents import getPlaneDistance
 
-def finger2Mouse(fX, fY, rectangle = False):
+
+def finger2Mouse(fX, fY, rectangle=False):
     " Convert the fingers coordinate to mouse coordinate "
     left = vals.leftBound
     upper = vals.upperBound
-    if rectangle == False:
+    if rectangle is False:
         left = 600
         upper = 150
-
 
     windowX=vals.windowX
     windowY=vals.windowY
@@ -59,7 +57,8 @@ def finger2Mouse(fX, fY, rectangle = False):
     mX = (fX - left) * vals.width / windowX                    
     mY = (fY - upper) * vals.height / windowY
 
-    return mX, mY    
+    return mX, mY
+
 
 def finger2MouseRelative(fXList, fYList, mX0, mY0):
     " Get next mouse point(mX1, mY1) by fX/YList "
@@ -108,11 +107,11 @@ def isOnKeyboard(x, y, z):
 
 class mainThread(threading.Thread):
     def __init__(self):
-        threading.Thread.__init__(self)    
+        threading.Thread.__init__(self)
 
     def run(self):
         global FLG, coords
-        FLG=1
+        FLG = 1
         m = PyMouse()
         k = PyKeyboard()
         
