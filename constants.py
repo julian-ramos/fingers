@@ -22,10 +22,11 @@ buff=[[],[]]
 maxBuffSize = 40 			
 minBuffSize = 5
 defaultBuffSize = 10
+relativeBuffSize = 6
 
 # Buffer for the mouse movement
-buff[0]=q.miniQueue(defaultBuffSize)
-buff[1]=q.miniQueue(defaultBuffSize)
+buff[0]=q.miniQueue(relativeBuffSize)
+buff[1]=q.miniQueue(relativeBuffSize)
 
 constBuff = [[], []]
 constBuff[0] = q.miniQueue(defaultBuffSize)
@@ -86,7 +87,7 @@ knuckleFlag = False
 featureFlag = False
 
 # Turn on/off the relative mode
-relativeFlag = False
+relativeFlag = True
 relativeSpeed = [1, 1]
 # The start point of finger coordinate.
 fingerStart = [750, 50]

@@ -70,6 +70,12 @@ def eventHandling(eventsObject):
 
                         vals.inputCalibration=0
 
+                        vals.planeDepthData = []
+
+                        height = 300
+                        width = height * float(vals.width) / vals.height
+                        vals.relativeSpeed = [float(vals.width) / width / 0.3, float(vals.height) / height / 0.3]
+
                         # vals.calibration=False
                         # vals.testStartTime = time.time()  
                     elif event.key==pygame.K_c: #start vals.calibration
@@ -171,8 +177,8 @@ def eventHandling(eventsObject):
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
 
-                            vals.buff[0].setBuffSize(vals.defaultBuffSize*6  / 10)
-                            vals.buff[1].setBuffSize(vals.defaultBuffSize*6 / 10)
+                            vals.buff[0].setBuffSize(vals.relativeBuffSize)
+                            vals.buff[1].setBuffSize(vals.relativeBuffSize)
 
                             height = 300
                             width = height * float(vals.width) / vals.height

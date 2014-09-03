@@ -8,6 +8,7 @@ import doDepth
 import funcs as fun
 from funcs import Reader
 import checkingInRange
+from doEvents import getPlaneDistance
 
 
 def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont, calibFont,depthFont):
@@ -103,6 +104,11 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
 
         traceXY = calibFont.render('Mouse X:{}, Y:{}'.format(int(vals.traceX), int(vals.traceY)), 1, vals.white)
         screen.blit(traceXY, (0, 580))
+
+        smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+        distance = getPlaneDistance(vals.planeParam, rpt[tipIndex][0], rpt[tipIndex][1], smoothTipIndex)
+        tipIndexDepth = calibFont.render('Tip Index Depth: {}'.format(distance), 1, vals.white)
+        screen.blit(tipIndexDepth, (0, 600))
 
     #main circles
         pygame.draw.circle(screen, vals.red, (rpt[tipIndex][0]/3,rpt[tipIndex][1]/3),10)
