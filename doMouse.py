@@ -4,8 +4,9 @@ import funcs as fun
 import time
 import numpy as np
 import doDepth
+from mainFingers import finger2Mouse
 
-def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
+def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
     dist3D=euclidean(rpt[tipIndex],rpt[tipThumb])
     vals.dist3D=dist3D   
@@ -60,15 +61,30 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.mouse_flg=1
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
+
+            file = 'switch.mp3'    
+            pygame.mixer.music.load(file)
+            pygame.mixer.music.play()
+
+
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
             print('Mouse mode deactivated')
             vals.mouse_flg=0
             vals.contDist=0
             vals.mouseSwitched_flg=1
+
+            file = 'switch.mp3'    
+            pygame.mixer.music.load(file)
+            pygame.mixer.music.play()
+
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
             vals.mouseSwitched_flg=0
             vals.mouseModeSwitchTime=0
+
+
+
+
 
     '''
     #Adjusting MaxBuff with respect to thumbtip and index knuckle
@@ -105,8 +121,9 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         #print distClick[0], vals.inrange, vals.mouse_flg
         if distClick[0] <= newClickValue and vals.inrange and vals.mouse_flg:
             # Get possible point of click or drag
-            vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-            vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+            vals.clickX, vals.clickY = vals.traceX, vals.traceY
+            # vals.clickX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+            # vals.clickY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
             vals.dragX, vals.dragY = vals.clickX, vals.clickY
 
             vals.stime = time.time()
@@ -137,11 +154,24 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.click(vals.clickX, vals.clickY)
                     vals.lastClickX, vals.lastClickY = vals.clickX, vals.clickY
                     print('Click')
+
+                    file = 'click.mp3'    
+                    pygame.mixer.music.load(file)
+                    pygame.mixer.music.play()
+
+
+
             else:
                 # Double Click
                 if not vals.testTypeFlag:
                     m.click(vals.lastClickX, vals.lastClickY)
                     print('Double Click')
+
+                    file = 'click.mp3'    
+                    pygame.mixer.music.load(file)
+                    pygame.mixer.music.play()
+
+
 
             vals.lastClickTime = time.time()
             # print('Click')
@@ -172,119 +202,24 @@ def mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             print("Release")
             print 'distClick[0]: ' + str(distClick[0])
 
-    if vals.testTypeFlag:
+    if vals.testTypeFlag or vals.testPointFlag:
         ''' TODO: convert them to actual coordinate on the display.'''
-        # Note: it is not the real coordinate.
-        # time, dista[0], distClick[0], vals.inrange, inBox
-        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY
-        # mouse_flg, mouseState, clickX, clickY
-        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
+        tIX, tIY = finger2Mouse(rpt[tipIndex][0], rpt[tipIndex][1])
+        kIX, kIY = finger2Mouse(rpt[kIndex][0], rpt[kIndex][1])
+        tTX, tTY = finger2Mouse(rpt[tipThumb][0], rpt[tipThumb][1])
+        kTX, kTY = finger2Mouse(rpt[kThumb][0], rpt[kThumb][1])
+        smoothX, smoothY = vals.traceX, vals.traceY
+        # smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
+        # smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+
+        # time, dista0, distClick0, inrange, inBox
+        # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
+        # mouse_flg, mouseState, clickX, clickY, speed, buffSize
+        vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
             str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
-            str(rpt[tipIndex][0]), str(rpt[tipIndex][1]), str(rpt[kIndex][0]), str(rpt[kIndex][1]), \
-            str(rpt[tipThumb][0]), str(rpt[tipThumb][1]), str(rpt[kThumb][0]), str(rpt[kThumb][1]), \
-            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY)
+            str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
+            str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.buff[0].size())
             ))
 
-'''
-# Old logic of click and drag.
-# Problem: always click before drag.
-    
-    if distClick[0]<newClickValue and vals.inrange and vals.mouse_flg and not vals.click_flg:
-        vals.click_flg=1
-        vals.stime=time.time()
-        try:
-            m.click(vals.buff[0].mean(),vals.buff[1].mean())
-            vals.dragX, vals.dragY=vals.buff[0].mean(),vals.buff[1].mean()
-        except:
-            pass
-        print('Click')
-        print distClick[0]
-        clickDistFile = open('clickDistFile.txt', 'a')
-        print >> clickDistFile, 'Click'
-        clickDistFile.close()
-        # vals.mouseClickBuff = [[], []]
-        # clickPntFile = open('clickPntFile.txt', 'a')
-        # print >> clickPntFile, 'Click:['
-        # clickPntFile.close()
-    if (vals.click_flg and (time.time()-vals.stime)*1000>=vals.lagValue and not vals.drag_flg): #so its been 1/2 second, 
-        if (distClick[0]>=newClickValue): #if finger is up, then delete flag. Else 
-            vals.click_flg=0
-            vals.drag_flg=0
-            print("reset")
-            print distClick[0]
-            clickDistFile = open('clickDistFile.txt', 'a')
-            print >> clickDistFile, 'EndClick'
-            clickDistFile.close()
-            # clickPntFile = open('clickPntFile.txt', 'a')
-            # print >> clickPntFile, '] Click End'
-            # print >> clickPntFile, 'mean:{}, {}, var:{}, {}'.format(np.mean(vals.mouseClickBuff[0]), np.mean(vals.mouseClickBuff[1]),\
-            #     np.var(vals.mouseClickBuff[0]), np.var(vals.mouseClickBuff[1]))
-            # clickPntFile.close()
-        elif ((vals.dragX-vals.buff[0].mean()>5) or (vals.dragY-vals.buff[1].mean()>5)): #Drag situation
-            m.press(vals.dragX,vals.dragY)
-            vals.drag_flg=1
-            print ("dragging")
-            print distClick[0]
-            # clickDistFile = open('clickDistFile.txt', 'a')
-            # print >> clickDistFile, 'Drag'
-            # clickDistFile.close()
-            # clickPntFile = open('clickPntFile.txt', 'a')
-            # print >> clickPntFile, 'Drag:['
-            # clickPntFile.close()
-    if vals.drag_flg and distClick[0]>=int(1.2*newClickValue): #released the drag
-        vals.drag_flg=0
-        m.release(vals.buff[0].mean(),vals.buff[1].mean())
-        vals.dragX,vals.dragY=0,0
-        print("release drag")
-        print distClick[0]
-        # clickDistFile = open('clickDistFile.txt', 'a')
-        # print >> clickDistFile, 'EndDrag'
-        # clickDistFile.close()
-        # clickPntFile = open('clickPntFile.txt', 'a')
-        # print >> clickPntFile, '] Drag End'
-        # print >> clickPntFile, 'mean:{}, {}, var:{}, {}'.format(np.mean(vals.mouseClickBuff[0]), np.mean(vals.mouseClickBuff[1]),\
-        #         np.var(vals.mouseClickBuff[0]), np.var(vals.mouseClickBuff[1]))
-        # clickPntFile.close()
-    if vals.mouse_flg:
-        if vals.click_flg or vals.drag_flg:
-            clickDistFile = open('clickDistFile.txt', 'a')
-            print >> clickDistFile, '{},{}'.format(str(distClick[0]), str(time.time()-vals.stime))
-            clickDistFile.close()
-            # currX, currY = vals.buff[0].data[-1], vals.buff[1].data[-1]
-            # vals.mouseClickBuff[0].append(currX)
-            # vals.mouseClickBuff[1].append(currY)
-            # clickPntFile = open('clickPntFile.txt', 'a')
-            # print >> clickPntFile, 'mean:{},{} ### curr:{}, {} ### time:{}'.format(\
-            #     vals.buff[0].mean(), vals.buff[1].mean(), currX, currY, (time.time()-vals.stime))
-            # clickPntFile.close()
-
-'''
 
 
-
-"""
-##################implement click with finger movement Still testing#################################
-    if vals.inrange and vals.mouse_flg and not vals.click_flg and not vals.yeah_flg: #raise flg and store current values
-        vals.ASDFTTD=vals.depthBuff[0].mean()
-        vals.ASDFTKD=vals.depthBuff[1].mean()
-        vals.ASDFITD=vals.depthBuff[2].mean()
-        vals.ASDFIKD=vals.depthBuff[3].mean()
-        vals.yeah_flg=1
-        print "yeah"
-
-#         if vals.mouse_flg:        
-#             print vals.depthBuff[0].mean(), ASDFTTD
-
-    if vals.inrange and vals.mouse_flg and not vals.click_flg and vals.yeah_flg and (vals.depthBuff[0].mean()-vals.ASDFTTD<-3):
-        vals.ASDFTTD=vals.depthBuff[0].mean()
-        print "oh yeah"
-
-    if vals.oh_yeah_flg and not vals.click_flg and (vals.depthBuff[0].mean()-vals.ASDFTTD>3):
-        vals.click_flg=1
-        vals.yeah_flg=0
-        vals.oh_yeah_flg=0
-        vals.stime=time.time()
-        m.click(vals.buff[0].mean(),vals.buff[1].mean())
-        vals.dragX, vals.dragY=vals.buff[0].mean(),vals.buff[1].mean()
-        print('Click with finger')
-"""

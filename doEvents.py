@@ -14,6 +14,26 @@ import constants as vals
 from calibFileManager import *
 from funcs import peakdetect, smooth
 
+def startRecordTestData():
+    vals.testStartTime = time.time()
+    vals.testTypeData = []
+    try:
+        unf = open(vals.userNameFile, 'r')
+        vals.userName = unf.readline().strip()
+        unf.close()
+    except:
+        print 'Failed to read userName from file: ' + str(vals.userNameFile)
+    print 'start recording test data'
+
+def saveTestData():
+    saveFileName = vals.testTypeFile.format(vals.userName)
+    sf  = open(saveFileName, 'w')
+    print >> sf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY, mouse_flg, mouseState, clickX, clickY, speed, buffSize'
+    for string in vals.testTypeData:
+        print >> sf, string
+    sf.close()
+    print 'Write test data to ' + str(saveFileName)
+
 def eventHandling(eventsObject):
     for event in eventsObject:
         if event.type==KEYDOWN:
@@ -31,10 +51,15 @@ def eventHandling(eventsObject):
             'e': do input calibration(optional)
             'k': use index knuckle to help correct index tip
 
-            Not used: 'up arrow': change sensitivity of fingers
-            Not used: 'down arrow': change sensitivity of fingers
-            Not used: 'left arrow': change sensitivity of fingers
-            Not used: 'right arrow': change sensitivity of fingers
+            Shift + 'w'/'up arrow': change sensitivity of fingers
+            Shift + 's'/'down arrow': change sensitivity of fingers
+            Shift + 'a'/'left arrow': change sensitivity of fingers
+            Shift + 'd'/'right arrow': change sensitivity of fingers
+
+            Shift + 'f': new feature testing
+            Shift + 'r': testing relative version
+
+            'z': Will zoom, in other words sensitivity will decrease
 
             '''
             # Note: [not testing] or [testing but press Ctrl now]
@@ -56,12 +81,9 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_q: #quits entirely
                         print "q pressed"
                         vals.quit_FLG=1
-                        if vals.testTypeFlag:
-                            ttf  = open(vals.testTypeFile.format(vals.userName), 'w')
-                            print >> ttf, 'time, dista0, distClick0, inRange, inBox, tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, mouse_flg, mouseState, clickX, clickY'
-                            for string in vals.testTypeData:
-                                print >> ttf, string
-                            ttf.close()
+                        if vals.testTypeFlag or vals.testPointFlag:
+                            # Quit without turn off the type/point flag
+                            saveTestData()
                     #Load calibration data from file : 'l', load
                     elif event.key == pygame.K_l:
                         vals.calibLoadFlag = True
@@ -69,19 +91,31 @@ def eventHandling(eventsObject):
                     elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                         vals.testTypeFlag = not vals.testTypeFlag
                         if vals.testTypeFlag:
-                            vals.testStartTime = time.time()
+                            if not vals.testPointFlag:
+                                # Start testing and timing
+                                startRecordTestData()
                             try:
-                                unf = open(vals.userNameFile, 'r')
-                                vals.userName = unf.readline().strip()
-                                unf.close()
+                                # Open gedit on the right side of the screen
                                 Popen(["gedit", vals.typeContentFile.format(vals.userName), \
                                     '--geometry=+1080+20'], stdin = open(os.devnull, 'r'))
                             except:
                                 pass
+                        else:
+                            # Turn off. Save if necessary.
+                            if not vals.testPointFlag:
+                                saveTestData()
                         print 'testTypeFlag changed to {}.'.format(str(vals.testTypeFlag)) 
                     # Start testing the pointing function
                     elif event.key == pygame.K_p:
                         vals.testPointFlag = not vals.testPointFlag
+                        if vals.testPointFlag:
+                            if not vals.testTypeFlag:
+                                # Start testing and timing
+                                startRecordTestData()
+                        else:
+                            # Turn off. Save if necessary.
+                            if not vals.testTypeFlag:
+                                saveTestData()
                         print 'testPointFlag changed to {}'.format(str(vals.testPointFlag))
                     # Enable/Disable dragging function
                     elif event.key == pygame.K_d:
@@ -97,7 +131,11 @@ def eventHandling(eventsObject):
                     elif event.key == pygame.K_k:
                         vals.knuckleFlag = not vals.knuckleFlag
                         print 'knuckleFlag changed to {}'.format(str(vals.knuckleFlag))
-                        
+                    elif event.key == pygame.K_z:
+                        vals.zoom_flg = not vals.zoom_flg
+
+
+
 #Julian doesn't want me to allow users to change values.
 # Note: I decided to uncomment these, but add a shift key to make it safe.
 # This is just for the testing. 
@@ -112,6 +150,39 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
+
+                    if event.key == pygame.K_f:
+                        # Turn on/off the adjustable buffer size
+                        vals.featureFlag = not vals.featureFlag
+                        print 'featureFlag changed to {}'.format(str(vals.featureFlag))
+                        if vals.featureFlag:
+                            vals.speedBuff.erase()
+                            vals.constBuff[0].erase()
+                            vals.constBuff[1].erase()
+                        else:
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize)
+
+                    elif event.key == pygame.K_r:
+                        # Turn on/off the relative version
+                        vals.relativeFlag = not vals.relativeFlag
+                        if vals.relativeFlag:
+                            print 'Change to [Relative Mode]'
+                            vals.planeDepthData = []
+                            # print 'Log the depth data'
+                        else:
+                            print 'Change to [Absolute Mode]'
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize)
+                        # Only write to files here when dubugging
+                        # Normaly, we write to files when DEPTH_CALIB -> END_CALIB
+                        # elif vals.planeDepthData != []:
+                        #     ddf  = open('testLog/depthData.csv', 'w')
+                        #     print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        #     for data in vals.planeDepthData:
+                        #         print >> ddf, data
+                        #     ddf.close()
+                        #     print 'Write depth data to file.'
 
                 '''
                 if vals.rec_flg: #if recording, can change the lag time
@@ -143,6 +214,9 @@ def eventHandling(eventsObject):
                         vals.boxLimit=int(sumBoxLimit)-3
                         vals.boxLimitBottom=int(sumBoxLimit)+3
 
+                        vals.calibState = vals.READY_CLICK_CALIB
+
+                    elif vals.calibState == vals.READY_CLICK_CALIB:
                         vals.calibState = vals.CLICK_CALIB
 
                     elif vals.calibState == vals.CLICK_CALIB:
@@ -170,9 +244,30 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
+                        if vals.relativeFlag:
+                            # Jump to depth calibration if relative
+                            vals.calibState = vals.DEPTH_CALIB
+                        else:
+                            #store them to file.
+                            calibWriter = CalibFileManager(vals.calibFile)
+                            calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
+                            vals.calibState = vals.END_CALIB
+
+                    elif vals.calibState == vals.DEPTH_CALIB:
+                        # Generate depth file to test or debug
+                        ddf  = open('testLog/depthData.csv', 'w')
+                        print >> ddf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        for data in vals.planeDepthData:
+                            print >> ddf, data
+                        ddf.close()
+                        print 'Write depth data to file.'
+
+                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+                        vals.planeParam = getPlaneParam()
+
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
-                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom)
+                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom, vals.planeParam)
                         vals.calibState = vals.END_CALIB
 
             # Read calibration data from file, vals.calibLoadFlag mode
@@ -400,3 +495,8 @@ def  getClickTimes(X, Y, valleyX, targetY):
         lo = rightX
 
     return clickTimes
+
+def getPlaneParam():
+    "Calculate the keyboard plane parameters from the depth calibration"
+
+    return [1,1,2,3,5]

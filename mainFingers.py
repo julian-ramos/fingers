@@ -38,8 +38,23 @@ def finger2Mouse(fX, fY, rectangle=False):
         left = 600
         upper = 150
 
-    mX = (fX - left) * vals.width / vals.windowX
-    mY = (fY - upper) * vals.height / vals.windowY
+    windowX=vals.windowX
+    windowY=vals.windowY
+
+    if vals.zoom_flg:
+        zoomConstant=10
+        windowX=zoomConstant*windowX
+        windowY=zoomConstant*windowY
+        print "zoom"
+
+        mX = (fX - vals.fX) * vals.width / windowX                    
+        mY = (fY - vals.fY) * vals.height / windowY
+        mX=mX+vals.mouseX
+        mY=mY+vals.mouseY
+        return mX,mY
+
+    mX = (fX - left) * vals.width / windowX                    
+    mY = (fY - upper) * vals.height / windowY
 
     return mX, mY
 
@@ -63,6 +78,8 @@ class mainThread(threading.Thread):
         calibFont=pygame.font.SysFont("monospace",20)
         depthFont=pygame.font.SysFont("monospace",10)
         defaultFont=pygame.font.SysFont("monospace",15)
+
+        pygame.mixer.init()
         
         infoObject = pygame.display.Info()
         vals.width = infoObject.current_w
@@ -182,23 +199,25 @@ class mainThread(threading.Thread):
                 doDraw.drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,averageX2,averageY2,myfont,calibFont,depthFont)
                 #doDraw.drawAllMiniRecording(miniScreen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2,averageX,averageY,myfont,calibFont,depthFont)
 
-
-
-            #Creating the 3d box
-
+                if vals.relativeFlag:
+                    if vals.depthBuff[2].size() > 10:
+                        smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data[-10:], window_len = 10))
+                    else:
+                        smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+                    smoothTipIndex = vals.depthBuff[2].back()
+                    # log the depth and index tip raw coordinate
+                    vals.planeDepthData.append('{}, {}, {}, {}, {}, {}'.format(vals.depthBuff[0].back(), vals.depthBuff[1].back(), \
+                        smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events
-                doMouse.mouseActivities(rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 if doDepth.checkAllAboveBox():
                     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
-#                    if vals.windowX==0:
-#                        vals.windowX=10
-#                    if vals.windowY==0:
-#                        vals.windowY=10
+                    #This is to weight the location of the pointer WRT tip & knuckle
                     tipParam = 7
                     knuParam = 3
                     if vals.knuckleFlag:
@@ -207,25 +226,29 @@ class mainThread(threading.Thread):
                     else:
                         fingerX, fingerY = rpt[tipIndex][0], rpt[tipIndex][1]
 
+                    if not vals.zoom_flg:
+                        vals.fX=rpt[tipIndex][0]
+                        vals.fY=rpt[tipIndex][1]
+
                     if ((vals.inputX2-vals.inputX1)==0) or ((vals.inputY2-vals.inputY1)==0):
+                        # Use default option
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, False)
                         # mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
                         # mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
                     else:
+                        # Use the user prefered window size
                         mouseX, mouseY = finger2Mouse(fingerX, fingerY, True)
-                        # print "ye"
-                        # mouseX = (rpt[tipIndex][0] - vals.leftBound) * vals.width / vals.windowX                    
-                        # mouseY = (rpt[tipIndex][1] - vals.upperBound) * vals.height / vals.windowY
-                        
-                        # factorX =vals.width/(vals.inputX2-vals.inputX1)
-                        # factorY =vals.height/(vals.inputY2-vals.inputY1)
-
-                        # mouseX=(rpt[tipIndex][0]-600)*(vals.inputX2-vals.inputX1)*factorX/vals.windowX                    
-                        # mouseY=(rpt[tipIndex][1]-150)*(vals.inputY2-vals.inputY1)*factorY/vals.windowY
-
-                    #mouseX=(rpt[tipIndex][0]-600)*vals.width/vals.windowX                    
-                    #mouseY=(rpt[tipIndex][1]-150)*vals.height/vals.windowY
         
+
+                    if not vals.zoom_flg:
+                        vals.fingerX=fingerX
+                        vals.fingerY=fingerY
+                        vals.mouseX=mouseX
+                        vals.mouseY=mouseY
+
+
+
+
                     """Currently we have the setting such that if there is a single LED that is out of range then
                     the mouse wont move. The problem with this is that the range of the mouse gets limited, and 
                     some places (such as corners) are difficult/impossible to click. If we eliminate the if statement
@@ -235,19 +258,68 @@ class mainThread(threading.Thread):
                     if (vals.inrange and doDepth.checkIndexInBox()) or vals.mouseState == vals.MOUSE_DRAG:
                         vals.buff[0].put(mouseX)
                         vals.buff[1].put(mouseY)
-                        # data0 = vals.buff[0].getData()
-                        # data1 = vals.buff[1].getData() 
-                        # smoothX = np.mean(fun.smooth(data0, window_len = len(data0)))
-                        # smoothY = np.mean(fun.smooth(data1, window_len = len(data1)))
-                        # print data0, data1
-                        # print smoothX, smoothY
-                        smoothX=np.mean(fun.smooth(vals.buff[0].data, window_len=len(vals.buff[0].data)))
-                        smoothY=np.mean(fun.smooth(vals.buff[1].data, window_len=len(vals.buff[1].data)))
+                     
+                        smoothX = np.mean(fun.smooth(vals.buff[0].data, window_len = vals.buff[0].size()))
+                        smoothY = np.mean(fun.smooth(vals.buff[1].data, window_len = vals.buff[1].size()))
 
+                        if vals.featureFlag:
+                            vals.constBuff[0].put(mouseX)
+                            vals.constBuff[1].put(mouseY)
+
+                            sX = np.mean(fun.smooth(vals.constBuff[0].data, window_len = vals.constBuff[0].size()))
+                            sY = np.mean(fun.smooth(vals.constBuff[1].data, window_len = vals.constBuff[1].size()))
+
+
+                            # The speed of the cursor
+                            speed = np.sqrt( (sX - vals.traceX)**2 + (sY - vals.traceY)**2 )
+                            if speed < 0.0001:
+                                speed = 0.0001
+                            vals.speedBuff.put(speed)
+                            vals.smoothSpeed = np.mean(fun.smooth(vals.speedBuff.data, window_len = vals.speedBuff.size()))
+
+                            # Several method to get buffer size from speed:
+                            
+                            # paramA, paramB = 8.5, 20
+
+                            # 1) size = A + B / speed
+                            # newSize = max(int(paramA + paramB / vals.smoothSpeed), vals.minBuffSize)
+
+                            # 2) size = A + B / sqrt(speed)
+                            # newSize = max(int(paramA + paramB / np.sqrt(vals.smoothSpeed)), vals.minBuffSize)
+                            
+                            # newSize = min(newSize, vals.maxBuffSize)
+
+                            # P1(minSpeed, maxBuff), P2(maxSpeed, minBuff)
+                            maxSpeed = 25
+                            minSpeed = 0.1
+                            maxBuff = 35
+                            minBuff = 10
+
+                            # 3) size = A + B * speed
+                            paramB = float(minBuff - maxBuff) / (maxSpeed - minSpeed)
+                            paramA = maxBuff - paramB * minSpeed
+
+                            newSize = paramA + paramB * vals.smoothSpeed
+                            newSize = max(min(int(newSize), maxBuff), minBuff)
+                            
+                            vals.buff[0].setBuffSize(newSize)
+                            vals.buff[1].setBuffSize(newSize)
 
                         if not vals.testTypeFlag or (vals.testTypeFlag and vals.testPointFlag):
+                            # Record the last trace point
+                            vals.traceX, vals.traceY = smoothX, smoothY
+                            # if vals.featureFlag:# and vals.mouseState == vals.MOUSE_READY:
+                            #     # param = 20.0 / speed2
+                            #     # vals.traceX = int((vals.traceX * param + smoothX) / (1 + param))
+                            #     # vals.traceY = int((vals.traceY * param + smoothY) / (1 + param))
+                            #     vals.traceX = np.mean(fun.smooth(vals.buff[0].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     vals.traceY = np.mean(fun.smooth(vals.buff[1].data[-vals.smoothSize:], window_len = vals.smoothSize))
+                            #     # vals.traceX = (vals.traceX * 4 + smoothX) / 5
+                            #     # vals.traceY = (vals.traceY * 4 + smoothY) / 5
+
+                            m.move(vals.traceX, vals.traceY)
                             # m.move(vals.buff[0].data[-1],vals.buff[1].data[-1])
-                            m.move(smoothX, smoothY)
+                            # m.move(smoothX, smoothY)
                             # m.move(mouseX, mouseY)
             
             if vals.wiimoteNum == vals.wiimoteMaxNum \

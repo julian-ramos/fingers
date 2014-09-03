@@ -17,9 +17,18 @@ width = 800
 height = 600
 
 buff=[[],[]]
-maxBuff = 10 		# Max buffer size of the x-y queue
-buff[0]=q.miniQueue(maxBuff)#, minBuff)
-buff[1]=q.miniQueue(maxBuff)#, minBuff)
+# Max/Min/Default buffer size of the x-y queue
+maxBuffSize = 40 			
+minBuffSize = 5
+defaultBuffSize = 10
+
+# Buffer for the mouse movement
+buff[0]=q.miniQueue(defaultBuffSize)
+buff[1]=q.miniQueue(defaultBuffSize)
+
+constBuff = [[], []]
+constBuff[0] = q.miniQueue(defaultBuffSize)
+constBuff[1] = q.miniQueue(defaultBuffSize)
 
 
 rpt=[ [0,0] for i in range(4)]
@@ -57,7 +66,7 @@ textContentFile = 'textFiles/text01.txt'
 textContent = ''
 textGUI = None
 typeContentFile = 'textFiles/{}_Type_Content.txt'
-userNameFile = '../FittsLawTest/userName'
+userNameFile = '../FittsLawTest/userName.txt'
 # userNameFile = '../FittsLawTest/userData/userName'
 userName = ''
 '''
@@ -72,8 +81,20 @@ dragFlag = True
 # Enable/Disable using knuckle
 knuckleFlag = False
 
-# Debug Mode
-# debugFlag = False
+# New feature test
+featureFlag = False
+
+# Turn on/off the relative mode
+relativeFlag = False
+planeDepthData = []
+# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+planeParam = []
+
+speedBuffSize = 10
+speedBuff = q.miniQueue(speedBuffSize)
+smoothSpeed = 0.0
+
+traceX, traceY = 0, 0
 
 #calibration constants
 mouseModeValue=10
@@ -105,8 +126,10 @@ calibWriteFinished = False
 calibState = -1
 START_CALIB, \
 MOUSE_MODE_CALIB, \
+READY_CLICK_CALIB, \
 CLICK_CALIB, \
-END_CALIB = range(4)
+DEPTH_CALIB, \
+END_CALIB = range(6)
 
 #calibration file using JSON
 calibFile = 'calib.data'
@@ -206,8 +229,8 @@ tipDistance=0
 dist3D=0
 
 #To adjust the cursor sensitivity. Adjusted by arrow keys
-windowX=200
-windowY=250
+windowX=250
+windowY=200
 
 #checking inRange constants
 leftBound=5
@@ -224,3 +247,10 @@ inputClickStopper=0
 inputX2=-1
 inputY2=-1
 inputSet=0
+
+
+zoom_flg = 0
+fingerX=0
+fingerY=0
+mouseX=0
+mouseY=0
