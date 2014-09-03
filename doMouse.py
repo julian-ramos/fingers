@@ -5,6 +5,17 @@ import time
 import numpy as np
 import doDepth
 from mainFingers import finger2Mouse
+from doEvents import getPlaneDistance
+
+def checkSwitchBox(x, y, z):
+    " Check if the finger is in valid height(inside swithch box)"
+    distance = getPlaneDistance(vals.planeParam, x, y, z)
+    upper, lower = vals.switchBoxParam
+
+    if distance >= lower and distance <= upper:
+        vals.inSwitchBox = True
+    else:
+        vals.inSwitchBox = False
 
 def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
@@ -45,8 +56,10 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
     newMouseModeValue=vals.mouseModeValue
     newClickValue=vals.clickValue
 
-    inBox = doDepth.checkAllInBox() # Used to log data
-    if inBox:
+    smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+    checkSwitchBox(rpt[tipIndex][0], rpt[tipIndex][1], smoothTipIndex)
+    # inBox = doDepth.checkAllInBox() # Used to log data
+    if vals.inSwitchBox:
     #Switching Modes
         #When distance tips goes below mouseModevalue, start measuring time.
         if 10<=dista[0]<=newMouseModeValue and vals.inrange==1 and vals.mouseModeSwitchTime==0:     
@@ -58,13 +71,23 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         #if distance is below for a certain time and all other conditions are met, then switch
         if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
             print('Mouse mode activated')
+            vals.traceX, vals.traceY = m.position()
+
             vals.mouse_flg=1
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
-            pygame.mixer.music.load(file)
-            pygame.mixer.music.play()
+            try:
+                vals.switchSound.play()
+            except:
+                pass
+            # file = 'switch.mp3'
+            
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
 
 
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
@@ -73,9 +96,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
             vals.contDist=0
             vals.mouseSwitched_flg=1
 
-            file = 'switch.mp3'    
-            pygame.mixer.music.load(file)
-            pygame.mixer.music.play()
+            try:
+                vals.switchSound.play()
+            except:
+                pass
+
+            # file = 'switch.mp3'
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
 
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
@@ -155,11 +186,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     vals.lastClickX, vals.lastClickY = vals.clickX, vals.clickY
                     print('Click')
 
-                    file = 'click.mp3'    
-                    pygame.mixer.music.load(file)
-                    pygame.mixer.music.play()
+                    try:
+                        vals.clickSound.play()
+                    except:
+                        pass
 
-
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
 
             else:
                 # Double Click
@@ -167,11 +204,17 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.click(vals.lastClickX, vals.lastClickY)
                     print('Double Click')
 
-                    file = 'click.mp3'    
-                    pygame.mixer.music.load(file)
-                    pygame.mixer.music.play()
+                    try:
+                        vals.clickSound.play()
+                    except:
+                        pass
 
-
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
 
             vals.lastClickTime = time.time()
             # print('Click')
@@ -184,6 +227,10 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                     m.press(vals.dragX, vals.dragY)
                 else:
                     m.click(vals.clickX, vals.clickY)
+                    try:
+                        vals.clickSound.play()
+                    except:
+                        pass
             vals.mouseState = vals.MOUSE_DRAG
             print('Drag')
             print 'distClick[0]: ' + str(distClick[0])
@@ -216,7 +263,7 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         # tIX, tIY, kIX, kIY, tTX, tTY, kTX, kTY, smoothX, smoothY
         # mouse_flg, mouseState, clickX, clickY, speed, buffSize
         vals.testTypeData.append('{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}'.format(\
-            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(inBox)), \
+            str(time.time() - vals.testStartTime), str(dista[0]), str(distClick[0]), str(int(vals.inrange)), str(int(vals.inSwitchBox)), \
             str(tIX), str(tIY), str(kIX), str(kIY), str(tTX), str(tTY), str(kTX), str(kTY), str(smoothX), str(smoothY), \
             str(vals.mouse_flg), str(vals.mouseState), str(vals.clickX), str(vals.clickY), str(vals.smoothSpeed), str(vals.buff[0].size())
             ))

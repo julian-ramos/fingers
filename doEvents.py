@@ -44,8 +44,8 @@ def eventHandling(eventsObject):
             'h': enter next screen(calibration)
             'q': quit
             
-            't': test type open/close
-            'p': test mouse open/close
+            't': typing test start/end 
+            'p': pointing test start/end
             'd': dragging & double click enable/disable
             'm': switch between mouse and keyboard
             'e': do input calibration(optional)
@@ -150,7 +150,8 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
                     print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
-
+#                     vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
+                    print 'relative speed: X-{}, Y-{}'.format(vals.relativeSpeed[0], vals.relativeSpeed[1])
                     if event.key == pygame.K_f:
                         # Turn on/off the adjustable buffer size
                         vals.featureFlag = not vals.featureFlag
@@ -169,6 +170,15 @@ def eventHandling(eventsObject):
                         if vals.relativeFlag:
                             print 'Change to [Relative Mode]'
                             vals.planeDepthData = []
+
+                            vals.buff[0].setBuffSize(vals.defaultBuffSize*6  / 10)
+                            vals.buff[1].setBuffSize(vals.defaultBuffSize*6 / 10)
+
+                            height = 300
+                            width = height * float(vals.width) / vals.height
+                            vals.relativeSpeed = [float(vals.width) / width / 0.3, float(vals.height) / height / 0.3]
+                            
+                            # vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
                             # print 'Log the depth data'
                         else:
                             print 'Change to [Absolute Mode]'
@@ -205,14 +215,27 @@ def eventHandling(eventsObject):
                             vals.mouseModeCalibList.remove(min(vals.mouseModeCalibList))
                         vals.mouseModeValue = int(1.2 * min(vals.mouseModeCalibList))
                         vals.clickCalibSTime = time.time()
+
                         while min(vals.boxBoundCalibList)<15:
                             vals.boxBoundCalibList.remove(min(vals.boxBoundCalibList))
                         sumBoxLimit=0
                         for i in xrange(len(vals.boxBoundCalibList)):
                             sumBoxLimit+=vals.boxBoundCalibList[i]
                         sumBoxLimit=sumBoxLimit/len(vals.boxBoundCalibList)
-                        vals.boxLimit=int(sumBoxLimit)-3
-                        vals.boxLimitBottom=int(sumBoxLimit)+3
+                        vals.boxLimit=int(sumBoxLimit)-5
+                        vals.boxLimitBottom=int(sumBoxLimit)+4
+
+                        # Generate depth file to test or debug
+                        sbdf  = open('testLog/switchBoxData.csv', 'w')
+                        print >> sbdf, 'tipThumb, knuThumb, tipIndex, knuIndex, rawX, rawY'
+                        for data in vals.switchBoxData:
+                            print >> sbdf, data
+                        sbdf.close()
+                        print 'Write depth data to file.'
+
+                        # # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), s = std
+                        # [A, B, C, D, E, s] = getPlaneParam(vals.switchBoxData)
+                        # vals.switchBoxParam = [A, B, C, D, E, s, s]
 
                         vals.calibState = vals.READY_CLICK_CALIB
 
@@ -244,9 +267,11 @@ def eventHandling(eventsObject):
                         vals.clickValue=int(1.2 * min(vals.clickingCalibList[1]))
                         '''
 
-                        if vals.relativeFlag:
+                        if True:
+                        # if vals.relativeFlag:
                             # Jump to depth calibration if relative
                             vals.calibState = vals.DEPTH_CALIB
+                            vals.planeDepthData = []
                         else:
                             #store them to file.
                             calibWriter = CalibFileManager(vals.calibFile)
@@ -262,12 +287,28 @@ def eventHandling(eventsObject):
                         ddf.close()
                         print 'Write depth data to file.'
 
-                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
-                        vals.planeParam = getPlaneParam()
+                        # Get parameters for the plane: Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), s
+                        vals.planeParam = getPlaneParam(vals.planeDepthData)
+                        vals.planeParam[-1] = 3 * vals.planeParam[-1]
+
+                        # Get switch box parameters with the keyboard plane and switch points
+                        distance = np.zeros(len(vals.switchBoxData))
+                        # Load the data and get X, Y and Z
+                        switchBoxStrArray = [x.split(',') for x in vals.switchBoxData]
+                        switchBoxStr = zip(*switchBoxStrArray)
+                        x, y, z = [float(x) for x in switchBoxStr[4]], [float(x) for x in switchBoxStr[5]], [float(x) for x in switchBoxStr[2]]
+                        for i in range(len(x)):
+                            distance[i] = getPlaneDistance(vals.planeParam, x[i], y[i], z[i])
+                        print 'distance: max:{}, min:{}, mean:{}, std:{}'.format(distance.max(), distance.min(), \
+                            distance.mean(), distance.std())
+                        boxMean = distance.mean()
+                        boxStd = distance.std()
+                        vals.switchBoxParam = [20, max(boxMean - 3*boxStd, vals.planeParam[-1]+2)]
 
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
-                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, vals.boxLimitBottom, vals.planeParam)
+                        calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, \
+                            vals.boxLimitBottom, vals.planeParam, vals.switchBoxParam)
                         vals.calibState = vals.END_CALIB
 
             # Read calibration data from file, vals.calibLoadFlag mode
@@ -280,6 +321,10 @@ def eventHandling(eventsObject):
                         vals.mouseActTimeThre = float(calibReader.read('mouseActTimeThre'))
                         vals.boxLimit = float(calibReader.read('boxLimit'))
                         vals.boxLimitBottom = float(calibReader.read('boxLimitBottom'))
+                        planeParam = calibReader.read('planeParam').strip('[]').split(',')
+                        vals.planeParam = [float(x) for x in planeParam]
+                        switchBoxParam = calibReader.read('switchBoxParam').strip('[]').split(',')
+                        vals.switchBoxParam = [float(x) for x in switchBoxParam]
 
                     except:
                         # Go back and press again
@@ -496,7 +541,67 @@ def  getClickTimes(X, Y, valleyX, targetY):
 
     return clickTimes
 
-def getPlaneParam():
-    "Calculate the keyboard plane parameters from the depth calibration"
+def getPlane(x, y, z):
+    matXY = np.array([x, y, np.ones(len(x))], np.float64)
+    matXY = matXY.T
+    vecZ = z
+    ret = np.linalg.lstsq(matXY, vecZ)
+    return ret
 
-    return [1,1,2,3,5]
+def getPlaneParam(depthData):
+    "Calculate the keyboard plane parameters from the depth calibration"
+    # boxSizeInc = 1.5
+
+    # Load the data and get X, Y and Z
+    depthDataStrArray = [x.split(',') for x in depthData]
+    dataStr = zip(*depthDataStrArray)
+    x, y, z = [float(x) for x in dataStr[4]], [float(x) for x in dataStr[5]], [float(x) for x in dataStr[2]]
+
+    # Get the plane parameter
+    # Linear function: z = a * x + b * y + c
+    ret = getPlane(x, y, z)
+    print 'Residual: {}, {}'.format(ret[1], ret[1] / len(x))
+    a, b, c = ret[0]
+
+    # z = ax + by + c => Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
+    # A = a, B = b, C = -1, D = c, E = sqrt(a**2 + b**2 + 1)
+    A, B, C, D, E = a, b, -1, c, np.sqrt(a**2 + b**2 + 1)
+
+    # From distance(planeZ, rawZ), positive means the point is 'under' the plane, negative means the point is 'above' the plane.
+    # So the max(positive) is the top of the 3D box of keyboard.
+    deviation = np.zeros(len(x))
+    for j in range(len(x)):
+        distance = np.abs((A*x[j] + B*y[j] + C*z[j] + D) / E)
+        zj = a*x[j] + b*y[j] + c
+        if zj < z[j]:
+            # this point is above the plane
+            distance = -distance
+        if distance > 5:
+            print 'Discard: ' + str(distance)
+            distance = 0
+        deviation[j] = distance
+
+    # For this problem, we need the max, to get all training points in the box.
+    maxDev, minDev, stdDev = max(deviation), min(deviation), np.std(deviation)
+    print 'max:{}, min:{}, std:{}'.format(maxDev, minDev, stdDev)
+
+    return [A, B, C, D, E, stdDev]
+    # keyboardTop = 3 * stdDev
+    # keyboardTop = maxDev + boxSizeInc
+            
+    # return [A, B, C, D, E, keyboardTop]
+
+def getPlaneDistance(planeParam, x, y, z):
+    " Calculate the distance to the plane. Positive if under the plane, negative if above the plane "
+
+    # z = ax + by + c <=> Ax + By + Cz + D = 0, E = sqrt(A^2 + B^2 + C^2)
+    A, B, C, D, E = planeParam[:5]
+    a, b, c = -A/C, -B/C, -D/C
+
+    distance = np.abs((A*x + B*y + C*z + D) / E)
+    zi = a*x + b*y + c
+    if zi < z:
+        # this point is above the plane
+        distance = -distance
+
+    return distance

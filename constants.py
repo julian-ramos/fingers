@@ -1,4 +1,5 @@
 import miniQueue as q
+import pygame
 
 quit_FLG=0
 
@@ -76,7 +77,7 @@ typeGUI = None
 
 # Enable/Disable dragging function
 # Note: different from drag_flg. drag_flg is not used now.
-dragFlag = True
+dragFlag = False
 
 # Enable/Disable using knuckle
 knuckleFlag = False
@@ -86,9 +87,28 @@ featureFlag = False
 
 # Turn on/off the relative mode
 relativeFlag = False
+relativeSpeed = [1, 1]
+# The start point of finger coordinate.
+fingerStart = [750, 50]
+
+# The keyboard plane. We only need box upper size because we can't put our fingers
+# lower than keyboard. F is positive to avoid mistake.
 planeDepthData = []
-# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2)
+# Ax + By + Cz + D = 0, E = sqrt(A**2 + B**2 + C**2), F = boxUpperSize
 planeParam = []
+
+# The box for switching gesture
+switchBoxData = []
+# F = boxUpperSize, G = boxLowerSize. F and G are positive to avoid mistake.
+switchBoxParam = []
+inSwitchBox = False
+
+onKeyboardFlag = True
+
+fingerBuffSize = 2
+fingerBuff = [[], []]
+fingerBuff[0] = q.miniQueue(fingerBuffSize)
+fingerBuff[1] = q.miniQueue(fingerBuffSize)
 
 speedBuffSize = 10
 speedBuff = q.miniQueue(speedBuffSize)
@@ -201,6 +221,12 @@ LED3=[]
 LED4=[]
 rptList=[]
 
+wii2_LED1=[]
+wii2_LED2=[]
+wii2_LED3=[]
+wii2_LED4=[]
+wii2_rptList=[]
+
 #Depth Constants
 maxDepthBuff=10
 depthBuff=[[],[],[],[]]
@@ -254,3 +280,12 @@ fingerX=0
 fingerY=0
 mouseX=0
 mouseY=0
+
+# sounds constants
+# a=pygame.mixer.music
+# a.load('switch.mp3')
+# b=pygame.mixer.music
+# b.load('click.mp3')
+
+switchSound = None
+clickSound = None

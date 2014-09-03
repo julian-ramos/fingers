@@ -22,7 +22,7 @@ def run():
         ax.set_aspect('equal')
         
     indent = '    '
-    for fi in range(20, 22):
+    for fi in range(40, 45):
         print 'Start No.' + str(fi)
 
         # Load the data and get X, Y and Z
@@ -50,6 +50,7 @@ def run():
 
         print indent + str(dataNum) + ' points'
         print indent + 'Least square result: ' + str(ret)
+        print indent + 'residual / number: ' + str(ret[1]/dataNum)
         print indent + 'z = f(x, y) = {}*x + {}*y + {}'.format(param[0], param[1], param[2])
 
         # Show the plane
@@ -76,9 +77,10 @@ def run():
                 setZ.append(dataZ[edge[i]:edge[i+1]])
 
             # Train and Test
-            boxTopInc = np.linspace(0, 2, 50)
+            boxTopInc = np.linspace(0.1, 5, 50)
             # Error rate [m,n]: use No.m to train, and boxTopInc increase boxTopInc[n]
             errorRate = np.zeros((setNum, len(boxTopInc)))
+            trainStd = np.zeros(setNum)
             for i in range(setNum):#(0,1):
                 # Train
                 x, y, z = setX[i], setY[i], setZ[i]
@@ -105,8 +107,9 @@ def run():
                     deviation[j] = distance
 
                 # For this problem, we need the max, to get all training points in the box.
-                maxDev, minDev = max(deviation), min(deviation)
-                print indent*2 + 'MaxDeviation:{}, MinDeviation:{}'.format(maxDev, minDev)
+                maxDev, minDev, stdDev = max(deviation), min(deviation), np.std(deviation)
+                print indent*2 + 'MaxDeviation:{}, MinDeviation:{}, Std:{}'.format(maxDev, minDev, stdDev)
+                trainStd[i] = stdDev
 
                 # Test
                 # Total testing number and error number
@@ -128,7 +131,7 @@ def run():
                             distance = -distance
                         # loop for different box size
                         for m in range(len(boxTopInc)):
-                            if distance > maxDev + boxTopInc[m]:
+                            if distance > boxTopInc[m]:
                                 # Error
                                 errNum[m] += 1
 
@@ -147,6 +150,9 @@ def run():
             title('data No.' + str(fi))
             legend()
 
+            print 'Std for each set: ' + str(trainStd)
+            print 'Mean std for each set(about 10sec): ' + str(trainStd.mean())
+
         # data2 = np.genfromtxt('depthData15.csv', dtype = float, delimiter = ',', names = True)
 
         # above keyboard surface
@@ -155,6 +161,8 @@ def run():
 
         if not plotTogether:
             title('data No.' + str(fi))
+
+    ax.legend()
 
     legend()
     show()
