@@ -265,8 +265,8 @@ class mainThread(threading.Thread):
                 doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
-                if doDepth.checkAllAboveBox():
-                    doGestures.gestures(averageX,averageY,k,m)
+                # if doDepth.checkAllAboveBox():
+                #     doGestures.gestures(averageX,averageY,k,m)
 
                 if vals.mouse_flg==1:
                     #This is to weight the location of the pointer WRT tip & knuckle

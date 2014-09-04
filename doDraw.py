@@ -247,7 +247,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
     #Drawing the instructions
     pygame.draw.rect(screen, vals.gray, (0,5,600,60))
     if vals.calibState == vals.START_CALIB:
-        Calib1=calibFont.render("Press H to start",1,vals.black)
+        Calib1=calibFont.render("Press H to calibrate the switching gesture",1,vals.black)
         screen.blit(Calib1,(0,15))
 
     elif vals.calibState == vals.MOUSE_MODE_CALIB:
@@ -274,7 +274,7 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
     elif vals.calibState == vals.READY_CLICK_CALIB:
         Calib1=calibFont.render("Put your hand on the keyboard",1,vals.black)
         screen.blit(Calib1,(0,15))
-        Calib2=calibFont.render("Press H to calibrate clicking gesture",1,vals.black)
+        Calib2=calibFont.render("Press H to calibrate the clicking gesture",1,vals.black)
         screen.blit(Calib2,(0,35))
 
     elif vals.calibState == vals.CLICK_CALIB:
