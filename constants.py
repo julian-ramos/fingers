@@ -186,7 +186,8 @@ mouseState = 0
 MOUSE_NORMAL, \
 MOUSE_READY, \
 MOUSE_CLICK, \
-MOUSE_DRAG = range(4)
+MOUSE_WAIT, \
+MOUSE_DRAG = range(5)
 
 # Calculating the variance may not work, because we can both click and drag without moving.
 '''
