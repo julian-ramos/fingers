@@ -237,7 +237,12 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     elif vals.mouseState == vals.MOUSE_CLICK:
         # print 'CLICK'
-        vals.mouseState = vals.MOUSE_NORMAL
+        # vals.mouseState = vals.MOUSE_NORMAL
+        vals.mouseState = vals.MOUSE_WAIT
+
+    elif vals.mouseState == vals.MOUSE_WAIT:
+        if distClick[0] > 1.5 * newClickValue and vals.mouse_flg and vals.inrange:
+            vals.mouseState = vals.MOUSE_NORMAL
 
     elif vals.mouseState == vals.MOUSE_DRAG:
         # print 'DRAG'
