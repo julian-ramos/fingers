@@ -48,8 +48,8 @@ def findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipInde
     vals.rtiX.put(1380*tiX/vals.depthBuff[2])
     vals.rtiY.put(1380*tiY/vals.depthBuff[2])
     
-    vals.rkiX.put(1380*kiX/vals.depthBuff[2])
-    vals.rkiY.put(1380*kiY/vals.depthBuff[2])
+    vals.rkiX.put(1380*kiX/vals.depthBuff[3])
+    vals.rkiY.put(1380*kiY/vals.depthBuff[3])
     
 
 #Some notes about depth measurement
