@@ -36,10 +36,6 @@ def saveTestData():
 
 def eventHandling(eventsObject):
     for event in eventsObject:
-        if event.type==KEYUP:
-            if event.key == pygame.K_SPACE:
-                vals.newClick_flg = 0
-
         if event.type==KEYDOWN:
             '''
             'r': record mode
@@ -62,25 +58,10 @@ def eventHandling(eventsObject):
 
             Shift + 'f': new feature testing
             Shift + 'r': testing relative version
-            
-            Shift + 'm': Activates the new way of clicking
-            Shift + control: New switch gesture 
-            Space : new click
 
             'z': Will zoom, in other words sensitivity will decrease
 
             '''
-
-            if vals.newGestures:
-                if (pygame.key.get_mods() & pygame.KMOD_SHIFT):
-                    if ((event.key == pygame.K_LCTRL) or (event.key == pygame.K_RCTRL)):
-                        vals.mouse_flg = not vals.mouse_flg
-                    if vals.mouse_flg:
-                        if event.key == pygame.K_SPACE:
-                            vals.newClick_flg = 1
-
-
-
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
                 if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -339,12 +320,6 @@ def eventHandling(eventsObject):
                             vals.boxLimitBottom, vals.planeParam, vals.switchBoxParam)
                         vals.calibState = vals.END_CALIB
 
-                elif (pygame.key.get_mods() & pygame.KMOD_SHIFT):
-                    if event.key == pygame.K_m:
-                        vals.calibState = vals.READY_DEPTH_CALIB
-                        vals.newGestures = 1
-
-
             # Read calibration data from file, vals.calibLoadFlag mode
             if vals.calibLoadFlag:
                 if not vals.calibReadFinished:
@@ -383,6 +358,10 @@ def eventHandling(eventsObject):
             #also it is resettable.
             if vals.calibState == vals.END_CALIB and event.key == K_e:
                 vals.inputCalibration=1
+
+
+
+
 
 
         if event.type==QUIT:

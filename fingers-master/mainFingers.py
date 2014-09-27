@@ -262,10 +262,7 @@ class mainThread(threading.Thread):
                 #         smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events
-                if not vals.newGestures:
-                    doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
-                else:
-                    doMouse.newMouseActivities(pygame, rpt, m,k)
+                doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 # if doDepth.checkAllAboveBox():
@@ -513,6 +510,9 @@ def messageDecypher(messageData):
             data[ind][1]=float(i[indy+1:])
     
     return wiiID,data
+    
+        
+        
 
 class Server:
     

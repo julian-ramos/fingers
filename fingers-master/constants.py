@@ -309,9 +309,3 @@ vals.rtiY=q.miniQueue(maxDepthBuff)
 vals.rkiX=q.miniQueue(maxDepthBuff)
 vals.rkiY=q.miniQueue(maxDepthBuff)
 
-
-
-newGestures = 0
-newClick_flg = 0
-
-

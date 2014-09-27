@@ -249,8 +249,6 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
     if vals.calibState == vals.START_CALIB:
         Calib1=calibFont.render("Press H to calibrate the switching gesture",1,vals.black)
         screen.blit(Calib1,(0,15))
-        Calib2=calibFont.render("Press Shift + M to calibrate the new gestures",1,vals.black)
-        screen.blit(Calib2,(0,15))      
 
     elif vals.calibState == vals.MOUSE_MODE_CALIB:
         Calib1=calibFont.render("Tap tip of thumb and tip of index",1,vals.black)

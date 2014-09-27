@@ -17,12 +17,6 @@ def checkSwitchBox(x, y, z):
     else:
         vals.inSwitchBox = False
 
-
-def newMouseActivities(pygame, rpt, m, k):
-    if vals.newClick_flg == 1:
-        m.click(vals.traceX, vals.traceY)
-
-
 def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
     dist3D=euclidean(rpt[tipIndex],rpt[tipThumb])
@@ -46,6 +40,19 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 
     vals.clickDistance=distClick[0]
 
+
+#Modifying vals.mouseModeValue with respect to distance between knuckles
+   # currentKnuckleValue=fun.distanceVec(\
+   # [rpt[kIndex][0]],\
+   # [rpt[kIndex][1]],\
+   # [rpt[kThumb][0]],\
+   # [rpt[kThumb][1]])[0]
+
+   # knuckleRatio=float(currentKnuckleValue/vals.knuckleValue)
+   # if knuckleRatio>1:
+   #     newMouseModeValue=int(knuckleRatio*vals.mouseModeValue)
+   #     newClickValue=int(knuckleRatio*vals.clickValue)
+   # else:
     newMouseModeValue=vals.mouseModeValue
     newClickValue=vals.clickValue
 
@@ -65,22 +72,42 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
         if mouseCondition and vals.mouse_flg==0 and not vals.mouseSwitched_flg:
             print('Mouse mode activated')
             vals.traceX, vals.traceY = m.position()
+
             vals.mouse_flg=1
             vals.mouseModeSwitchTime=0
             vals.mouseSwitched_flg=1
+
             try:
                 vals.switchSound.play()
             except:
                 pass
+            # file = 'switch.mp3'
+            
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
+
+
         if mouseCondition and vals.mouse_flg==1 and not vals.mouseSwitched_flg:
             print('Mouse mode deactivated')
             vals.mouse_flg=0
             vals.contDist=0
             vals.mouseSwitched_flg=1
+
             try:
                 vals.switchSound.play()
             except:
                 pass
+
+            # file = 'switch.mp3'
+            # try:
+            #     vals.a.play()
+            # except:
+            #     vals.a.load(file)
+            #     vals.a.play()
+
         #after switching, the fingers need to part in order to reset constants.
         if (vals.mouseSwitched_flg and dista[0]>newMouseModeValue):
             vals.mouseSwitched_flg=0
@@ -163,6 +190,14 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                         vals.clickSound.play()
                     except:
                         pass
+
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
+
             else:
                 # Double Click
                 if not vals.testTypeFlag:
@@ -173,6 +208,14 @@ def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
                         vals.clickSound.play()
                     except:
                         pass
+
+                    # file = 'click.mp3'    
+                    # try:
+                    #     vals.b.play()
+                    # except:
+                    #     vals.b.load(file)
+                    #     vals.b.play()
+
             vals.lastClickTime = time.time()
             # print('Click')
             print 'distClick[0]: ' + str(distClick[0])
