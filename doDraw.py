@@ -247,7 +247,9 @@ def drawAllCalibration(screen, rpt, tipIndex, tipThumb,kThumb,kIndex,rpt2,tipInd
     #Drawing the instructions
     pygame.draw.rect(screen, vals.gray, (0,5,600,60))
     if vals.calibState == vals.START_CALIB:
-        Calib1=calibFont.render("Press H to calibrate the switching gesture",1,vals.black)
+        # Calib1=calibFont.render("Press H to calibrate the switching gesture",1,vals.black)
+        # New GUI: only calibrate the keyboard plane
+        Calib1=calibFont.render("Press H to calibrate the keyboard plane",1,vals.black)
         screen.blit(Calib1,(0,15))
         Calib2=calibFont.render("Press Shift + M to calibrate the new gestures",1,vals.black)
         screen.blit(Calib2,(0,15))      

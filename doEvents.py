@@ -233,8 +233,11 @@ def eventHandling(eventsObject):
                 # Transition if press 'H'
                 if event.key == pygame.K_h:
                     if vals.calibState == vals.START_CALIB:
-                        vals.calibState = vals.MOUSE_MODE_CALIB
+                        # vals.calibState = vals.MOUSE_MODE_CALIB
+                        # New GUI: Jump to the keyboard calibration
+                        vals.calibState = vals.READY_DEPTH_CALIB
 
+                    # New GUI: the following status: MOUSE_MODE_CALIB, READY_CLICK_CALIB, CLICK_CALIB will not be executed.
                     elif vals.calibState == vals.MOUSE_MODE_CALIB:
                         while min(vals.mouseModeCalibList) < 50:
                             vals.mouseModeCalibList.remove(min(vals.mouseModeCalibList))
