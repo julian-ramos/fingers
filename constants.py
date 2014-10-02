@@ -298,17 +298,31 @@ clickSound = None
 
 maxRealBuff=30
 
-vals.rttX=q.miniQueue(maxDepthBuff)
-vals.rttY=q.miniQueue(maxDepthBuff)
+# Some bugs? There should be no 'vals.' prefix in this file.
 
-vals.rktX=q.miniQueue(maxDepthBuff)
-vals.rktY=q.miniQueue(maxDepthBuff)
+rttX=q.miniQueue(maxDepthBuff)
+rttY=q.miniQueue(maxDepthBuff)
 
-vals.rtiX=q.miniQueue(maxDepthBuff)
-vals.rtiY=q.miniQueue(maxDepthBuff)
+rktX=q.miniQueue(maxDepthBuff)
+rktY=q.miniQueue(maxDepthBuff)
 
-vals.rkiX=q.miniQueue(maxDepthBuff)
-vals.rkiY=q.miniQueue(maxDepthBuff)
+rtiX=q.miniQueue(maxDepthBuff)
+rtiY=q.miniQueue(maxDepthBuff)
+
+rkiX=q.miniQueue(maxDepthBuff)
+rkiY=q.miniQueue(maxDepthBuff)
+
+# vals.rttX=q.miniQueue(maxDepthBuff)
+# vals.rttY=q.miniQueue(maxDepthBuff)
+
+# vals.rktX=q.miniQueue(maxDepthBuff)
+# vals.rktY=q.miniQueue(maxDepthBuff)
+
+# vals.rtiX=q.miniQueue(maxDepthBuff)
+# vals.rtiY=q.miniQueue(maxDepthBuff)
+
+# vals.rkiX=q.miniQueue(maxDepthBuff)
+# vals.rkiY=q.miniQueue(maxDepthBuff)
 
 
 
