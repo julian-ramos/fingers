@@ -127,6 +127,7 @@ clickingCalibList=[[], []]		#time, value
 
 
 boxLimit=41 #(the upper bound of box. Note as value decreases, box size increases)
+boxLimitBottom = 50
 boxBoundCalibList=[]
 
 rightClickValue=180
