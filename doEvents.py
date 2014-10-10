@@ -174,9 +174,9 @@ def eventHandling(eventsObject):
                        vals.windowX += 50
                     elif event.key==pygame.K_LEFT or event.key == pygame.K_a:
                        vals.windowX -= 50
-                    print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
+                    #print 'window size: X-{}, Y-{}'.format(str(vals.windowX), str(vals.windowY))
 #                     vals.relativeSpeed = [float(vals.width) / vals.windowX, float(vals.height) / vals.windowY]
-                    print 'relative speed: X-{}, Y-{}'.format(vals.relativeSpeed[0], vals.relativeSpeed[1])
+                    #print 'relative speed: X-{}, Y-{}'.format(vals.relativeSpeed[0], vals.relativeSpeed[1])
                     if event.key == pygame.K_f:
                         # Turn on/off the adjustable buffer size
                         vals.featureFlag = not vals.featureFlag
@@ -322,6 +322,7 @@ def eventHandling(eventsObject):
                         vals.planeParam = getPlaneParam(vals.planeDepthData)
                         vals.planeParam[-1] = 3 * vals.planeParam[-1]
 
+                        """
                         # Get switch box parameters with the keyboard plane and switch points
                         distance = np.zeros(len(vals.switchBoxData))
                         # Load the data and get X, Y and Z
@@ -335,7 +336,7 @@ def eventHandling(eventsObject):
                         boxMean = distance.mean()
                         boxStd = distance.std()
                         vals.switchBoxParam = [20, max(boxMean - 3*boxStd, vals.planeParam[-1]+2)]
-
+                        """
                         #store them to file.
                         calibWriter = CalibFileManager(vals.calibFile)
                         calibWriter.write(vals.mouseModeValue, vals.clickValue, vals.mouseActTimeThre, vals.boxLimit, \

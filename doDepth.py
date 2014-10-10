@@ -5,16 +5,7 @@ import funcs as fun
 
 def findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipIndex2,kIndex,kIndex2):
     focal=1380 #pixels, I found this online
-    
-    ttX=rpt[tipThumb][0]
-    ttY=rpt[tipThumb][1]
-    ktX=rpt[kThumb][0]
-    ktY=rpt[kThumb][1]
-    tiX=rpt[tipIndex][0]
-    tiY=rpt[tipIndex][1]
-    kiX=rpt[kIndex][0]
-    kiY=rpt[kIndex][1]
-    
+
     
     disparityTipThumb=fun.distanceVec([rpt[tipThumb][0]],[rpt[tipThumb][1]],\
                                 [rpt2[tipThumb2][0]],[rpt2[tipThumb2][1]])[0]
@@ -38,19 +29,6 @@ def findingDepth(rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipIndex,tipInde
             depth=1.0*focal/disparityList[i]*13.4 #cm, the b value
         vals.depthBuff[i].put(depth)
         
-        
-    vals.rttX.put(1380*ttX/vals.depthBuff[0])
-    vals.rttY.put(1380*ttY/vals.depthBuff[0])
-    
-    vals.rktX.put(1380*ktX/vals.depthBuff[1])
-    vals.rktY.put(1380*ktY/vals.depthBuff[1])
-    
-    vals.rtiX.put(1380*tiX/vals.depthBuff[2])
-    vals.rtiY.put(1380*tiY/vals.depthBuff[2])
-    
-    vals.rkiX.put(1380*kiX/vals.depthBuff[3])
-    vals.rkiY.put(1380*kiY/vals.depthBuff[3])
-    
 
 #Some notes about depth measurement
 
