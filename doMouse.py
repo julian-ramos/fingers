@@ -17,6 +17,14 @@ def checkSwitchBox(x, y, z):
     else:
         vals.inSwitchBox = False
 
+
+def clientMouseActivities(pygame, rpt, m, k):
+    if vals.newClick_flg:
+        m.click(vals.traceX, vals.traceY)
+        vals.newClick_flg = 0
+        print "CLICKED!"
+
+
 def mouseActivities(pygame, rpt, tipIndex,tipThumb,kIndex,kThumb,m,k):
 #3D Distance from the tipIndex to tipThumb
     dist3D=euclidean(rpt[tipIndex],rpt[tipThumb])

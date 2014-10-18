@@ -265,7 +265,8 @@ class mainThread(threading.Thread):
                 #         smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events
-                doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                #doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                doMouse.clientMouseActivities(pygame, rpt, m, k)
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 # if doDepth.checkAllAboveBox():
