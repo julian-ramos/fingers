@@ -103,6 +103,9 @@ def isOnKeyboard(x, y, z):
         ret = False
     else:
         ret = True
+        
+    print distance, keyboardTop, ret
+    
     return ret
 
 class mainThread(threading.Thread):
@@ -585,7 +588,12 @@ class Client(threading.Thread):
                         print(data)
                         self.client.send(str(vals.mouse_flg))
                         print(vals.mouse_flg)
-                        
+                    elif data.find('click')>=0:
+                        print "click cliked"
+                        vals.newClick_flg = 1 
+                    elif data.find('switch')>=0:
+                        print "switch switched"
+                        vals.mouse_flg = not vals.mouse_flg
                     elif data.find('wii')>=0:
                         self.wiiID,self.data=messageDecypher(data)
                 except:

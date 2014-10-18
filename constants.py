@@ -292,3 +292,9 @@ mouseY=0
 
 switchSound = None
 clickSound = None
+
+
+newGestures = 0
+newClick_flg = 0
+releaseButton = 0
+
