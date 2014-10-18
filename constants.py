@@ -1,5 +1,6 @@
 import miniQueue as q
 import pygame
+sens=1
 
 quit_FLG=0
 

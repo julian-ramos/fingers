@@ -99,7 +99,7 @@ def isOnKeyboard(x, y, z):
 
     distance = getPlaneDistance(vals.planeParam, x, y, z)
     keyboardTop = vals.planeParam[-1]
-    if distance > keyboardTop:
+    if distance > keyboardTop*vals.sens:
         ret = False
     else:
         ret = True

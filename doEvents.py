@@ -36,11 +36,16 @@ def saveTestData():
            
 def eventHandling(eventsObject):
     for event in eventsObject:
+    			
         if event.type == KEYUP:
             if event.key == pygame.K_SPACE:
                 vals.newClick_flg = 0
                 vals.releaseButton = 0
-        if event.type == KEYDOWN:            
+        if event.type == KEYDOWN:
+            if event.key==pygame.K_u:
+	 			vals.sens+=0.1
+            if event.key==pygame.K_y:
+	 			vals.sens-=0.1
             if vals.newGestures:
                 # Press shift and space to switch modes
                 if (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -105,8 +110,8 @@ def eventHandling(eventsObject):
                     elif event.key==pygame.K_c: #start vals.calibration
                         vals.calibration=1
                         vals.calibState = vals.START_CALIB
-                        vals.calibState = vals.READY_DEPTH_CALIB
-                        vals.newGestures = 1
+                        #vals.calibState = vals.READY_DEPTH_CALIB
+                        #vals.newGestures = 1
                     # Acts strange now
                     # elif event.key==pygame.K_s: #pauses the recording
                     #     vals.rec_flg=False 
@@ -119,7 +124,7 @@ def eventHandling(eventsObject):
                     #Load calibration data from file : 'l', load
                     elif event.key == pygame.K_l:
                         vals.calibLoadFlag = True
-                        vals.newGestures = 1
+                        #vals.newGestures = 1
                     # Start testing the device while typing
                     elif event.key == pygame.K_t:# and (pygame.key.get_mods() & pygame.KMOD_CTRL):
                         vals.testTypeFlag = not vals.testTypeFlag
