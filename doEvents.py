@@ -33,7 +33,34 @@ def saveTestData():
         print >> sf, string
     sf.close()
     print 'Write test data to ' + str(saveFileName)
-           
+    
+
+'''
+'r': record mode
+'c': calibration mode
+'l': load data mode
+'h': enter next screen(calibration)
+'q': quit
+
+'t': typing test start/end 
+'p': pointing test start/end
+'d': dragging & double click enable/disable
+'m': switch between mouse and keyboard
+'e': do input calibration(optional)
+'k': use index knuckle to help correct index tip
+
+Shift + 'w'/'up arrow': change sensitivity of fingers
+Shift + 's'/'down arrow': change sensitivity of fingers
+Shift + 'a'/'left arrow': change sensitivity of fingers
+Shift + 'd'/'right arrow': change sensitivity of fingers
+
+Shift + 'f': new feature testing
+Shift + 'r': testing relative version
+
+'z': Will zoom, in other words sensitivity will decrease
+
+'''
+
 def eventHandling(eventsObject):
     for event in eventsObject:
     			
@@ -41,11 +68,13 @@ def eventHandling(eventsObject):
             if event.key == pygame.K_SPACE:
                 vals.newClick_flg = 0
                 vals.releaseButton = 0
+
         if event.type == KEYDOWN:
             if event.key==pygame.K_u:
 	 			vals.sens+=0.1
             if event.key==pygame.K_y:
 	 			vals.sens-=0.1
+
             if vals.newGestures:
                 # Press shift and space to switch modes
                 if (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -66,31 +95,6 @@ def eventHandling(eventsObject):
                         if event.key == pygame.K_SPACE:
                             vals.newClick_flg = 1
             
-            '''
-            'r': record mode
-            'c': calibration mode
-            'l': load data mode
-            'h': enter next screen(calibration)
-            'q': quit
-            
-            't': typing test start/end 
-            'p': pointing test start/end
-            'd': dragging & double click enable/disable
-            'm': switch between mouse and keyboard
-            'e': do input calibration(optional)
-            'k': use index knuckle to help correct index tip
-
-            Shift + 'w'/'up arrow': change sensitivity of fingers
-            Shift + 's'/'down arrow': change sensitivity of fingers
-            Shift + 'a'/'left arrow': change sensitivity of fingers
-            Shift + 'd'/'right arrow': change sensitivity of fingers
-
-            Shift + 'f': new feature testing
-            Shift + 'r': testing relative version
-
-            'z': Will zoom, in other words sensitivity will decrease
-
-            '''
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
                 if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -111,7 +115,8 @@ def eventHandling(eventsObject):
                         vals.calibration=1
                         vals.calibState = vals.START_CALIB
                         #vals.calibState = vals.READY_DEPTH_CALIB
-                        #vals.newGestures = 1
+                        vals.newGestures = 1
+
                     # Acts strange now
                     # elif event.key==pygame.K_s: #pauses the recording
                     #     vals.rec_flg=False 
