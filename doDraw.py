@@ -32,11 +32,24 @@ def drawAllRecording(screen, rpt, rpt2, tipThumb,tipThumb2, kThumb,kThumb2, tipI
         Calib4=calibFont.render("kIndex:"+str(int(vals.depthBuff[3].mean())),1,vals.white)
         screen.blit(Calib4,(0,175))
 
-        tipDistance=calibFont.render("Switch-Distance:"+str(int(vals.tipDistance)),1,vals.white)
+        #tipDistance=calibFont.render("Switch-Distance:"+str(int(vals.tipDistance)),1,vals.white)
+        #screen.blit(tipDistance,(0,205))
+
+        #clickDistance=calibFont.render("Click-Distance:"+str(int(vals.clickDistance)),1,vals.white)
+        #screen.blit(clickDistance,(0,235))
+        x,y = rpt[tipIndex][0], rpt[tipIndex][1]
+        z = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
+
+        distance = getPlaneDistance(vals.planeParam, x, y, z)
+        keyboardTop = vals.planeParam[-1]
+
+        tipDistance=calibFont.render("Distance:"+str((distance)),1,vals.white)
         screen.blit(tipDistance,(0,205))
 
-        clickDistance=calibFont.render("Click-Distance:"+str(int(vals.clickDistance)),1,vals.white)
+        clickDistance=calibFont.render("Keyboard Top:"+str((keyboardTop)),1,vals.white)
         screen.blit(clickDistance,(0,235))
+
+
 
 
         distance3D=calibFont.render("3D-Distance:"+str(int(vals.dist3D)),1,vals.white)

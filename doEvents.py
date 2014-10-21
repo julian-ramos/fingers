@@ -77,34 +77,31 @@ def eventHandling(eventsObject):
 	 			vals.sens+=0.1
             if event.key==pygame.K_y:
 	 			vals.sens-=0.1
-
             #test onkeyboard accuracy
             if event.key == pygame.K_x:
                 #close the test, write into a file
                 if vals.testIsOnKeyboard:
-                        
-                        testKeyboardFile = open('testKeyboard.txt','w')
-                        for i in xrange(len(vals.test_array_IsOnKeyboard)):
-                            thisArray = vals.test_array_IsOnKeyboard[i]
+                    name = "testZhen"+ str(vals.sens)+".txt"
+                    testKeyboardFile = open(name, 'w')
+                    for i in xrange(len(vals.test_array_IsOnKeyboard)):
+                        thisArray = vals.test_array_IsOnKeyboard[i]
 #One of these two
-                            print >> testKeyboardFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
-                            testKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
-                        
-                        testKeyboardFile.close()
-                        
+                        print >> testKeyboardFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
+                        testKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
+                    testKeyboardFile.close()
+                    
 #My version of the implementation
-                        testMyKeyboardFile = open('testMyKeyboard.txt','w')
-                        for i in xrange(len(vals.test_my_array_IsOnKeyboard)):
-                            thisArray = vals.test_my_array_IsOnKeyboard[i]
-#One of these two
-                            print >> testKeyboardMFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
-                            testMyKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
-                        
-                        testMyKeyboardFile.close()
-
-
-
+                    name = "testMe"+ str(vals.sens)+".txt"
+                    testMyKeyboardFile = open(name,'w')
+                    for i in xrange(len(vals.test_my_array_IsOnKeyboard)):
+                        thisArray = vals.test_my_array_IsOnKeyboard[i]
+                        print >> testMyKeyboardFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
+                        testMyKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
+                    
+                    testMyKeyboardFile.close()
                 vals.testIsOnKeyboard = not vals.testIsOnKeyboard
+                print "X Pressed"
+
             #New Gestures Portion
             if vals.newGestures:
                 # Press shift and space to switch modes
@@ -272,6 +269,8 @@ def eventHandling(eventsObject):
         # Mouse events for vals.calibration mode
             if vals.calibration:
                 # Transition if press 'H'
+                if event.key == pygame.K_n:
+                    vals.switchRPT = not vals.switchRPT
                 if event.key == pygame.K_h:
                     if vals.calibState == vals.START_CALIB:
                         vals.calibState = vals.MOUSE_MODE_CALIB

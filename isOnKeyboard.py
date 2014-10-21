@@ -15,19 +15,18 @@ def redrawAll(canvas):   # DK: redrawAll() --> redrawAll(canvas)
 		[x,y,z,ret] = canvas.data.allData[i]
 		visualizeValue(canvas,x,y,z,ret)
 	displayStatistics(canvas)
-	print "hey"
 
 #reads the calibration file
 def openFile(canvas):
-	file_path = tkFileDialog.askopenfilename()
-	with open(file_path) as f:
+	canvas.data.file_path = tkFileDialog.askopenfilename()
+	with open(canvas.data.file_path) as f:
 		while True:
 			line = str(f.readline()).rstrip()
 			if line == "":
 				break
 			canvas.data.total+=1
-			canvas.data.allData.append(getIndividualValues(line))
-			[x,y,z,ret] = getIndividualValues(line)
+			canvas.data.allData.append(getIndividualValues(canvas,line))
+			[x,y,z,ret] = getIndividualValues(canvas,line)
 			#visualizeValue(canvas,x,y,z,ret)
 			if ret:
 				canvas.data.hitValue += 1
@@ -42,11 +41,12 @@ def visualizeValue(canvas, x,y,z,ret):
 	canvas.create_oval(x-circleSize,y-circleSize,x+circleSize,y+circleSize, fill = color)
 
 def displayStatistics(canvas):
+	canvas.create_text(100,100, text = canvas.data.file_path)
 	canvas.create_text(100,200, text = "total:"+str(canvas.data.total))
 	canvas.create_text(100,300, text = "hit:"+str(canvas.data.hitValue))
 	canvas.create_text(100,400, text = str(canvas.data.hitValue*1.0/canvas.data.total))
 
-def getIndividualValues(line):
+def getIndividualValues(canvas,line):
 	x = ""
 	y = ""
 	z = ""
@@ -63,13 +63,13 @@ def getIndividualValues(line):
 		elif (count == 2):
 			z += (line[i])
 		elif (count == 3):
-			print line[i]
+			#print line[i]
 			if (line[i] == "T"):
 				ret = True
 			else:
 				ret = False
 			break
-	return [int(x),int(y),int(z),ret]
+	return [canvas.data.constant* int(float(x)),canvas.data.constant*int(float(y)),canvas.data.constant*int(float(z)),ret]
 
 
 def init(canvas):
@@ -77,13 +77,16 @@ def init(canvas):
 	canvas.data.total = 0
 	canvas.data.hitValue = 0
 	canvas.data.allData = []
+	canvas.data.file_path = ""
+	canvas.data.constant = 0.4
+
 	openFile(canvas)
 
 def run():
 	# create the root and the canvas
 	root = Tk()
-	cHeight=700
-	cWidth=700
+	cHeight=800
+	cWidth=800
 	#root.attributes("-fullscreen", True) #substitute `Tk` for whatever your `Tk()` object is called
 	canvas = Canvas(root, width=cWidth, height=cHeight)
 	canvas.pack()

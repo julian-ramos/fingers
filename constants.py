@@ -91,7 +91,7 @@ featureFlag = False
 relativeFlag = True
 relativeSpeed = [1, 1]
 # The start point of finger coordinate.
-fingerStart = [750, 50]
+fingerStart = [640, 140]
 
 # The keyboard plane. We only need box upper size because we can't put our fingers
 # lower than keyboard. F is positive to avoid mistake.
@@ -302,3 +302,4 @@ releaseButton = 0
 testIsOnKeyboard = 0
 test_array_IsOnKeyboard = []
 test_my_array_IsOnKeyboard = []
+switchRPT = 0

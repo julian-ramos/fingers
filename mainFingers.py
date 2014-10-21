@@ -64,6 +64,9 @@ def finger2MouseRelative(fXList, fYList, mX0, mY0):
     " Get next mouse point(mX1, mY1) by fX/YList "
 
     # Restrict the valid area
+    if vals.switchRPT:
+        vals.fingerStart = [270,120]
+    print fXList[-1],fYList[-1]
     if fXList[-1] < vals.fingerStart[0] or fYList[-1] < vals.fingerStart[1]:
         [mX1, mY1] = [mX0, mY0]
         #print('1 %d %d'%(mX1,mY1))
@@ -107,23 +110,25 @@ def isOnKeyboard(x, y, z):
     if vals.testIsOnKeyboard:
         vals.test_array_IsOnKeyboard.append([x,y,z,ret])
     
-    print distance, keyboardTop, ret
+    #print distance, keyboardTop, ret
     return ret
 
 
 
 def myIsOnKeyboard(x,y,z):
-    return True;
-
+    " Check if the index tip is on the keyboard "
+    if x == 0 and y == 0:
+        return True
+    distance = getPlaneDistance(vals.planeParam, x, y, z)
+    keyboardTop = vals.planeParam[-1]
+    if distance > keyboardTop*vals.sens:
+        ret = False
+    else:
+        ret = True
 
     if vals.testIsOnKeyboard:
         vals.test_my_array_IsOnKeyboard.append([x,y,z,ret])
-
-
-
-
-
-
+    return ret
 
 
 
@@ -169,6 +174,11 @@ class mainThread(threading.Thread):
             rpt=[[int(i2) for i2 in i]for i in coords[0]]
             rpt2=[[int(i2) for i2 in i]for i in coords[1]]
             
+            if vals.switchRPT:
+                tmp = rpt
+                rpt = rpt2
+                rpt2 = tmp
+
             if not vals.rec_flg and (vals.calibration or vals.calibLoadFlag): #do calibration or load from file
             #Receiving data from the threads
                 newList=findingPoints.findDegrees(rpt) #returns in from [(theta1,i1),(theta2,i2)....)]
@@ -284,14 +294,15 @@ class mainThread(threading.Thread):
                 #         smoothTipIndex, vals.depthBuff[3].back(), rpt[tipIndex][0], rpt[tipIndex][1]))
 
             #Mouse Events
-                doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                #doMouse.mouseActivities(pygame,rpt, tipIndex,tipThumb,kIndex,kThumb,m,k)
+                doMouse.clientMouseActivities(pygame,rpt,m,k)
+
             #Gestures
                 # print doDepth.checkAllAboveBox()
                 # if doDepth.checkAllAboveBox():
                 #     doGestures.gestures(averageX,averageY,k,m)
 
-                if vals.mouse_flg==1:2
-                    #This is to weight the location of the pointer WRT tip & knuckle
+                if vals.mouse_flg==1:
                     tipParam = 7
                     knuParam = 3
                     if vals.knuckleFlag:
@@ -303,7 +314,7 @@ class mainThread(threading.Thread):
                     # Relative:
                     if vals.relativeFlag:
                         smoothTipIndex = np.mean(fun.smooth(vals.depthBuff[2].data, window_len = vals.depthBuff[2].size()))
- 
+                        keyboardTest = myIsOnKeyboard(fingerX, fingerY, smoothTipIndex)
                         keyboardTest = isOnKeyboard(fingerX, fingerY, smoothTipIndex)
 
                         if vals.onKeyboardFlag and not keyboardTest:
