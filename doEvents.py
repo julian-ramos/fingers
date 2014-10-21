@@ -59,6 +59,9 @@ Shift + 'r': testing relative version
 
 'z': Will zoom, in other words sensitivity will decrease
 
+'u':change vals.sens
+'y':change vals.sens
+
 '''
 
 def eventHandling(eventsObject):
@@ -75,6 +78,34 @@ def eventHandling(eventsObject):
             if event.key==pygame.K_y:
 	 			vals.sens-=0.1
 
+            #test onkeyboard accuracy
+            if event.key == pygame.K_x:
+                #close the test, write into a file
+                if vals.testIsOnKeyboard:
+                        
+                        testKeyboardFile = open('testKeyboard.txt','w')
+                        for i in xrange(len(vals.test_array_IsOnKeyboard)):
+                            thisArray = vals.test_array_IsOnKeyboard[i]
+#One of these two
+                            print >> testKeyboardFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
+                            testKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
+                        
+                        testKeyboardFile.close()
+                        
+#My version of the implementation
+                        testMyKeyboardFile = open('testMyKeyboard.txt','w')
+                        for i in xrange(len(vals.test_my_array_IsOnKeyboard)):
+                            thisArray = vals.test_my_array_IsOnKeyboard[i]
+#One of these two
+                            print >> testKeyboardMFile,'{},{},{},{}'.format(thisArray[0],thisArray[1],thisArray[2],thisArray[3])
+                            testMyKeyboardFile.write(str(thisArray[0])+","+str(thisArray[1])+","+str(thisArray[2])+","+str(thisArray[3])+"\n")
+                        
+                        testMyKeyboardFile.close()
+
+
+
+                vals.testIsOnKeyboard = not vals.testIsOnKeyboard
+            #New Gestures Portion
             if vals.newGestures:
                 # Press shift and space to switch modes
                 if (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -94,7 +125,8 @@ def eventHandling(eventsObject):
                     if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
                         if event.key == pygame.K_SPACE:
                             vals.newClick_flg = 1
-            
+           #New Gestures Portion
+         
             # Note: [not testing] or [testing but press Ctrl now]
             if not vals.testTypeFlag or (pygame.key.get_mods() & pygame.KMOD_CTRL):
                 if not (pygame.key.get_mods() & pygame.KMOD_SHIFT):
@@ -237,15 +269,6 @@ def eventHandling(eventsObject):
                         #     ddf.close()
                         #     print 'Write depth data to file.'
 
-                '''
-                if vals.rec_flg: #if recording, can change the lag time
-                    if event.key==pygame.K_z:
-                        vals.lagValue+=100
-                    elif event.key==pygame.K_x:
-                        vals.lagValue-=100
-                '''
-            # if vals.testTypeFlag and not(pygame.key.get_mods() & pygame.KMOD_CTRL)
-                    
         # Mouse events for vals.calibration mode
             if vals.calibration:
                 # Transition if press 'H'

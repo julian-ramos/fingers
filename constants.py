@@ -299,3 +299,6 @@ newGestures = 0
 newClick_flg = 0
 releaseButton = 0
 
+testIsOnKeyboard = 0
+test_array_IsOnKeyboard = []
+test_my_array_IsOnKeyboard = []

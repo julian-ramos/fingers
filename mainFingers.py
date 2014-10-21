@@ -103,10 +103,29 @@ def isOnKeyboard(x, y, z):
         ret = False
     else:
         ret = True
-        
-    print distance, keyboardTop, ret
+
+    if vals.testIsOnKeyboard:
+        vals.test_array_IsOnKeyboard.append([x,y,z,ret])
     
+    print distance, keyboardTop, ret
     return ret
+
+
+
+def myIsOnKeyboard(x,y,z):
+    return True;
+
+
+    if vals.testIsOnKeyboard:
+        vals.test_my_array_IsOnKeyboard.append([x,y,z,ret])
+
+
+
+
+
+
+
+
 
 class mainThread(threading.Thread):
     def __init__(self):
@@ -271,7 +290,7 @@ class mainThread(threading.Thread):
                 # if doDepth.checkAllAboveBox():
                 #     doGestures.gestures(averageX,averageY,k,m)
 
-                if vals.mouse_flg==1:
+                if vals.mouse_flg==1:2
                     #This is to weight the location of the pointer WRT tip & knuckle
                     tipParam = 7
                     knuParam = 3
