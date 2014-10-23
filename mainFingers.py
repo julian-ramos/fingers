@@ -36,26 +36,28 @@ def finger2Mouse(fX, fY, rectangle=False):
     left = vals.leftBound
     upper = vals.upperBound
     if rectangle is False:
-        left = 600
-        upper = 150
+        left = 250
+        upper = 90
 
     windowX=vals.windowX
     windowY=vals.windowY
+    #commented out since we wont use it
+    #if vals.zoom_flg:
+    #    zoomConstant=10
+    #    windowX=zoomConstant*windowX
+    #    windowY=zoomConstant*windowY
+    #    print "zoom"
 
-    if vals.zoom_flg:
-        zoomConstant=10
-        windowX=zoomConstant*windowX
-        windowY=zoomConstant*windowY
-        print "zoom"
-
-        mX = (fX - vals.fX) * vals.width / windowX                    
-        mY = (fY - vals.fY) * vals.height / windowY
-        mX=mX+vals.mouseX
-        mY=mY+vals.mouseY
-        return mX,mY
+    #    mX = (fX - vals.fX) * vals.width / windowX                    
+    #    mY = (fY - vals.fY) * vals.height / windowY
+    #    mX=mX+vals.mouseX
+    #    mY=mY+vals.mouseY
+    #    return mX,mY
 
     mX = (fX - left) * vals.width / windowX                    
     mY = (fY - upper) * vals.height / windowY
+
+    print fX,fY, mX,mY
 
     return mX, mY
 
