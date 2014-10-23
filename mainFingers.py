@@ -65,8 +65,7 @@ def finger2MouseRelative(fXList, fYList, mX0, mY0):
 
     # Restrict the valid area
     if vals.switchRPT:
-        vals.fingerStart = [270,120]
-    print fXList[-1],fYList[-1]
+        vals.fingerStart =  [200,80]
     if fXList[-1] < vals.fingerStart[0] or fYList[-1] < vals.fingerStart[1]:
         [mX1, mY1] = [mX0, mY0]
         #print('1 %d %d'%(mX1,mY1))

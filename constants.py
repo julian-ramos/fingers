@@ -91,7 +91,8 @@ featureFlag = False
 relativeFlag = True
 relativeSpeed = [1, 1]
 # The start point of finger coordinate.
-fingerStart = [640, 140]
+fingerStart = [650, 60]
+fingerStart = [200,80]
 
 # The keyboard plane. We only need box upper size because we can't put our fingers
 # lower than keyboard. F is positive to avoid mistake.
