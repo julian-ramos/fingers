@@ -57,7 +57,7 @@ def finger2Mouse(fX, fY, rectangle=False):
     mX = (fX - left) * vals.width / windowX                    
     mY = (fY - upper) * vals.height / windowY
 
-    print fX,fY, mX,mY
+    #print fX,fY, mX,mY
 
     return mX, mY
 
@@ -553,9 +553,9 @@ class Server:
     def __init__(self):
         print('Starting server')
         self.host = ''
-        self.port = 50000
-        self.backlog = 5
-        self.size = 1024
+        self.port = 50001
+        self.backlog = 10
+        self.size = 2048
         self.server = None
         self.threads = []
         self.data=[[],[],[]]
@@ -564,7 +564,7 @@ class Server:
         try:
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((self.host,self.port))
-            self.server.listen(30)
+            self.server.listen(60)
         except socket.error, (value,message):
             if self.server:
                 self.server.close()
@@ -604,7 +604,7 @@ class Client(threading.Thread):
         threading.Thread.__init__(self)
         self.client = client
         self.address = address
-        self.size = 1024
+        self.size = 2048
         self.data=[]
         vals.wiimoteNum = vals.wiimoteNum + 1
 

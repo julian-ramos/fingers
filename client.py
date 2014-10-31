@@ -14,8 +14,8 @@ import sys
 
 
 host = 'localhost'
-port = 50000
-size = 1024
+port = 50001
+size = 2048
 socketCon=False
 # s.send('identity wiiMote1')
 wiiMAC=[]   
